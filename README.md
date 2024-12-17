@@ -1,4 +1,4 @@
-# denvr-go
+# go-denvr
 
 A Go SDK for interacting with Denvr Cloud SDK
 

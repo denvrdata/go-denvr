@@ -1,5 +1,6 @@
 package result
 
+// https://en.wikipedia.org/wiki/Result_type
 type Result[T any] struct {
 	value T
 	err   error
