@@ -17,11 +17,11 @@ func TestAuth(t *testing.T) {
 				writer.Write(
 					[]byte(`{
 						"result": {
-			                "accessToken": "access1",
-			                "refreshToken": "refresh",
-			                "expireInSeconds": 60,
-			                "refreshTokenExpireInSeconds": 3600
-			            }
+							"accessToken": "access1",
+							"refreshToken": "refresh",
+							"expireInSeconds": 60,
+							"refreshTokenExpireInSeconds": 3600
+						}
 					}`),
 				)
 			},

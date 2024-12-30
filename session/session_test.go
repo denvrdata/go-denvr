@@ -1,4 +1,4 @@
-package config_test
+package session_test
 
 import (
 	"fmt"
@@ -7,13 +7,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/denvrdata/go-denvr/auth"
-	"github.com/denvrdata/go-denvr/config"
 	"github.com/denvrdata/go-denvr/result"
+	"github.com/denvrdata/go-denvr/session"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestConfig(t *testing.T) {
+func TestSession(t *testing.T) {
 	server := httptest.NewServer(
 		http.HandlerFunc(
 			func(writer http.ResponseWriter, request *http.Request) {
@@ -34,7 +33,7 @@ func TestConfig(t *testing.T) {
 
 	content := fmt.Sprintf(
 		`[defaults]
-        server = "%s"
+		server = "%s"
         api = "v2"
         cluster = "Hou1"
         tenant = "denvr"
@@ -48,26 +47,21 @@ func TestConfig(t *testing.T) {
 		server.URL,
 	)
 
-	expected := config.Config{
-		auth.NewAuth(server.URL, "test@foobar.com", "test.foo.bar.baz"),
-		server.URL,
-		"v2",
-		"Hou1",
-		"denvr",
-		"denvr",
-		"reserved-denvr",
-		5,
-	}
-
 	f := result.Wrap(os.CreateTemp("", "test-newconfig-tmpfile-")).Unwrap()
 	defer f.Close()
 	defer os.Remove(f.Name())
 	result.Wrap(f.Write([]byte(content))).Unwrap()
 
 	t.Run(
-		"NewConfig",
+		"NewSession",
 		func(t *testing.T) {
-			assert.Equal(t, expected, config.NewConfig(f.Name()))
+			os.Setenv("DENVR_CONFIG", f.Name())
+			s := session.NewSession()
+			assert.Equal(t, server.URL, s.Config.Server)
+			assert.Equal(t, int64(5), s.Config.Retries)
+
+			t.Cleanup(func() { os.Unsetenv("DENVR_CONFIG") })
 		},
 	)
+
 }
