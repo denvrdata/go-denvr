@@ -1,0 +1,25 @@
+{{range .Types}}
+{{ if .Schema.Description }}{{ toGoComment .Schema.Description .TypeName  }}{{ else }}// {{.TypeName}} defines model for {{.JsonName}}.{{ end }}
+type {{.TypeName}} {{if .IsAlias }}={{end}} {{.Schema.TypeDecl}}
+
+// Parse{{ .TypeName }} parses an HTTP response into a {{ .TypeName }}.
+func Parse{{ .TypeName}}(rsp *http.Response) (*{{ .TypeName}}, error) {
+    bodyBytes, err := io.ReadAll(rsp.Body)
+    defer func() { _ = rsp.Body.Close() }()
+    if err != nil {
+        return nil, err
+    }
+
+    // Just panic for now if we get a 4xx or higher error
+    if 400 <= rsp.StatusCode {
+        panic(rsp.Status)
+    }
+
+    // TODO: Add an assert on the header content-type
+    var dest {{ .TypeName}}
+    if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+        return nil, err
+    }
+    return &dest, nil
+}
+{{end}}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/BurntSushi/toml"
 	"github.com/denvrdata/go-denvr/auth"
@@ -80,7 +81,7 @@ func NewConfig(paths ...string) Config {
 		RPool   string
 		Retries int64
 	}{
-		Server:  "https://api.cloud.denvrdata.com",
+		Server:  "https://api.cloud.denvrdata.com/",
 		API:     "v1",
 		Cluster: "Msc1",
 		Tenant:  "",
@@ -90,7 +91,8 @@ func NewConfig(paths ...string) Config {
 	}
 	if def, ok := content["defaults"].(map[string]interface{}); ok {
 		if server, ok := def["server"].(string); ok {
-			defaults.Server = server
+			// Trim any trailing slashes to make sure the paths work
+			defaults.Server = strings.Trim(server, "/")
 		}
 		if api, ok := def["api"].(string); ok {
 			defaults.API = api

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/denvrdata/go-denvr/auth"
 	"github.com/stretchr/testify/assert"
@@ -33,7 +34,7 @@ func TestAuth(t *testing.T) {
 		func(t *testing.T) {
 			assert.Equal(
 				t,
-				auth.Auth{server.URL, "access1", "refresh", 60, 3600},
+				auth.Auth{server.URL, "access1", "refresh", time.Now().Unix() + 60, time.Now().Unix() + 3600},
 				auth.NewAuth(
 					server.URL,
 					"alice@denvrtest.com",

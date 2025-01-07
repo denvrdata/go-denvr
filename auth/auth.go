@@ -2,6 +2,7 @@ package auth
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -55,8 +56,8 @@ func NewAuth(server string, username string, password string) Auth {
 		server,
 		content.Result.AccessToken,
 		content.Result.RefreshToken,
-		content.Result.ExpireInSeconds,
-		content.Result.RefreshTokenExpireInSeconds,
+		time.Now().Unix() + content.Result.ExpireInSeconds,
+		time.Now().Unix() + content.Result.RefreshTokenExpireInSeconds,
 	}
 }
 
@@ -99,4 +100,9 @@ func (auth Auth) Token() string {
 	}
 
 	return auth.AccessToken
+}
+
+func (auth Auth) Intercept(ctx context.Context, req *http.Request) error {
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", auth.Token()))
+	return nil
 }
