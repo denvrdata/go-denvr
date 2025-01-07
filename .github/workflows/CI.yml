@@ -21,7 +21,9 @@ jobs:
       - name: Build
         run: go build -v ./...
       - name: Test
-        run: go test --race --covermode atomic --coverprofile=report.cov ./...
+        run: go test --race --covermode atomic --coverprofile=full-report.cov ./...
+      - name: Trim coverage reporting for generated code
+        run: cat full-report.cov | grep -v ".gen.go" > report.cov
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2.3.4
         with:
