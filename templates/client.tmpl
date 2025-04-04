@@ -32,13 +32,15 @@ func NewClient() {{ $clientTypeName }} {
 	conf := config.NewConfig()
 
 	// Use a retryable http client and set the max retries
-	client := retryablehttp.NewClient()
-	client.RetryMax = int(conf.Retries)
+	// TODO: re-enable this and call client.Standard() below when we stop
+	// returning incorrect 500 errors
+	// client := retryablehttp.NewClient()
+	// client.RetryMax = int(conf.Retries)
 
     // Create the client with our server, retryable client and auth intercept method
     return {{ $clientTypeName }}{
         Server: conf.Server,
-        Client: client.StandardClient(),
+        Client: http.DefaultClient,
         RequestEditors: []RequestEditorFn{conf.Auth.Intercept},
     }
 }
@@ -78,7 +80,7 @@ func (c *{{ $clientTypeName }}) {{$opid}}{{if .HasBody}}WithBody{{end}}(ctx cont
     if err != nil {
         return nil, err
     }
-    return Parse{{$responseType}}(rsp)
+    return response.ParseResponse[{{$responseType}}](rsp)
 }
 
 {{/* Generate raw with body method */}}
@@ -101,7 +103,7 @@ func (c *{{ $clientTypeName }}) {{$opid}}{{.Suffix}}(ctx context.Context{{genPar
     if err != nil {
         return nil, err
     }
-    return Parse{{$responseType}}(rsp)
+    return response.ParseResponse[{{$responseType}}](rsp)
 }
 
 func (c *{{ $clientTypeName }}) {{$opid}}{{.Suffix}}Raw(ctx context.Context{{genParamArgs $pathParams}}{{if $hasParams}}, params *{{$opid}}Params{{end}}, body {{$opid}}{{.NameTag}}RequestBody, reqEditors... RequestEditorFn) (*http.Response, error) {

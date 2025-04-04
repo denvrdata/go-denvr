@@ -42,9 +42,10 @@ import (
 	"github.com/kataras/iris/v12/core/router"
 	"github.com/gorilla/mux"
 
-	"github.com/hashicorp/go-retryablehttp"
+	// "github.com/hashicorp/go-retryablehttp"
 
 	"github.com/denvrdata/go-denvr/config"
+	"github.com/denvrdata/go-denvr/response"
 	{{- range .ExternalImports}}
 	{{ . }}
 	{{- end}}

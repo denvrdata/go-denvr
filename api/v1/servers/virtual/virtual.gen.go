@@ -15,36 +15,16 @@ import (
 
 	"github.com/oapi-codegen/runtime"
 
-	"github.com/hashicorp/go-retryablehttp"
+	// "github.com/hashicorp/go-retryablehttp"
 
 	"github.com/denvrdata/go-denvr/config"
+	"github.com/denvrdata/go-denvr/response"
 )
 
 // Child defines model for Child.
 type Child struct {
 	Children *[]Child `json:"children"`
 	Data     *Data    `json:"data,omitempty"`
-}
-
-// ParseChild parses an HTTP response into a Child.
-func ParseChild(rsp *http.Response) (*Child, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	// Just panic for now if we get a 4xx or higher error
-	if 400 <= rsp.StatusCode {
-		panic(rsp.Status)
-	}
-
-	// TODO: Add an assert on the header content-type
-	var dest Child
-	if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-		return nil, err
-	}
-	return &dest, nil
 }
 
 // CreateVirtualServerInput defines model for CreateVirtualServerInput.
@@ -84,27 +64,6 @@ type CreateVirtualServerInput struct {
 	Vpc string `json:"vpc"`
 }
 
-// ParseCreateVirtualServerInput parses an HTTP response into a CreateVirtualServerInput.
-func ParseCreateVirtualServerInput(rsp *http.Response) (*CreateVirtualServerInput, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	// Just panic for now if we get a 4xx or higher error
-	if 400 <= rsp.StatusCode {
-		panic(rsp.Status)
-	}
-
-	// TODO: Add an assert on the header content-type
-	var dest CreateVirtualServerInput
-	if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-		return nil, err
-	}
-	return &dest, nil
-}
-
 // Data defines model for Data.
 type Data struct {
 	Cost      *float64   `json:"cost,omitempty"`
@@ -113,51 +72,9 @@ type Data struct {
 	StartTime *time.Time `json:"startTime,omitempty"`
 }
 
-// ParseData parses an HTTP response into a Data.
-func ParseData(rsp *http.Response) (*Data, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	// Just panic for now if we get a 4xx or higher error
-	if 400 <= rsp.StatusCode {
-		panic(rsp.Status)
-	}
-
-	// TODO: Add an assert on the header content-type
-	var dest Data
-	if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-		return nil, err
-	}
-	return &dest, nil
-}
-
 // ListResultDtoOfServerAvailability defines model for ListResultDtoOfServerAvailability.
 type ListResultDtoOfServerAvailability struct {
 	Items *[]ServerAvailability `json:"items"`
-}
-
-// ParseListResultDtoOfServerAvailability parses an HTTP response into a ListResultDtoOfServerAvailability.
-func ParseListResultDtoOfServerAvailability(rsp *http.Response) (*ListResultDtoOfServerAvailability, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	// Just panic for now if we get a 4xx or higher error
-	if 400 <= rsp.StatusCode {
-		panic(rsp.Status)
-	}
-
-	// TODO: Add an assert on the header content-type
-	var dest ListResultDtoOfServerAvailability
-	if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-		return nil, err
-	}
-	return &dest, nil
 }
 
 // ListResultDtoOfServerConfiguration defines model for ListResultDtoOfServerConfiguration.
@@ -165,51 +82,9 @@ type ListResultDtoOfServerConfiguration struct {
 	Items *[]ServerConfiguration `json:"items"`
 }
 
-// ParseListResultDtoOfServerConfiguration parses an HTTP response into a ListResultDtoOfServerConfiguration.
-func ParseListResultDtoOfServerConfiguration(rsp *http.Response) (*ListResultDtoOfServerConfiguration, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	// Just panic for now if we get a 4xx or higher error
-	if 400 <= rsp.StatusCode {
-		panic(rsp.Status)
-	}
-
-	// TODO: Add an assert on the header content-type
-	var dest ListResultDtoOfServerConfiguration
-	if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-		return nil, err
-	}
-	return &dest, nil
-}
-
 // ListResultDtoOfVirtualServerDetailsItem defines model for ListResultDtoOfVirtualServerDetailsItem.
 type ListResultDtoOfVirtualServerDetailsItem struct {
 	Items *[]VirtualServerDetailsItem `json:"items"`
-}
-
-// ParseListResultDtoOfVirtualServerDetailsItem parses an HTTP response into a ListResultDtoOfVirtualServerDetailsItem.
-func ParseListResultDtoOfVirtualServerDetailsItem(rsp *http.Response) (*ListResultDtoOfVirtualServerDetailsItem, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	// Just panic for now if we get a 4xx or higher error
-	if 400 <= rsp.StatusCode {
-		panic(rsp.Status)
-	}
-
-	// TODO: Add an assert on the header content-type
-	var dest ListResultDtoOfVirtualServerDetailsItem
-	if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-		return nil, err
-	}
-	return &dest, nil
 }
 
 // ServerAvailability defines model for ServerAvailability.
@@ -229,27 +104,6 @@ type ServerAvailability struct {
 	Type *string `json:"type"`
 }
 
-// ParseServerAvailability parses an HTTP response into a ServerAvailability.
-func ParseServerAvailability(rsp *http.Response) (*ServerAvailability, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	// Just panic for now if we get a 4xx or higher error
-	if 400 <= rsp.StatusCode {
-		panic(rsp.Status)
-	}
-
-	// TODO: Add an assert on the header content-type
-	var dest ServerAvailability
-	if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-		return nil, err
-	}
-	return &dest, nil
-}
-
 // ServerCommandInput defines model for ServerCommandInput.
 type ServerCommandInput struct {
 	// Cluster The cluster you're operating on
@@ -260,27 +114,6 @@ type ServerCommandInput struct {
 
 	// Namespace The namespace where the virtual machine lives. This is usually just the tenant name.
 	Namespace string `json:"namespace"`
-}
-
-// ParseServerCommandInput parses an HTTP response into a ServerCommandInput.
-func ParseServerCommandInput(rsp *http.Response) (*ServerCommandInput, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	// Just panic for now if we get a 4xx or higher error
-	if 400 <= rsp.StatusCode {
-		panic(rsp.Status)
-	}
-
-	// TODO: Add an assert on the header content-type
-	var dest ServerCommandInput
-	if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-		return nil, err
-	}
-	return &dest, nil
 }
 
 // ServerConfiguration defines model for ServerConfiguration.
@@ -313,27 +146,6 @@ type ServerConfiguration struct {
 	Type             *string  `json:"type"`
 	UserFriendlyName *string  `json:"user_friendly_name"`
 	Vcpus            *int32   `json:"vcpus,omitempty"`
-}
-
-// ParseServerConfiguration parses an HTTP response into a ServerConfiguration.
-func ParseServerConfiguration(rsp *http.Response) (*ServerConfiguration, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	// Just panic for now if we get a 4xx or higher error
-	if 400 <= rsp.StatusCode {
-		panic(rsp.Status)
-	}
-
-	// TODO: Add an assert on the header content-type
-	var dest ServerConfiguration
-	if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-		return nil, err
-	}
-	return &dest, nil
 }
 
 // VirtualServerDetailsItem defines model for VirtualServerDetailsItem.
@@ -385,27 +197,6 @@ type VirtualServerDetailsItem struct {
 
 	// Vcpus Number of vCPUs available to the VM
 	Vcpus *int32 `json:"vcpus"`
-}
-
-// ParseVirtualServerDetailsItem parses an HTTP response into a VirtualServerDetailsItem.
-func ParseVirtualServerDetailsItem(rsp *http.Response) (*VirtualServerDetailsItem, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	// Just panic for now if we get a 4xx or higher error
-	if 400 <= rsp.StatusCode {
-		panic(rsp.Status)
-	}
-
-	// TODO: Add an assert on the header content-type
-	var dest VirtualServerDetailsItem
-	if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-		return nil, err
-	}
-	return &dest, nil
 }
 
 // DestroyServerParams defines parameters for DestroyServer.
@@ -505,13 +296,15 @@ func NewClient() Client {
 	conf := config.NewConfig()
 
 	// Use a retryable http client and set the max retries
-	client := retryablehttp.NewClient()
-	client.RetryMax = int(conf.Retries)
+	// TODO: re-enable this and call client.Standard() below when we stop
+	// returning incorrect 500 errors
+	// client := retryablehttp.NewClient()
+	// client.RetryMax = int(conf.Retries)
 
 	// Create the client with our server, retryable client and auth intercept method
 	return Client{
 		Server:         conf.Server,
-		Client:         client.StandardClient(),
+		Client:         http.DefaultClient,
 		RequestEditors: []RequestEditorFn{conf.Auth.Intercept},
 	}
 }
@@ -601,7 +394,7 @@ func (c *Client) CreateServerWithBody(ctx context.Context, contentType string, b
 	if err != nil {
 		return nil, err
 	}
-	return ParseVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[VirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) CreateServerWithBodyRaw(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -621,7 +414,7 @@ func (c *Client) CreateServerWithApplicationWildcardPlusJSONBody(ctx context.Con
 	if err != nil {
 		return nil, err
 	}
-	return ParseVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[VirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) CreateServerWithApplicationWildcardPlusJSONBodyRaw(ctx context.Context, body CreateServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -641,7 +434,7 @@ func (c *Client) CreateServer(ctx context.Context, body CreateServerJSONRequestB
 	if err != nil {
 		return nil, err
 	}
-	return ParseVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[VirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) CreateServerRaw(ctx context.Context, body CreateServerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -661,7 +454,7 @@ func (c *Client) CreateServerWithApplicationJSONPatchPlusJSONBody(ctx context.Co
 	if err != nil {
 		return nil, err
 	}
-	return ParseVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[VirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) CreateServerWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body CreateServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -682,7 +475,7 @@ func (c *Client) DestroyServer(ctx context.Context, params *DestroyServerParams,
 	if err != nil {
 		return nil, err
 	}
-	return ParseVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[VirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) DestroyServerRaw(ctx context.Context, params *DestroyServerParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -703,7 +496,7 @@ func (c *Client) GetAvailability(ctx context.Context, params *GetAvailabilityPar
 	if err != nil {
 		return nil, err
 	}
-	return ParseListResultDtoOfServerAvailability(rsp)
+	return response.ParseResponse[ListResultDtoOfServerAvailability](rsp)
 }
 
 func (c *Client) GetAvailabilityRaw(ctx context.Context, params *GetAvailabilityParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -724,7 +517,7 @@ func (c *Client) GetConfigurations(ctx context.Context, reqEditors ...RequestEdi
 	if err != nil {
 		return nil, err
 	}
-	return ParseListResultDtoOfServerConfiguration(rsp)
+	return response.ParseResponse[ListResultDtoOfServerConfiguration](rsp)
 }
 
 func (c *Client) GetConfigurationsRaw(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -745,7 +538,7 @@ func (c *Client) GetServer(ctx context.Context, params *GetServerParams, reqEdit
 	if err != nil {
 		return nil, err
 	}
-	return ParseVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[VirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) GetServerRaw(ctx context.Context, params *GetServerParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -766,7 +559,7 @@ func (c *Client) GetServers(ctx context.Context, params *GetServersParams, reqEd
 	if err != nil {
 		return nil, err
 	}
-	return ParseListResultDtoOfVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[ListResultDtoOfVirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) GetServersRaw(ctx context.Context, params *GetServersParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -787,7 +580,7 @@ func (c *Client) StartServerWithBody(ctx context.Context, contentType string, bo
 	if err != nil {
 		return nil, err
 	}
-	return ParseVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[VirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) StartServerWithBodyRaw(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -807,7 +600,7 @@ func (c *Client) StartServerWithApplicationWildcardPlusJSONBody(ctx context.Cont
 	if err != nil {
 		return nil, err
 	}
-	return ParseVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[VirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) StartServerWithApplicationWildcardPlusJSONBodyRaw(ctx context.Context, body StartServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -827,7 +620,7 @@ func (c *Client) StartServer(ctx context.Context, body StartServerJSONRequestBod
 	if err != nil {
 		return nil, err
 	}
-	return ParseVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[VirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) StartServerRaw(ctx context.Context, body StartServerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -847,7 +640,7 @@ func (c *Client) StartServerWithApplicationJSONPatchPlusJSONBody(ctx context.Con
 	if err != nil {
 		return nil, err
 	}
-	return ParseVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[VirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) StartServerWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body StartServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -868,7 +661,7 @@ func (c *Client) StopServerWithBody(ctx context.Context, contentType string, bod
 	if err != nil {
 		return nil, err
 	}
-	return ParseVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[VirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) StopServerWithBodyRaw(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -888,7 +681,7 @@ func (c *Client) StopServerWithApplicationWildcardPlusJSONBody(ctx context.Conte
 	if err != nil {
 		return nil, err
 	}
-	return ParseVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[VirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) StopServerWithApplicationWildcardPlusJSONBodyRaw(ctx context.Context, body StopServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -908,7 +701,7 @@ func (c *Client) StopServer(ctx context.Context, body StopServerJSONRequestBody,
 	if err != nil {
 		return nil, err
 	}
-	return ParseVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[VirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) StopServerRaw(ctx context.Context, body StopServerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -928,7 +721,7 @@ func (c *Client) StopServerWithApplicationJSONPatchPlusJSONBody(ctx context.Cont
 	if err != nil {
 		return nil, err
 	}
-	return ParseVirtualServerDetailsItem(rsp)
+	return response.ParseResponse[VirtualServerDetailsItem](rsp)
 }
 
 func (c *Client) StopServerWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body StopServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
