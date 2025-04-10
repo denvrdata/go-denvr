@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/HEAD/configuration-schema.json
+package: applications
+output: applications.gen.go
+generate:
+  models: true
+  client: true
+output-options:
+  include-tags: ["servers/applications"]
+  user-templates:
+    imports.tmpl: ../../../../templates/imports.tmpl
+    client.tmpl: ../../../../templates/client.tmpl
+    client-with-responses.tmpl: ../../../../templates/client-with-responses.tmpl
+    typedef.tmpl: ../../../../templates/typedef.tmpl
