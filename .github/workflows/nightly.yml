@@ -1,0 +1,61 @@
+name: Nightly API Update
+
+on:
+  schedule:
+    # Run at 6 AM UTC every day
+    - cron: "0 6 * * *"
+  # Optional: Allow manual triggering
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  # TODO: Split update-api with creating the pull request for security purposes.
+  update-api:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.23"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+
+      - name: Download the latest dev api file
+        run: python tools/download.py
+
+      - name: Run code generation
+        run: go generate -v -x ./...
+
+      - name: Format code with gofmt
+        run: gofmt -w .
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        if: steps.git-check.outputs.changes == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "API changes detected in development"
+          title: "Automated API Update"
+          body: |
+            API changes detected in development.
+            The `go generate` and `gofmt` have been used to update the SDK codebase.
+            Please review, merge and tag a new release with the next production release.
+          branch: automated-api-update
+          delete-branch: true
