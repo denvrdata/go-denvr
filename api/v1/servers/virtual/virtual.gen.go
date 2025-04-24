@@ -54,8 +54,11 @@ type CreateVirtualServerInput struct {
 	RootDiskSize *int32 `json:"rootDiskSize,omitempty"`
 
 	// Rpool Name of the pool to be used. If not provided, first pool assigned to a tenant will be used. In case of no pool assigned, 'on-demand' will be used.
-	Rpool   *string  `json:"rpool"`
-	SshKeys []string `json:"ssh_keys"`
+	Rpool *string `json:"rpool"`
+
+	// SnapshotName Snapshot name.
+	SnapshotName *string  `json:"snapshotName"`
+	SshKeys      []string `json:"ssh_keys"`
 
 	// TenantSharedAdditionalStorage Tenant shared storage file system mount path.
 	TenantSharedAdditionalStorage *string `json:"tenantSharedAdditionalStorage"`
@@ -112,7 +115,7 @@ type ServerCommandInput struct {
 	// Id The virtual machine id
 	Id string `json:"id"`
 
-	// Namespace The namespace where the virtual machine lives. This is usually just the tenant name.
+	// Namespace The namespace/vpc where the virtual machine lives. Default one is same as tenant name.
 	Namespace string `json:"namespace"`
 }
 
@@ -177,7 +180,8 @@ type VirtualServerDetailsItem struct {
 	Namespace *string `json:"namespace"`
 
 	// PrivateIp The private IP address of the VM
-	PrivateIp *string `json:"privateIp"`
+	PrivateIp    *string `json:"privateIp"`
+	RootDiskSize *string `json:"rootDiskSize"`
 
 	// Rpool Resource pool where the VM has been created
 	Rpool *string `json:"rpool"`
@@ -204,7 +208,7 @@ type DestroyServerParams struct {
 	// Id The virtual machine id
 	Id string `form:"Id" json:"Id"`
 
-	// Namespace The namespace where the virtual machine lives. This is usually just the tenant name.
+	// Namespace The namespace/vpc where the virtual machine lives. Default one is same as tenant name.
 	Namespace string `form:"Namespace" json:"Namespace"`
 
 	// Cluster The cluster you're operating on
@@ -216,7 +220,7 @@ type GetAvailabilityParams struct {
 	Cluster      string  `form:"cluster" json:"cluster"`
 	ResourcePool *string `form:"resourcePool,omitempty" json:"resourcePool,omitempty"`
 
-	// ReportNodes controls if nodes_available and nodes_max_capacity is calculated and returned in the response. If they are not needed, use 'false' to improve response time of thie endpoint.
+	// ReportNodes controls if Count and MaxCount is calculated and returned in the response. If they are not needed, use 'false' to improve response time of the endpoint.
 	ReportNodes *bool `form:"reportNodes,omitempty" json:"reportNodes,omitempty"`
 }
 
@@ -225,7 +229,7 @@ type GetServerParams struct {
 	// Id The virtual machine id
 	Id string `form:"Id" json:"Id"`
 
-	// Namespace The namespace where the virtual machine lives. This is usually just the tenant name.
+	// Namespace The namespace/vpc where the virtual machine lives. Default one is same as tenant name.
 	Namespace string `form:"Namespace" json:"Namespace"`
 
 	// Cluster The cluster you're operating on

@@ -21,63 +21,30 @@ import (
 	"github.com/denvrdata/go-denvr/response"
 )
 
-// ApplicationCatalogItemDto defines model for ApplicationCatalogItemDto.
-type ApplicationCatalogItemDto struct {
-	AdditionalProperties *string                             `json:"additionalProperties"`
-	Description          *string                             `json:"description"`
-	DisplayName          *string                             `json:"displayName"`
-	Id                   *int32                              `json:"id,omitempty"`
-	IsDefault            *bool                               `json:"isDefault,omitempty"`
-	LogoUrl              *string                             `json:"logoUrl"`
-	Name                 *string                             `json:"name"`
-	Type                 *string                             `json:"type"`
-	Versions             *[]ApplicationCatalogItemVersionDto `json:"versions"`
+// ApplicationsApiApplicationConfig defines model for ApplicationsApiApplicationConfig.
+type ApplicationsApiApplicationConfig struct {
+	Clusters                *[]string `json:"clusters"`
+	Description             *string   `json:"description"`
+	DirectAttachedStorageGb *int32    `json:"directAttachedStorageGb"`
+	GpuBrand                *string   `json:"gpuBrand"`
+	GpuCount                *int32    `json:"gpuCount"`
+	GpuName                 *string   `json:"gpuName"`
+	GpuType                 *string   `json:"gpuType"`
+	MemoryGb                *int64    `json:"memoryGb"`
+	Name                    *string   `json:"name"`
+	PricePerHour            *float64  `json:"pricePerHour"`
+	VcpusCount              *int32    `json:"vcpusCount"`
 }
 
-// ApplicationCatalogItemVersionDto defines model for ApplicationCatalogItemVersionDto.
-type ApplicationCatalogItemVersionDto struct {
-	AdditionalProperties     *string    `json:"additionalProperties"`
-	ApplicationCatalogItemId *int32     `json:"applicationCatalogItemId"`
-	Description              *string    `json:"description"`
-	Id                       *int32     `json:"id,omitempty"`
-	ImageLastPushDate        *time.Time `json:"imageLastPushDate"`
-	ImageUrl                 *string    `json:"imageUrl"`
-	Name                     *string    `json:"name"`
-	Platform                 *string    `json:"platform"`
-	SourceDetailsUrl         *string    `json:"sourceDetailsUrl"`
-}
-
-// ApplicationDetailsItemDto defines model for ApplicationDetailsItemDto.
-type ApplicationDetailsItemDto struct {
-	ApplicationCatalogItem         *ApplicationCatalogItemDto `json:"applicationCatalogItem,omitempty"`
-	ApplicationCatalogItemType     *string                    `json:"applicationCatalogItemType"`
-	Cluster                        *string                    `json:"cluster"`
-	CommandOverride                *string                    `json:"commandOverride"`
-	CreatedBy                      *string                    `json:"createdBy"`
-	CreatedByTenantId              *string                    `json:"createdByTenantId"`
-	CreatedByUserId                *string                    `json:"createdByUserId"`
-	CreationTime                   *time.Time                 `json:"creationTime,omitempty"`
-	Dns                            *string                    `json:"dns"`
-	EnvironmentVariables           *map[string]*string        `json:"environmentVariables"`
-	HardwarePackage                *HardwarePackageDto        `json:"hardwarePackage,omitempty"`
-	ImageRepositoryHostname        *string                    `json:"imageRepositoryHostname"`
-	ImageRepositoryPassword        *string                    `json:"imageRepositoryPassword"`
-	ImageRepositoryUsername        *string                    `json:"imageRepositoryUsername"`
-	ImageUrl                       *string                    `json:"imageUrl"`
-	LastUpdated                    *time.Time                 `json:"lastUpdated,omitempty"`
-	Name                           *string                    `json:"name"`
-	PersistedDirectAttachedStorage *bool                      `json:"persistedDirectAttachedStorage,omitempty"`
-	PersonalSharedStorage          *bool                      `json:"personalSharedStorage,omitempty"`
-	Ports                          *[]int32                   `json:"ports"`
-	PrivateIp                      *string                    `json:"privateIp"`
-	PublicIp                       *string                    `json:"publicIp"`
-	ReadinessWatcherPort           *string                    `json:"readinessWatcherPort"`
-	ResourcePool                   *string                    `json:"resourcePool"`
-	SshKeys                        *[]string                  `json:"sshKeys"`
-	SshUsername                    *string                    `json:"sshUsername"`
-	Status                         *string                    `json:"status"`
-	Tenant                         *string                    `json:"tenant"`
-	TenantSharedStorage            *bool                      `json:"tenantSharedStorage,omitempty"`
+// ApplicationsApiApplicationConfigAvailability defines model for ApplicationsApiApplicationConfigAvailability.
+type ApplicationsApiApplicationConfigAvailability struct {
+	Available     *bool    `json:"available"`
+	Cluster       *string  `json:"cluster"`
+	Configuration *string  `json:"configuration"`
+	Count         *int32   `json:"count"`
+	MaxCount      *int32   `json:"maxCount"`
+	Price         *float64 `json:"price"`
+	Rpool         *string  `json:"rpool"`
 }
 
 // ApplicationsApiCatalogItem defines model for ApplicationsApiCatalogItem.
@@ -126,7 +93,7 @@ type ApplicationsApiCreateRequest struct {
 	// Cluster The cluster you're operating on
 	Cluster string `json:"cluster"`
 
-	// HardwarePackageName The name or unique identifier of the hardware package to use for the application.
+	// HardwarePackageName The name or unique identifier of the application hardware configuration to use for the application.
 	HardwarePackageName string `json:"hardwarePackageName"`
 
 	// JupyterToken An authentication token for accessing Jupyter Notebook enabled applications
@@ -151,27 +118,55 @@ type ApplicationsApiCreateRequest struct {
 	TenantSharedStorage *bool `json:"tenantSharedStorage,omitempty"`
 }
 
-// ApplicationsApiDetails defines model for ApplicationsApiDetails.
-type ApplicationsApiDetails struct {
-	ApplicationCatalogItem *ApplicationsApiCatalogItem     `json:"applicationCatalogItem,omitempty"`
-	HardwarePackage        *ApplicationsApiHardwarePackage `json:"hardwarePackage,omitempty"`
-	InstanceDetails        *InstanceDetails                `json:"instanceDetails,omitempty"`
+// ApplicationsApiCustomApiCreateRequest defines model for ApplicationsApiCustomApiCreateRequest.
+type ApplicationsApiCustomApiCreateRequest struct {
+	// Cluster The cluster you're operating on
+	Cluster string `json:"cluster"`
+
+	// EnvironmentVariables Environment variables for the application.
+	// Names must start with a letter or underscore and contain only alphanumeric characters and underscores.
+	// Values must not contain null characters, carriage returns, or newlines.
+	EnvironmentVariables *map[string]*string `json:"environmentVariables"`
+
+	// HardwarePackageName The name or unique identifier of the application hardware configuration to use for the application.
+	HardwarePackageName string `json:"hardwarePackageName"`
+
+	// ImageCmdOverride Optional Image CMD override allows users to specify a custom command to run in the container.
+	// Must be a JSON array (e.g., ["python", "train.py"])
+	ImageCmdOverride *[]string          `json:"imageCmdOverride"`
+	ImageRepository  ImageRepositoryDto `json:"imageRepository"`
+
+	// ImageUrl Image URL for the custom application.
+	ImageUrl string `json:"imageUrl"`
+
+	// Name The application name
+	Name string `json:"name"`
+
+	// PersistDirectAttachedStorage Indicates whether to persist direct attached storage (if resource pool is reserved)
+	PersistDirectAttachedStorage *bool `json:"persistDirectAttachedStorage,omitempty"`
+
+	// PersonalSharedStorage Enable personal shared storage for the application
+	PersonalSharedStorage *bool `json:"personalSharedStorage,omitempty"`
+
+	// ReadinessWatcherPort The port used for monitoring application readiness and status.
+	// Common examples:
+	// - 443 (JupyterLab)
+	// - 22 (SSH)
+	ReadinessWatcherPort *int32 `json:"readinessWatcherPort"`
+
+	// ResourcePool The resource pool to use for the application
+	ResourcePool    *string             `json:"resourcePool"`
+	SecurityContext *SecurityContextDto `json:"securityContext,omitempty"`
+
+	// TenantSharedStorage Enable tenant shared storage for the application
+	TenantSharedStorage *bool `json:"tenantSharedStorage,omitempty"`
 }
 
-// ApplicationsApiHardwarePackage defines model for ApplicationsApiHardwarePackage.
-type ApplicationsApiHardwarePackage struct {
-	Clusters                 *[]string `json:"clusters"`
-	Description              *string   `json:"description"`
-	DirectAttachedStorageGb  *int32    `json:"directAttachedStorageGb"`
-	GpuBrand                 *string   `json:"gpuBrand"`
-	GpuCount                 *int32    `json:"gpuCount"`
-	GpuName                  *string   `json:"gpuName"`
-	GpuType                  *string   `json:"gpuType"`
-	MemoryGb                 *int64    `json:"memoryGb"`
-	Name                     *string   `json:"name"`
-	OperatingSystemStorageGb *int32    `json:"operatingSystemStorageGb"`
-	PricePerHour             *float64  `json:"pricePerHour"`
-	VcpusCount               *int32    `json:"vcpusCount"`
+// ApplicationsApiDetails defines model for ApplicationsApiDetails.
+type ApplicationsApiDetails struct {
+	ApplicationCatalogItem *ApplicationsApiCatalogItem       `json:"applicationCatalogItem,omitempty"`
+	HardwarePackage        *ApplicationsApiApplicationConfig `json:"hardwarePackage,omitempty"`
+	InstanceDetails        *InstanceDetails                  `json:"instanceDetails,omitempty"`
 }
 
 // ApplicationsApiOverview defines model for ApplicationsApiOverview.
@@ -208,46 +203,63 @@ type Data struct {
 	StartTime *time.Time `json:"startTime,omitempty"`
 }
 
-// HardwarePackageDto defines model for HardwarePackageDto.
-type HardwarePackageDto struct {
-	Available                  *bool    `json:"available"`
-	AvailableCount             *int32   `json:"availableCount"`
-	DeploymentJson             *string  `json:"deploymentJson"`
-	Description                *string  `json:"description"`
-	DirectAttachedStorageSize  *int32   `json:"directAttachedStorageSize"`
-	DirectAttachedStorageUnit  *string  `json:"directAttachedStorageUnit"`
-	DisplayName                *string  `json:"displayName"`
-	GpuBrand                   *string  `json:"gpuBrand"`
-	GpuCount                   *int32   `json:"gpuCount"`
-	GpuName                    *string  `json:"gpuName"`
-	GpuType                    *string  `json:"gpuType"`
-	Id                         *int32   `json:"id,omitempty"`
-	LogoUrl                    *string  `json:"logoUrl"`
-	MaxCount                   *int32   `json:"maxCount"`
-	MemoryByte                 *int64   `json:"memoryByte"`
-	Name                       *string  `json:"name"`
-	OperatingSystemStorageSize *int32   `json:"operatingSystemStorageSize"`
-	OperatingSystemStorageUnit *string  `json:"operatingSystemStorageUnit"`
-	PricePerHour               *float64 `json:"pricePerHour"`
-	VcpusCount                 *int32   `json:"vcpusCount"`
+// ImageRepositoryDto defines model for ImageRepositoryDto.
+type ImageRepositoryDto struct {
+	// Hostname The registry hostname for the container repository.
+	// Examples:
+	// - Docker Hub: "https://index.docker.io/v1/"
+	// - GitHub Container Registry: "https://ghcr.io/"
+	Hostname string `json:"hostname"`
+
+	// Password The password or access token for authentication with private repositories.
+	// This is only required if the repository is private.
+	Password *string `json:"password"`
+
+	// Username The username for authentication with private repositories.
+	// This is only required if the repository is private.
+	Username *string `json:"username"`
 }
 
 // InstanceDetails defines model for InstanceDetails.
 type InstanceDetails struct {
-	Cluster                        *string    `json:"cluster"`
-	CreatedBy                      *string    `json:"createdBy"`
-	CreationTime                   *time.Time `json:"creationTime,omitempty"`
-	Dns                            *string    `json:"dns"`
-	Id                             *string    `json:"id"`
-	LastUpdated                    *time.Time `json:"lastUpdated,omitempty"`
-	PersistedDirectAttachedStorage *bool      `json:"persistedDirectAttachedStorage,omitempty"`
-	PersonalSharedStorage          *bool      `json:"personalSharedStorage,omitempty"`
-	PrivateIp                      *string    `json:"privateIp"`
-	PublicIp                       *string    `json:"publicIp"`
-	ResourcePool                   *string    `json:"resourcePool"`
-	Status                         *string    `json:"status"`
-	Tenant                         *string    `json:"tenant"`
-	TenantSharedStorage            *bool      `json:"tenantSharedStorage,omitempty"`
+	Cluster *string `json:"cluster"`
+
+	// ContainerGid Group ID (GID) for running container when not using root privileges
+	ContainerGid *int32 `json:"containerGid"`
+
+	// ContainerUid User ID (UID) for running container when not using root privileges
+	ContainerUid                   *int32              `json:"containerUid"`
+	CreatedBy                      *string             `json:"createdBy"`
+	CreationTime                   *time.Time          `json:"creationTime,omitempty"`
+	Dns                            *string             `json:"dns"`
+	EnvironmentVariables           *map[string]*string `json:"environmentVariables"`
+	Id                             *string             `json:"id"`
+	ImageCmdOverride               *string             `json:"imageCmdOverride"`
+	LastUpdated                    *time.Time          `json:"lastUpdated,omitempty"`
+	PersistedDirectAttachedStorage *bool               `json:"persistedDirectAttachedStorage,omitempty"`
+	PersonalSharedStorage          *bool               `json:"personalSharedStorage,omitempty"`
+	PrivateIp                      *string             `json:"privateIp"`
+	PublicIp                       *string             `json:"publicIp"`
+	ReadinessWatcherPort           *int32              `json:"readinessWatcherPort"`
+	ResourcePool                   *string             `json:"resourcePool"`
+
+	// RunAsRoot Run container with root privileges. When disabled, requires UID and GID.
+	RunAsRoot           *bool   `json:"runAsRoot,omitempty"`
+	Status              *string `json:"status"`
+	StatusMessage       *string `json:"statusMessage"`
+	StatusReason        *string `json:"statusReason"`
+	Tenant              *string `json:"tenant"`
+	TenantSharedStorage *bool   `json:"tenantSharedStorage,omitempty"`
+}
+
+// ListResultDtoOfApplicationsApiApplicationConfig defines model for ListResultDtoOfApplicationsApiApplicationConfig.
+type ListResultDtoOfApplicationsApiApplicationConfig struct {
+	Items *[]ApplicationsApiApplicationConfig `json:"items"`
+}
+
+// ListResultDtoOfApplicationsApiApplicationConfigAvailability defines model for ListResultDtoOfApplicationsApiApplicationConfigAvailability.
+type ListResultDtoOfApplicationsApiApplicationConfigAvailability struct {
+	Items *[]ApplicationsApiApplicationConfigAvailability `json:"items"`
 }
 
 // ListResultDtoOfApplicationsApiCatalogItem defines model for ListResultDtoOfApplicationsApiCatalogItem.
@@ -255,14 +267,21 @@ type ListResultDtoOfApplicationsApiCatalogItem struct {
 	Items *[]ApplicationsApiCatalogItem `json:"items"`
 }
 
-// ListResultDtoOfApplicationsApiDetails defines model for ListResultDtoOfApplicationsApiDetails.
-type ListResultDtoOfApplicationsApiDetails struct {
-	Items *[]ApplicationsApiDetails `json:"items"`
+// ListResultDtoOfApplicationsApiOverview defines model for ListResultDtoOfApplicationsApiOverview.
+type ListResultDtoOfApplicationsApiOverview struct {
+	Items *[]ApplicationsApiOverview `json:"items"`
 }
 
-// ListResultDtoOfHardwarePackageDto defines model for ListResultDtoOfHardwarePackageDto.
-type ListResultDtoOfHardwarePackageDto struct {
-	Items *[]HardwarePackageDto `json:"items"`
+// SecurityContextDto defines model for SecurityContextDto.
+type SecurityContextDto struct {
+	// ContainerGid Group ID (GID) for running container when not using root privileges
+	ContainerGid *int32 `json:"containerGid"`
+
+	// ContainerUid User ID (UID) for running container when not using root privileges
+	ContainerUid *int32 `json:"containerUid"`
+
+	// RunAsRoot Run container with root privileges. When disabled, requires UID and GID.
+	RunAsRoot *bool `json:"runAsRoot,omitempty"`
 }
 
 // DestroyApplicationParams defines parameters for DestroyApplication.
@@ -289,14 +308,23 @@ type GetAvailabilityParams struct {
 	ResourcePool string `form:"resourcePool" json:"resourcePool"`
 }
 
-// CreateApplicationApplicationWildcardPlusJSONRequestBody defines body for CreateApplication for application/*+json ContentType.
-type CreateApplicationApplicationWildcardPlusJSONRequestBody = ApplicationsApiCreateRequest
+// CreateCatalogApplicationApplicationWildcardPlusJSONRequestBody defines body for CreateCatalogApplication for application/*+json ContentType.
+type CreateCatalogApplicationApplicationWildcardPlusJSONRequestBody = ApplicationsApiCreateRequest
 
-// CreateApplicationJSONRequestBody defines body for CreateApplication for application/json ContentType.
-type CreateApplicationJSONRequestBody = ApplicationsApiCreateRequest
+// CreateCatalogApplicationJSONRequestBody defines body for CreateCatalogApplication for application/json ContentType.
+type CreateCatalogApplicationJSONRequestBody = ApplicationsApiCreateRequest
 
-// CreateApplicationApplicationJSONPatchPlusJSONRequestBody defines body for CreateApplication for application/json-patch+json ContentType.
-type CreateApplicationApplicationJSONPatchPlusJSONRequestBody = ApplicationsApiCreateRequest
+// CreateCatalogApplicationApplicationJSONPatchPlusJSONRequestBody defines body for CreateCatalogApplication for application/json-patch+json ContentType.
+type CreateCatalogApplicationApplicationJSONPatchPlusJSONRequestBody = ApplicationsApiCreateRequest
+
+// CreateCustomApplicationApplicationWildcardPlusJSONRequestBody defines body for CreateCustomApplication for application/*+json ContentType.
+type CreateCustomApplicationApplicationWildcardPlusJSONRequestBody = ApplicationsApiCustomApiCreateRequest
+
+// CreateCustomApplicationJSONRequestBody defines body for CreateCustomApplication for application/json ContentType.
+type CreateCustomApplicationJSONRequestBody = ApplicationsApiCustomApiCreateRequest
+
+// CreateCustomApplicationApplicationJSONPatchPlusJSONRequestBody defines body for CreateCustomApplication for application/json-patch+json ContentType.
+type CreateCustomApplicationApplicationJSONPatchPlusJSONRequestBody = ApplicationsApiCustomApiCreateRequest
 
 // StartApplicationApplicationWildcardPlusJSONRequestBody defines body for StartApplication for application/*+json ContentType.
 type StartApplicationApplicationWildcardPlusJSONRequestBody = ApplicationsApiCommandRequest
@@ -364,20 +392,35 @@ func NewClient() Client {
 // The interface specification for the client above.
 type ClientInterface interface {
 
-	// CreateApplicationWithBody request with any body
-	CreateApplicationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error)
+	// CreateCatalogApplicationWithBody request with any body
+	CreateCatalogApplicationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error)
 
-	// CreateApplicationWithBodyRaw request with any body
-	CreateApplicationWithBodyRaw(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// CreateCatalogApplicationWithBodyRaw request with any body
+	CreateCatalogApplicationWithBodyRaw(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	CreateApplicationWithApplicationWildcardPlusJSONBody(ctx context.Context, body CreateApplicationApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error)
-	CreateApplicationWithApplicationWildcardPlusJSONBodyRaw(ctx context.Context, body CreateApplicationApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	CreateCatalogApplicationWithApplicationWildcardPlusJSONBody(ctx context.Context, body CreateCatalogApplicationApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error)
+	CreateCatalogApplicationWithApplicationWildcardPlusJSONBodyRaw(ctx context.Context, body CreateCatalogApplicationApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	CreateApplication(ctx context.Context, body CreateApplicationJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error)
-	CreateApplicationRaw(ctx context.Context, body CreateApplicationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	CreateCatalogApplication(ctx context.Context, body CreateCatalogApplicationJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error)
+	CreateCatalogApplicationRaw(ctx context.Context, body CreateCatalogApplicationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	CreateApplicationWithApplicationJSONPatchPlusJSONBody(ctx context.Context, body CreateApplicationApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error)
-	CreateApplicationWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body CreateApplicationApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	CreateCatalogApplicationWithApplicationJSONPatchPlusJSONBody(ctx context.Context, body CreateCatalogApplicationApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error)
+	CreateCatalogApplicationWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body CreateCatalogApplicationApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateCustomApplicationWithBody request with any body
+	CreateCustomApplicationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error)
+
+	// CreateCustomApplicationWithBodyRaw request with any body
+	CreateCustomApplicationWithBodyRaw(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateCustomApplicationWithApplicationWildcardPlusJSONBody(ctx context.Context, body CreateCustomApplicationApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error)
+	CreateCustomApplicationWithApplicationWildcardPlusJSONBodyRaw(ctx context.Context, body CreateCustomApplicationApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateCustomApplication(ctx context.Context, body CreateCustomApplicationJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error)
+	CreateCustomApplicationRaw(ctx context.Context, body CreateCustomApplicationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CreateCustomApplicationWithApplicationJSONPatchPlusJSONBody(ctx context.Context, body CreateCustomApplicationApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error)
+	CreateCustomApplicationWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body CreateCustomApplicationApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// DestroyApplication request
 	DestroyApplication(ctx context.Context, params *DestroyApplicationParams, reqEditors ...RequestEditorFn) (*ApplicationsApiCommandResponse, error)
@@ -392,25 +435,25 @@ type ClientInterface interface {
 	GetApplicationCatalogItemsRaw(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetApplicationDetails request
-	GetApplicationDetails(ctx context.Context, params *GetApplicationDetailsParams, reqEditors ...RequestEditorFn) (*ApplicationDetailsItemDto, error)
+	GetApplicationDetails(ctx context.Context, params *GetApplicationDetailsParams, reqEditors ...RequestEditorFn) (*ApplicationsApiDetails, error)
 
 	// GetApplicationDetailsRaw request
 	GetApplicationDetailsRaw(ctx context.Context, params *GetApplicationDetailsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetApplications request
-	GetApplications(ctx context.Context, reqEditors ...RequestEditorFn) (*ListResultDtoOfApplicationsApiDetails, error)
+	GetApplications(ctx context.Context, reqEditors ...RequestEditorFn) (*ListResultDtoOfApplicationsApiOverview, error)
 
 	// GetApplicationsRaw request
 	GetApplicationsRaw(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetAvailability request
-	GetAvailability(ctx context.Context, params *GetAvailabilityParams, reqEditors ...RequestEditorFn) (*ListResultDtoOfHardwarePackageDto, error)
+	GetAvailability(ctx context.Context, params *GetAvailabilityParams, reqEditors ...RequestEditorFn) (*ListResultDtoOfApplicationsApiApplicationConfigAvailability, error)
 
 	// GetAvailabilityRaw request
 	GetAvailabilityRaw(ctx context.Context, params *GetAvailabilityParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetConfigurations request
-	GetConfigurations(ctx context.Context, reqEditors ...RequestEditorFn) (*ListResultDtoOfHardwarePackageDto, error)
+	GetConfigurations(ctx context.Context, reqEditors ...RequestEditorFn) (*ListResultDtoOfApplicationsApiApplicationConfig, error)
 
 	// GetConfigurationsRaw request
 	GetConfigurationsRaw(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -446,17 +489,17 @@ type ClientInterface interface {
 	StopApplicationWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body StopApplicationApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-// CreateApplicationWithBody request with arbitrary body returning *ApplicationsApiOverview
-func (c *Client) CreateApplicationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error) {
-	rsp, err := c.CreateApplicationWithBodyRaw(ctx, contentType, body, reqEditors...)
+// CreateCatalogApplicationWithBody request with arbitrary body returning *ApplicationsApiOverview
+func (c *Client) CreateCatalogApplicationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error) {
+	rsp, err := c.CreateCatalogApplicationWithBodyRaw(ctx, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
 	return response.ParseResponse[ApplicationsApiOverview](rsp)
 }
 
-func (c *Client) CreateApplicationWithBodyRaw(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewCreateApplicationRequestWithBody(c.Server, contentType, body)
+func (c *Client) CreateCatalogApplicationWithBodyRaw(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCatalogApplicationRequestWithBody(c.Server, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -467,16 +510,16 @@ func (c *Client) CreateApplicationWithBodyRaw(ctx context.Context, contentType s
 	return c.Client.Do(req)
 }
 
-func (c *Client) CreateApplicationWithApplicationWildcardPlusJSONBody(ctx context.Context, body CreateApplicationApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error) {
-	rsp, err := c.CreateApplicationWithApplicationWildcardPlusJSONBodyRaw(ctx, body, reqEditors...)
+func (c *Client) CreateCatalogApplicationWithApplicationWildcardPlusJSONBody(ctx context.Context, body CreateCatalogApplicationApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error) {
+	rsp, err := c.CreateCatalogApplicationWithApplicationWildcardPlusJSONBodyRaw(ctx, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
 	return response.ParseResponse[ApplicationsApiOverview](rsp)
 }
 
-func (c *Client) CreateApplicationWithApplicationWildcardPlusJSONBodyRaw(ctx context.Context, body CreateApplicationApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewCreateApplicationRequestWithApplicationWildcardPlusJSONBody(c.Server, body)
+func (c *Client) CreateCatalogApplicationWithApplicationWildcardPlusJSONBodyRaw(ctx context.Context, body CreateCatalogApplicationApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCatalogApplicationRequestWithApplicationWildcardPlusJSONBody(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -487,16 +530,16 @@ func (c *Client) CreateApplicationWithApplicationWildcardPlusJSONBodyRaw(ctx con
 	return c.Client.Do(req)
 }
 
-func (c *Client) CreateApplication(ctx context.Context, body CreateApplicationJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error) {
-	rsp, err := c.CreateApplicationRaw(ctx, body, reqEditors...)
+func (c *Client) CreateCatalogApplication(ctx context.Context, body CreateCatalogApplicationJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error) {
+	rsp, err := c.CreateCatalogApplicationRaw(ctx, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
 	return response.ParseResponse[ApplicationsApiOverview](rsp)
 }
 
-func (c *Client) CreateApplicationRaw(ctx context.Context, body CreateApplicationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewCreateApplicationRequest(c.Server, body)
+func (c *Client) CreateCatalogApplicationRaw(ctx context.Context, body CreateCatalogApplicationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCatalogApplicationRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -507,16 +550,97 @@ func (c *Client) CreateApplicationRaw(ctx context.Context, body CreateApplicatio
 	return c.Client.Do(req)
 }
 
-func (c *Client) CreateApplicationWithApplicationJSONPatchPlusJSONBody(ctx context.Context, body CreateApplicationApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error) {
-	rsp, err := c.CreateApplicationWithApplicationJSONPatchPlusJSONBodyRaw(ctx, body, reqEditors...)
+func (c *Client) CreateCatalogApplicationWithApplicationJSONPatchPlusJSONBody(ctx context.Context, body CreateCatalogApplicationApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error) {
+	rsp, err := c.CreateCatalogApplicationWithApplicationJSONPatchPlusJSONBodyRaw(ctx, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
 	return response.ParseResponse[ApplicationsApiOverview](rsp)
 }
 
-func (c *Client) CreateApplicationWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body CreateApplicationApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewCreateApplicationRequestWithApplicationJSONPatchPlusJSONBody(c.Server, body)
+func (c *Client) CreateCatalogApplicationWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body CreateCatalogApplicationApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCatalogApplicationRequestWithApplicationJSONPatchPlusJSONBody(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateCustomApplicationWithBody request with arbitrary body returning *ApplicationsApiOverview
+func (c *Client) CreateCustomApplicationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error) {
+	rsp, err := c.CreateCustomApplicationWithBodyRaw(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return response.ParseResponse[ApplicationsApiOverview](rsp)
+}
+
+func (c *Client) CreateCustomApplicationWithBodyRaw(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCustomApplicationRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateCustomApplicationWithApplicationWildcardPlusJSONBody(ctx context.Context, body CreateCustomApplicationApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error) {
+	rsp, err := c.CreateCustomApplicationWithApplicationWildcardPlusJSONBodyRaw(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return response.ParseResponse[ApplicationsApiOverview](rsp)
+}
+
+func (c *Client) CreateCustomApplicationWithApplicationWildcardPlusJSONBodyRaw(ctx context.Context, body CreateCustomApplicationApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCustomApplicationRequestWithApplicationWildcardPlusJSONBody(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateCustomApplication(ctx context.Context, body CreateCustomApplicationJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error) {
+	rsp, err := c.CreateCustomApplicationRaw(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return response.ParseResponse[ApplicationsApiOverview](rsp)
+}
+
+func (c *Client) CreateCustomApplicationRaw(ctx context.Context, body CreateCustomApplicationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCustomApplicationRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CreateCustomApplicationWithApplicationJSONPatchPlusJSONBody(ctx context.Context, body CreateCustomApplicationApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ApplicationsApiOverview, error) {
+	rsp, err := c.CreateCustomApplicationWithApplicationJSONPatchPlusJSONBodyRaw(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return response.ParseResponse[ApplicationsApiOverview](rsp)
+}
+
+func (c *Client) CreateCustomApplicationWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body CreateCustomApplicationApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCustomApplicationRequestWithApplicationJSONPatchPlusJSONBody(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -569,13 +693,13 @@ func (c *Client) GetApplicationCatalogItemsRaw(ctx context.Context, reqEditors .
 	return c.Client.Do(req)
 }
 
-// GetApplicationDetails request returning *ApplicationDetailsItemDto
-func (c *Client) GetApplicationDetails(ctx context.Context, params *GetApplicationDetailsParams, reqEditors ...RequestEditorFn) (*ApplicationDetailsItemDto, error) {
+// GetApplicationDetails request returning *ApplicationsApiDetails
+func (c *Client) GetApplicationDetails(ctx context.Context, params *GetApplicationDetailsParams, reqEditors ...RequestEditorFn) (*ApplicationsApiDetails, error) {
 	rsp, err := c.GetApplicationDetailsRaw(ctx, params, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return response.ParseResponse[ApplicationDetailsItemDto](rsp)
+	return response.ParseResponse[ApplicationsApiDetails](rsp)
 }
 
 func (c *Client) GetApplicationDetailsRaw(ctx context.Context, params *GetApplicationDetailsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -590,13 +714,13 @@ func (c *Client) GetApplicationDetailsRaw(ctx context.Context, params *GetApplic
 	return c.Client.Do(req)
 }
 
-// GetApplications request returning *ListResultDtoOfApplicationsApiDetails
-func (c *Client) GetApplications(ctx context.Context, reqEditors ...RequestEditorFn) (*ListResultDtoOfApplicationsApiDetails, error) {
+// GetApplications request returning *ListResultDtoOfApplicationsApiOverview
+func (c *Client) GetApplications(ctx context.Context, reqEditors ...RequestEditorFn) (*ListResultDtoOfApplicationsApiOverview, error) {
 	rsp, err := c.GetApplicationsRaw(ctx, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return response.ParseResponse[ListResultDtoOfApplicationsApiDetails](rsp)
+	return response.ParseResponse[ListResultDtoOfApplicationsApiOverview](rsp)
 }
 
 func (c *Client) GetApplicationsRaw(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -611,13 +735,13 @@ func (c *Client) GetApplicationsRaw(ctx context.Context, reqEditors ...RequestEd
 	return c.Client.Do(req)
 }
 
-// GetAvailability request returning *ListResultDtoOfHardwarePackageDto
-func (c *Client) GetAvailability(ctx context.Context, params *GetAvailabilityParams, reqEditors ...RequestEditorFn) (*ListResultDtoOfHardwarePackageDto, error) {
+// GetAvailability request returning *ListResultDtoOfApplicationsApiApplicationConfigAvailability
+func (c *Client) GetAvailability(ctx context.Context, params *GetAvailabilityParams, reqEditors ...RequestEditorFn) (*ListResultDtoOfApplicationsApiApplicationConfigAvailability, error) {
 	rsp, err := c.GetAvailabilityRaw(ctx, params, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return response.ParseResponse[ListResultDtoOfHardwarePackageDto](rsp)
+	return response.ParseResponse[ListResultDtoOfApplicationsApiApplicationConfigAvailability](rsp)
 }
 
 func (c *Client) GetAvailabilityRaw(ctx context.Context, params *GetAvailabilityParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -632,13 +756,13 @@ func (c *Client) GetAvailabilityRaw(ctx context.Context, params *GetAvailability
 	return c.Client.Do(req)
 }
 
-// GetConfigurations request returning *ListResultDtoOfHardwarePackageDto
-func (c *Client) GetConfigurations(ctx context.Context, reqEditors ...RequestEditorFn) (*ListResultDtoOfHardwarePackageDto, error) {
+// GetConfigurations request returning *ListResultDtoOfApplicationsApiApplicationConfig
+func (c *Client) GetConfigurations(ctx context.Context, reqEditors ...RequestEditorFn) (*ListResultDtoOfApplicationsApiApplicationConfig, error) {
 	rsp, err := c.GetConfigurationsRaw(ctx, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return response.ParseResponse[ListResultDtoOfHardwarePackageDto](rsp)
+	return response.ParseResponse[ListResultDtoOfApplicationsApiApplicationConfig](rsp)
 }
 
 func (c *Client) GetConfigurationsRaw(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -815,41 +939,41 @@ func (c *Client) StopApplicationWithApplicationJSONPatchPlusJSONBodyRaw(ctx cont
 	return c.Client.Do(req)
 }
 
-// NewCreateApplicationRequestWithApplicationWildcardPlusJSONBody calls the generic CreateApplication builder with application/*+json body
-func NewCreateApplicationRequestWithApplicationWildcardPlusJSONBody(server string, body CreateApplicationApplicationWildcardPlusJSONRequestBody) (*http.Request, error) {
+// NewCreateCatalogApplicationRequestWithApplicationWildcardPlusJSONBody calls the generic CreateCatalogApplication builder with application/*+json body
+func NewCreateCatalogApplicationRequestWithApplicationWildcardPlusJSONBody(server string, body CreateCatalogApplicationApplicationWildcardPlusJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewCreateApplicationRequestWithBody(server, "application/*+json", bodyReader)
+	return NewCreateCatalogApplicationRequestWithBody(server, "application/*+json", bodyReader)
 }
 
-// NewCreateApplicationRequest calls the generic CreateApplication builder with application/json body
-func NewCreateApplicationRequest(server string, body CreateApplicationJSONRequestBody) (*http.Request, error) {
+// NewCreateCatalogApplicationRequest calls the generic CreateCatalogApplication builder with application/json body
+func NewCreateCatalogApplicationRequest(server string, body CreateCatalogApplicationJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewCreateApplicationRequestWithBody(server, "application/json", bodyReader)
+	return NewCreateCatalogApplicationRequestWithBody(server, "application/json", bodyReader)
 }
 
-// NewCreateApplicationRequestWithApplicationJSONPatchPlusJSONBody calls the generic CreateApplication builder with application/json-patch+json body
-func NewCreateApplicationRequestWithApplicationJSONPatchPlusJSONBody(server string, body CreateApplicationApplicationJSONPatchPlusJSONRequestBody) (*http.Request, error) {
+// NewCreateCatalogApplicationRequestWithApplicationJSONPatchPlusJSONBody calls the generic CreateCatalogApplication builder with application/json-patch+json body
+func NewCreateCatalogApplicationRequestWithApplicationJSONPatchPlusJSONBody(server string, body CreateCatalogApplicationApplicationJSONPatchPlusJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewCreateApplicationRequestWithBody(server, "application/json-patch+json", bodyReader)
+	return NewCreateCatalogApplicationRequestWithBody(server, "application/json-patch+json", bodyReader)
 }
 
-// NewCreateApplicationRequestWithBody generates requests for CreateApplication with any type of body
-func NewCreateApplicationRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+// NewCreateCatalogApplicationRequestWithBody generates requests for CreateCatalogApplication with any type of body
+func NewCreateCatalogApplicationRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	serverURL, err := url.Parse(server)
@@ -857,7 +981,65 @@ func NewCreateApplicationRequestWithBody(server string, contentType string, body
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/servers/applications/CreateApplication")
+	operationPath := fmt.Sprintf("/api/v1/servers/applications/CreateCatalogApplication")
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewCreateCustomApplicationRequestWithApplicationWildcardPlusJSONBody calls the generic CreateCustomApplication builder with application/*+json body
+func NewCreateCustomApplicationRequestWithApplicationWildcardPlusJSONBody(server string, body CreateCustomApplicationApplicationWildcardPlusJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateCustomApplicationRequestWithBody(server, "application/*+json", bodyReader)
+}
+
+// NewCreateCustomApplicationRequest calls the generic CreateCustomApplication builder with application/json body
+func NewCreateCustomApplicationRequest(server string, body CreateCustomApplicationJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateCustomApplicationRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateCustomApplicationRequestWithApplicationJSONPatchPlusJSONBody calls the generic CreateCustomApplication builder with application/json-patch+json body
+func NewCreateCustomApplicationRequestWithApplicationJSONPatchPlusJSONBody(server string, body CreateCustomApplicationApplicationJSONPatchPlusJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateCustomApplicationRequestWithBody(server, "application/json-patch+json", bodyReader)
+}
+
+// NewCreateCustomApplicationRequestWithBody generates requests for CreateCustomApplication with any type of body
+func NewCreateCustomApplicationRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/servers/applications/CreateCustomApplication")
 	queryURL, err := serverURL.Parse(operationPath)
 	if err != nil {
 		return nil, err
