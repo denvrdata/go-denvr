@@ -5,7 +5,7 @@ A Go SDK for interacting with Denvr Cloud SDK
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/denvrdata/go-denvr/CI.yml)](https://github.com/denvrdata/go-denvr/actions/workflows/CI.yml)
 [![Coveralls](https://img.shields.io/coverallsCoverage/github/denvrdata/go-denvr)](https://coveralls.io/github/denvrdata/go-denvr?branch=main)
 [![Swagger Validator](https://img.shields.io/swagger/valid/3.0?specUrl=https%3A%2F%2Fapi.cloud.denvrdata.com%2Fswagger%2Fv1%2Fswagger.json)](https://api.cloud.denvrdata.com/swagger/index.html)
-[![go-denvr Docs](https://img.shields.io/badge/denvr-docs-%234493c5?style=flat)](https://pkg.go.dev/github.com/denvrdata/go-denvr)
+[![go-denvr Docs](https://img.shields.io/badge/pkg.go.dev-docs-%234493c5?style=flat)](https://pkg.go.dev/github.com/denvrdata/go-denvr)
 [![Denvr Dataworks Docs](https://img.shields.io/badge/denvr_cloud-docs-%234493c5?style=flat)](https://docs.denvrdata.com/docs)
 [![Denvr Dataworks Registration](https://img.shields.io/badge/denvr_cloud-registration-%234493c5?style=flat)](https://console.cloud.denvrdata.com/account/register-tenant)
 
