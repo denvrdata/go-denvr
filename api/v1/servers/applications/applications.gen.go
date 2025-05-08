@@ -148,6 +148,9 @@ type ApplicationsApiCustomApiCreateRequest struct {
 	// PersonalSharedStorage Enable personal shared storage for the application
 	PersonalSharedStorage *bool `json:"personalSharedStorage,omitempty"`
 
+	// ProxyPort Port where your service expects HTTPS traffic.
+	ProxyPort *int32 `json:"proxyPort"`
+
 	// ReadinessWatcherPort The port used for monitoring application readiness and status.
 	// Common examples:
 	// - 443 (JupyterLab)
@@ -239,6 +242,7 @@ type InstanceDetails struct {
 	PersistedDirectAttachedStorage *bool               `json:"persistedDirectAttachedStorage,omitempty"`
 	PersonalSharedStorage          *bool               `json:"personalSharedStorage,omitempty"`
 	PrivateIp                      *string             `json:"privateIp"`
+	ProxyPort                      *int32              `json:"proxyPort"`
 	PublicIp                       *string             `json:"publicIp"`
 	ReadinessWatcherPort           *int32              `json:"readinessWatcherPort"`
 	ResourcePool                   *string             `json:"resourcePool"`

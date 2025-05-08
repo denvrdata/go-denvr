@@ -205,6 +205,9 @@ type VirtualServerDetailsItem struct {
 
 // DestroyServerParams defines parameters for DestroyServer.
 type DestroyServerParams struct {
+	// DeleteSnapshots Should also delete snapshots with virtual machine.
+	DeleteSnapshots *bool `form:"DeleteSnapshots,omitempty" json:"DeleteSnapshots,omitempty"`
+
 	// Id The virtual machine id
 	Id string `form:"Id" json:"Id"`
 
@@ -815,6 +818,22 @@ func NewDestroyServerRequest(server string, params *DestroyServerParams) (*http.
 
 	if params != nil {
 		queryValues := queryURL.Query()
+
+		if params.DeleteSnapshots != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "DeleteSnapshots", runtime.ParamLocationQuery, *params.DeleteSnapshots); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
 
 		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "Id", runtime.ParamLocationQuery, params.Id); err != nil {
 			return nil, err
