@@ -148,7 +148,8 @@ type ApplicationsApiCustomApiCreateRequest struct {
 	// PersonalSharedStorage Enable personal shared storage for the application
 	PersonalSharedStorage *bool `json:"personalSharedStorage,omitempty"`
 
-	// ProxyPort Port where your service expects HTTPS traffic.
+	// ProxyPort The port your application uses to receive HTTPS traffic.
+	// Port 443 is reserved for the reverse proxy and cannot be used.
 	ProxyPort *int32 `json:"proxyPort"`
 
 	// ReadinessWatcherPort The port used for monitoring application readiness and status.
