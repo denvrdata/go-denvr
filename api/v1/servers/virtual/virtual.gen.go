@@ -107,6 +107,14 @@ type ServerAvailability struct {
 	Type *string `json:"type"`
 }
 
+// ServerBootLogsOutput defines model for ServerBootLogsOutput.
+type ServerBootLogsOutput struct {
+	BootLogs  *string `json:"bootLogs"`
+	Cluster   *string `json:"cluster"`
+	Id        *string `json:"id"`
+	Namespace *string `json:"namespace"`
+}
+
 // ServerCommandInput defines model for ServerCommandInput.
 type ServerCommandInput struct {
 	// Cluster The cluster you're operating on
@@ -117,6 +125,13 @@ type ServerCommandInput struct {
 
 	// Namespace The namespace/vpc where the virtual machine lives. Default one is same as tenant name.
 	Namespace string `json:"namespace"`
+}
+
+// ServerCommandOutput defines model for ServerCommandOutput.
+type ServerCommandOutput struct {
+	Cluster *string `json:"cluster"`
+	Id      *string `json:"id"`
+	Status  *string `json:"status"`
 }
 
 // ServerConfiguration defines model for ServerConfiguration.
@@ -244,6 +259,21 @@ type GetServersParams struct {
 	Cluster *string `form:"Cluster,omitempty" json:"Cluster,omitempty"`
 }
 
+// GetVirtualMachineBootLogsParams defines parameters for GetVirtualMachineBootLogs.
+type GetVirtualMachineBootLogsParams struct {
+	// Id The virtual machine id
+	Id string `form:"Id" json:"Id"`
+
+	// Namespace The namespace/vpc where the virtual machine lives. Default one is same as tenant name.
+	Namespace string `form:"Namespace" json:"Namespace"`
+
+	// Cluster The cluster you're operating on
+	Cluster string `form:"Cluster" json:"Cluster"`
+
+	// Limit The maximum number of log entries to return. Defaults to 2000.
+	Limit int32 `form:"Limit" json:"Limit"`
+}
+
 // CreateServerApplicationWildcardPlusJSONRequestBody defines body for CreateServer for application/*+json ContentType.
 type CreateServerApplicationWildcardPlusJSONRequestBody = CreateVirtualServerInput
 
@@ -335,7 +365,7 @@ type ClientInterface interface {
 	CreateServerWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body CreateServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// DestroyServer request
-	DestroyServer(ctx context.Context, params *DestroyServerParams, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error)
+	DestroyServer(ctx context.Context, params *DestroyServerParams, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error)
 
 	// DestroyServerRaw request
 	DestroyServerRaw(ctx context.Context, params *DestroyServerParams, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -364,34 +394,40 @@ type ClientInterface interface {
 	// GetServersRaw request
 	GetServersRaw(ctx context.Context, params *GetServersParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetVirtualMachineBootLogs request
+	GetVirtualMachineBootLogs(ctx context.Context, params *GetVirtualMachineBootLogsParams, reqEditors ...RequestEditorFn) (*ServerBootLogsOutput, error)
+
+	// GetVirtualMachineBootLogsRaw request
+	GetVirtualMachineBootLogsRaw(ctx context.Context, params *GetVirtualMachineBootLogsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// StartServerWithBody request with any body
-	StartServerWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error)
+	StartServerWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error)
 
 	// StartServerWithBodyRaw request with any body
 	StartServerWithBodyRaw(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	StartServerWithApplicationWildcardPlusJSONBody(ctx context.Context, body StartServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error)
+	StartServerWithApplicationWildcardPlusJSONBody(ctx context.Context, body StartServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error)
 	StartServerWithApplicationWildcardPlusJSONBodyRaw(ctx context.Context, body StartServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	StartServer(ctx context.Context, body StartServerJSONRequestBody, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error)
+	StartServer(ctx context.Context, body StartServerJSONRequestBody, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error)
 	StartServerRaw(ctx context.Context, body StartServerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	StartServerWithApplicationJSONPatchPlusJSONBody(ctx context.Context, body StartServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error)
+	StartServerWithApplicationJSONPatchPlusJSONBody(ctx context.Context, body StartServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error)
 	StartServerWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body StartServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// StopServerWithBody request with any body
-	StopServerWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error)
+	StopServerWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error)
 
 	// StopServerWithBodyRaw request with any body
 	StopServerWithBodyRaw(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	StopServerWithApplicationWildcardPlusJSONBody(ctx context.Context, body StopServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error)
+	StopServerWithApplicationWildcardPlusJSONBody(ctx context.Context, body StopServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error)
 	StopServerWithApplicationWildcardPlusJSONBodyRaw(ctx context.Context, body StopServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	StopServer(ctx context.Context, body StopServerJSONRequestBody, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error)
+	StopServer(ctx context.Context, body StopServerJSONRequestBody, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error)
 	StopServerRaw(ctx context.Context, body StopServerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	StopServerWithApplicationJSONPatchPlusJSONBody(ctx context.Context, body StopServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error)
+	StopServerWithApplicationJSONPatchPlusJSONBody(ctx context.Context, body StopServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error)
 	StopServerWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body StopServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
@@ -476,13 +512,13 @@ func (c *Client) CreateServerWithApplicationJSONPatchPlusJSONBodyRaw(ctx context
 	return c.Client.Do(req)
 }
 
-// DestroyServer request returning *VirtualServerDetailsItem
-func (c *Client) DestroyServer(ctx context.Context, params *DestroyServerParams, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error) {
+// DestroyServer request returning *ServerCommandOutput
+func (c *Client) DestroyServer(ctx context.Context, params *DestroyServerParams, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error) {
 	rsp, err := c.DestroyServerRaw(ctx, params, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return response.ParseResponse[VirtualServerDetailsItem](rsp)
+	return response.ParseResponse[ServerCommandOutput](rsp)
 }
 
 func (c *Client) DestroyServerRaw(ctx context.Context, params *DestroyServerParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -581,13 +617,34 @@ func (c *Client) GetServersRaw(ctx context.Context, params *GetServersParams, re
 	return c.Client.Do(req)
 }
 
-// StartServerWithBody request with arbitrary body returning *VirtualServerDetailsItem
-func (c *Client) StartServerWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error) {
+// GetVirtualMachineBootLogs request returning *ServerBootLogsOutput
+func (c *Client) GetVirtualMachineBootLogs(ctx context.Context, params *GetVirtualMachineBootLogsParams, reqEditors ...RequestEditorFn) (*ServerBootLogsOutput, error) {
+	rsp, err := c.GetVirtualMachineBootLogsRaw(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return response.ParseResponse[ServerBootLogsOutput](rsp)
+}
+
+func (c *Client) GetVirtualMachineBootLogsRaw(ctx context.Context, params *GetVirtualMachineBootLogsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetVirtualMachineBootLogsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// StartServerWithBody request with arbitrary body returning *ServerCommandOutput
+func (c *Client) StartServerWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error) {
 	rsp, err := c.StartServerWithBodyRaw(ctx, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return response.ParseResponse[VirtualServerDetailsItem](rsp)
+	return response.ParseResponse[ServerCommandOutput](rsp)
 }
 
 func (c *Client) StartServerWithBodyRaw(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -602,12 +659,12 @@ func (c *Client) StartServerWithBodyRaw(ctx context.Context, contentType string,
 	return c.Client.Do(req)
 }
 
-func (c *Client) StartServerWithApplicationWildcardPlusJSONBody(ctx context.Context, body StartServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error) {
+func (c *Client) StartServerWithApplicationWildcardPlusJSONBody(ctx context.Context, body StartServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error) {
 	rsp, err := c.StartServerWithApplicationWildcardPlusJSONBodyRaw(ctx, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return response.ParseResponse[VirtualServerDetailsItem](rsp)
+	return response.ParseResponse[ServerCommandOutput](rsp)
 }
 
 func (c *Client) StartServerWithApplicationWildcardPlusJSONBodyRaw(ctx context.Context, body StartServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -622,12 +679,12 @@ func (c *Client) StartServerWithApplicationWildcardPlusJSONBodyRaw(ctx context.C
 	return c.Client.Do(req)
 }
 
-func (c *Client) StartServer(ctx context.Context, body StartServerJSONRequestBody, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error) {
+func (c *Client) StartServer(ctx context.Context, body StartServerJSONRequestBody, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error) {
 	rsp, err := c.StartServerRaw(ctx, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return response.ParseResponse[VirtualServerDetailsItem](rsp)
+	return response.ParseResponse[ServerCommandOutput](rsp)
 }
 
 func (c *Client) StartServerRaw(ctx context.Context, body StartServerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -642,12 +699,12 @@ func (c *Client) StartServerRaw(ctx context.Context, body StartServerJSONRequest
 	return c.Client.Do(req)
 }
 
-func (c *Client) StartServerWithApplicationJSONPatchPlusJSONBody(ctx context.Context, body StartServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error) {
+func (c *Client) StartServerWithApplicationJSONPatchPlusJSONBody(ctx context.Context, body StartServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error) {
 	rsp, err := c.StartServerWithApplicationJSONPatchPlusJSONBodyRaw(ctx, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return response.ParseResponse[VirtualServerDetailsItem](rsp)
+	return response.ParseResponse[ServerCommandOutput](rsp)
 }
 
 func (c *Client) StartServerWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body StartServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -662,13 +719,13 @@ func (c *Client) StartServerWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.
 	return c.Client.Do(req)
 }
 
-// StopServerWithBody request with arbitrary body returning *VirtualServerDetailsItem
-func (c *Client) StopServerWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error) {
+// StopServerWithBody request with arbitrary body returning *ServerCommandOutput
+func (c *Client) StopServerWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error) {
 	rsp, err := c.StopServerWithBodyRaw(ctx, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return response.ParseResponse[VirtualServerDetailsItem](rsp)
+	return response.ParseResponse[ServerCommandOutput](rsp)
 }
 
 func (c *Client) StopServerWithBodyRaw(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -683,12 +740,12 @@ func (c *Client) StopServerWithBodyRaw(ctx context.Context, contentType string, 
 	return c.Client.Do(req)
 }
 
-func (c *Client) StopServerWithApplicationWildcardPlusJSONBody(ctx context.Context, body StopServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error) {
+func (c *Client) StopServerWithApplicationWildcardPlusJSONBody(ctx context.Context, body StopServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error) {
 	rsp, err := c.StopServerWithApplicationWildcardPlusJSONBodyRaw(ctx, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return response.ParseResponse[VirtualServerDetailsItem](rsp)
+	return response.ParseResponse[ServerCommandOutput](rsp)
 }
 
 func (c *Client) StopServerWithApplicationWildcardPlusJSONBodyRaw(ctx context.Context, body StopServerApplicationWildcardPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -703,12 +760,12 @@ func (c *Client) StopServerWithApplicationWildcardPlusJSONBodyRaw(ctx context.Co
 	return c.Client.Do(req)
 }
 
-func (c *Client) StopServer(ctx context.Context, body StopServerJSONRequestBody, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error) {
+func (c *Client) StopServer(ctx context.Context, body StopServerJSONRequestBody, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error) {
 	rsp, err := c.StopServerRaw(ctx, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return response.ParseResponse[VirtualServerDetailsItem](rsp)
+	return response.ParseResponse[ServerCommandOutput](rsp)
 }
 
 func (c *Client) StopServerRaw(ctx context.Context, body StopServerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -723,12 +780,12 @@ func (c *Client) StopServerRaw(ctx context.Context, body StopServerJSONRequestBo
 	return c.Client.Do(req)
 }
 
-func (c *Client) StopServerWithApplicationJSONPatchPlusJSONBody(ctx context.Context, body StopServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*VirtualServerDetailsItem, error) {
+func (c *Client) StopServerWithApplicationJSONPatchPlusJSONBody(ctx context.Context, body StopServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*ServerCommandOutput, error) {
 	rsp, err := c.StopServerWithApplicationJSONPatchPlusJSONBodyRaw(ctx, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return response.ParseResponse[VirtualServerDetailsItem](rsp)
+	return response.ParseResponse[ServerCommandOutput](rsp)
 }
 
 func (c *Client) StopServerWithApplicationJSONPatchPlusJSONBodyRaw(ctx context.Context, body StopServerApplicationJSONPatchPlusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -1075,6 +1132,83 @@ func NewGetServersRequest(server string, params *GetServersParams) (*http.Reques
 				}
 			}
 
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetVirtualMachineBootLogsRequest generates requests for GetVirtualMachineBootLogs
+func NewGetVirtualMachineBootLogsRequest(server string, params *GetVirtualMachineBootLogsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/servers/virtual/GetVirtualMachineBootLogs")
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "Id", runtime.ParamLocationQuery, params.Id); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "Namespace", runtime.ParamLocationQuery, params.Namespace); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "Cluster", runtime.ParamLocationQuery, params.Cluster); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "Limit", runtime.ParamLocationQuery, params.Limit); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
 		}
 
 		queryURL.RawQuery = queryValues.Encode()

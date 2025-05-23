@@ -148,7 +148,8 @@ type ApplicationsApiCustomApiCreateRequest struct {
 	// PersonalSharedStorage Enable personal shared storage for the application
 	PersonalSharedStorage *bool `json:"personalSharedStorage,omitempty"`
 
-	// ProxyPort Port where your service expects HTTPS traffic.
+	// ProxyPort The port your application uses to receive HTTPS traffic.
+	// Port 443 is reserved for the reverse proxy and cannot be used.
 	ProxyPort *int32 `json:"proxyPort"`
 
 	// ReadinessWatcherPort The port used for monitoring application readiness and status.
@@ -190,6 +191,18 @@ type ApplicationsApiOverview struct {
 	Status                            *string `json:"status"`
 	Tenant                            *string `json:"tenant"`
 	TenantSharedStorage               *bool   `json:"tenantSharedStorage,omitempty"`
+}
+
+// ApplicationsApiRuntimeLogsResponse defines model for ApplicationsApiRuntimeLogsResponse.
+type ApplicationsApiRuntimeLogsResponse struct {
+	// Cluster The cluster where the application is running
+	Cluster *string `json:"cluster"`
+
+	// Id The name of the application
+	Id *string `json:"id"`
+
+	// Logs The runtime logs content
+	Logs *string `json:"logs"`
 }
 
 // Child defines model for Child.
@@ -304,6 +317,18 @@ type GetApplicationDetailsParams struct {
 
 	// Cluster The cluster you're operating on
 	Cluster string `form:"Cluster" json:"Cluster"`
+}
+
+// GetApplicationRuntimeLogsParams defines parameters for GetApplicationRuntimeLogs.
+type GetApplicationRuntimeLogsParams struct {
+	// Id The name of the application
+	Id string `form:"Id" json:"Id"`
+
+	// Cluster The cluster where the application is running
+	Cluster string `form:"Cluster" json:"Cluster"`
+
+	// Limit The maximum number of log entries to return.
+	Limit int32 `form:"Limit" json:"Limit"`
 }
 
 // GetAvailabilityParams defines parameters for GetAvailability.
@@ -443,6 +468,12 @@ type ClientInterface interface {
 
 	// GetApplicationDetailsRaw request
 	GetApplicationDetailsRaw(ctx context.Context, params *GetApplicationDetailsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetApplicationRuntimeLogs request
+	GetApplicationRuntimeLogs(ctx context.Context, params *GetApplicationRuntimeLogsParams, reqEditors ...RequestEditorFn) (*ApplicationsApiRuntimeLogsResponse, error)
+
+	// GetApplicationRuntimeLogsRaw request
+	GetApplicationRuntimeLogsRaw(ctx context.Context, params *GetApplicationRuntimeLogsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetApplications request
 	GetApplications(ctx context.Context, reqEditors ...RequestEditorFn) (*ListResultDtoOfApplicationsApiOverview, error)
@@ -708,6 +739,27 @@ func (c *Client) GetApplicationDetails(ctx context.Context, params *GetApplicati
 
 func (c *Client) GetApplicationDetailsRaw(ctx context.Context, params *GetApplicationDetailsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetApplicationDetailsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetApplicationRuntimeLogs request returning *ApplicationsApiRuntimeLogsResponse
+func (c *Client) GetApplicationRuntimeLogs(ctx context.Context, params *GetApplicationRuntimeLogsParams, reqEditors ...RequestEditorFn) (*ApplicationsApiRuntimeLogsResponse, error) {
+	rsp, err := c.GetApplicationRuntimeLogsRaw(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return response.ParseResponse[ApplicationsApiRuntimeLogsResponse](rsp)
+}
+
+func (c *Client) GetApplicationRuntimeLogsRaw(ctx context.Context, params *GetApplicationRuntimeLogsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetApplicationRuntimeLogsRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -1166,6 +1218,71 @@ func NewGetApplicationDetailsRequest(server string, params *GetApplicationDetail
 		}
 
 		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "Cluster", runtime.ParamLocationQuery, params.Cluster); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetApplicationRuntimeLogsRequest generates requests for GetApplicationRuntimeLogs
+func NewGetApplicationRuntimeLogsRequest(server string, params *GetApplicationRuntimeLogsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/servers/applications/GetApplicationRuntimeLogs")
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "Id", runtime.ParamLocationQuery, params.Id); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "Cluster", runtime.ParamLocationQuery, params.Cluster); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "Limit", runtime.ParamLocationQuery, params.Limit); err != nil {
 			return nil, err
 		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
 			return nil, err
