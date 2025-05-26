@@ -31,7 +31,7 @@ func ParseResponse[T any](rsp *http.Response) (*T, error) {
 	var resp Response[T]
 	err = json.Unmarshal(bodyBytes, &resp)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Failed to parse response (%s): %v", string(bodyBytes), err)
 	}
 
 	// At this point we've either extracted the additona error message details or not

@@ -35,10 +35,10 @@ func TestParseResponse(t *testing.T) {
 			name: "invalid JSON response",
 			response: &http.Response{
 				StatusCode: http.StatusOK,
-				Body:       io.NopCloser(bytes.NewReader([]byte("invalid json"))),
+				Body:       io.NopCloser(bytes.NewReader([]byte("invalid json text"))),
 			},
 			wantErr:     true,
-			errContains: "invalid character",
+			errContains: "(invalid json text): invalid character",
 		},
 		{
 			name: "valid JSON with success",
