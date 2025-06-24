@@ -188,7 +188,8 @@ type VirtualServerDetailsItem struct {
 	Image *string `json:"image"`
 
 	// Ip The public IP address of the VM
-	Ip *string `json:"ip"`
+	Ip          *string    `json:"ip"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 
 	// Memory Amount of system memory available in GB
 	Memory    *int64  `json:"memory"`
