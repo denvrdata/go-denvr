@@ -164,6 +164,16 @@ type ApplicationsApiCustomApiCreateRequest struct {
 
 	// TenantSharedStorage Enable tenant shared storage for the application
 	TenantSharedStorage *bool `json:"tenantSharedStorage,omitempty"`
+
+	// UserScripts Dictionary of script filenames to script content. Each scripts to be mounted at /etc/script/user-scripts for use in CMD or ENTRYPOINT.
+	// Script names must:
+	// - Contain only alphanumeric characters, dots, spaces and parentheses
+	// - Not exceed 255 characters
+	// Script content must:
+	// - Not be null or empty
+	// - Not exceed 16384 characters
+	// - Not contain invalid characters
+	UserScripts *map[string]*string `json:"userScripts"`
 }
 
 // ApplicationsApiDetails defines model for ApplicationsApiDetails.
