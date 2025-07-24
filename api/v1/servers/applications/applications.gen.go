@@ -21,6 +21,420 @@ import (
 	"github.com/denvrdata/go-denvr/response"
 )
 
+// Defines values for HttpStatusCode.
+const (
+	Accepted                     HttpStatusCode = 202
+	AlreadyReported              HttpStatusCode = 208
+	Ambiguous                    HttpStatusCode = 301
+	BadGateway                   HttpStatusCode = 507
+	BadRequest                   HttpStatusCode = 405
+	Conflict                     HttpStatusCode = 414
+	Continue                     HttpStatusCode = 100
+	Created                      HttpStatusCode = 201
+	EarlyHints                   HttpStatusCode = 103
+	ExpectationFailed            HttpStatusCode = 426
+	FailedDependency             HttpStatusCode = 451
+	Forbidden                    HttpStatusCode = 408
+	Found                        HttpStatusCode = 304
+	GatewayTimeout               HttpStatusCode = 510
+	Gone                         HttpStatusCode = 415
+	HttpVersionNotSupported      HttpStatusCode = 511
+	IMUsed                       HttpStatusCode = 226
+	InternalServerError          HttpStatusCode = 505
+	LengthRequired               HttpStatusCode = 416
+	Locked                       HttpStatusCode = 431
+	MethodNotAllowed             HttpStatusCode = 410
+	MisdirectedRequest           HttpStatusCode = 428
+	Moved                        HttpStatusCode = 303
+	MovedPermanently             HttpStatusCode = 302
+	MultiStatus                  HttpStatusCode = 207
+	MultipleChoices              HttpStatusCode = 300
+	NoContent                    HttpStatusCode = 204
+	NonAuthoritativeInformation  HttpStatusCode = 203
+	NotAcceptable                HttpStatusCode = 411
+	NotFound                     HttpStatusCode = 409
+	NotImplemented               HttpStatusCode = 506
+	NotModified                  HttpStatusCode = 308
+	OK                           HttpStatusCode = 200
+	PartialContent               HttpStatusCode = 206
+	PaymentRequired              HttpStatusCode = 407
+	PermanentRedirect            HttpStatusCode = 404
+	PreconditionFailed           HttpStatusCode = 417
+	PreconditionRequired         HttpStatusCode = 501
+	Processing                   HttpStatusCode = 102
+	ProxyAuthenticationRequired  HttpStatusCode = 412
+	Redirect                     HttpStatusCode = 305
+	RedirectKeepVerb             HttpStatusCode = 403
+	RedirectMethod               HttpStatusCode = 307
+	RequestEntityTooLarge        HttpStatusCode = 421
+	RequestHeaderFieldsTooLarge  HttpStatusCode = 503
+	RequestTimeout               HttpStatusCode = 413
+	RequestUriTooLong            HttpStatusCode = 422
+	RequestedRangeNotSatisfiable HttpStatusCode = 424
+	ResetContent                 HttpStatusCode = 205
+	SeeOther                     HttpStatusCode = 306
+	ServiceUnavailable           HttpStatusCode = 508
+	SwitchingProtocols           HttpStatusCode = 101
+	TemporaryRedirect            HttpStatusCode = 402
+	TooManyRequests              HttpStatusCode = 502
+	Unauthorized                 HttpStatusCode = 406
+	UnavailableForLegalReasons   HttpStatusCode = 504
+	UnprocessableEntity          HttpStatusCode = 429
+	UnsupportedMediaType         HttpStatusCode = 423
+	Unused                       HttpStatusCode = 401
+	UpgradeRequired              HttpStatusCode = 500
+	UseProxy                     HttpStatusCode = 400
+)
+
+// Account defines model for Account.
+type Account struct {
+	BusinessProfile    *AccountBusinessProfile       `json:"business_profile,omitempty"`
+	BusinessType       *string                       `json:"business_type"`
+	Capabilities       *AccountCapabilities          `json:"capabilities,omitempty"`
+	ChargesEnabled     *bool                         `json:"charges_enabled,omitempty"`
+	Company            *AccountCompany               `json:"company,omitempty"`
+	Controller         *AccountController            `json:"controller,omitempty"`
+	Country            *string                       `json:"country"`
+	Created            *time.Time                    `json:"created,omitempty"`
+	DefaultCurrency    *string                       `json:"default_currency"`
+	Deleted            *bool                         `json:"deleted"`
+	DetailsSubmitted   *bool                         `json:"details_submitted,omitempty"`
+	Email              *string                       `json:"email"`
+	ExternalAccounts   *StripeListOfIExternalAccount `json:"external_accounts,omitempty"`
+	FutureRequirements *AccountFutureRequirements    `json:"future_requirements,omitempty"`
+	Id                 *string                       `json:"id"`
+	Individual         *Person                       `json:"individual,omitempty"`
+	Metadata           *map[string]*string           `json:"metadata"`
+	Object             *string                       `json:"object"`
+	PayoutsEnabled     *bool                         `json:"payouts_enabled,omitempty"`
+	Requirements       *AccountRequirements          `json:"requirements,omitempty"`
+	Settings           *AccountSettings              `json:"settings,omitempty"`
+	TosAcceptance      *AccountTosAcceptance         `json:"tos_acceptance,omitempty"`
+	Type               *string                       `json:"type"`
+}
+
+// AccountBusinessProfile defines model for AccountBusinessProfile.
+type AccountBusinessProfile struct {
+	Mcc                     *string                                        `json:"mcc"`
+	MonthlyEstimatedRevenue *AccountBusinessProfileMonthlyEstimatedRevenue `json:"monthly_estimated_revenue,omitempty"`
+	Name                    *string                                        `json:"name"`
+	ProductDescription      *string                                        `json:"product_description"`
+	SupportAddress          *Address                                       `json:"support_address,omitempty"`
+	SupportEmail            *string                                        `json:"support_email"`
+	SupportPhone            *string                                        `json:"support_phone"`
+	SupportUrl              *string                                        `json:"support_url"`
+	Url                     *string                                        `json:"url"`
+}
+
+// AccountBusinessProfileMonthlyEstimatedRevenue defines model for AccountBusinessProfileMonthlyEstimatedRevenue.
+type AccountBusinessProfileMonthlyEstimatedRevenue struct {
+	Amount   *int64  `json:"amount,omitempty"`
+	Currency *string `json:"currency"`
+}
+
+// AccountCapabilities defines model for AccountCapabilities.
+type AccountCapabilities struct {
+	AcssDebitPayments          *string `json:"acss_debit_payments"`
+	AffirmPayments             *string `json:"affirm_payments"`
+	AfterpayClearpayPayments   *string `json:"afterpay_clearpay_payments"`
+	AuBecsDebitPayments        *string `json:"au_becs_debit_payments"`
+	BacsDebitPayments          *string `json:"bacs_debit_payments"`
+	BancontactPayments         *string `json:"bancontact_payments"`
+	BankTransferPayments       *string `json:"bank_transfer_payments"`
+	BlikPayments               *string `json:"blik_payments"`
+	BoletoPayments             *string `json:"boleto_payments"`
+	CardIssuing                *string `json:"card_issuing"`
+	CardPayments               *string `json:"card_payments"`
+	CartesBancairesPayments    *string `json:"cartes_bancaires_payments"`
+	CashappPayments            *string `json:"cashapp_payments"`
+	EpsPayments                *string `json:"eps_payments"`
+	FpxPayments                *string `json:"fpx_payments"`
+	GiropayPayments            *string `json:"giropay_payments"`
+	GrabpayPayments            *string `json:"grabpay_payments"`
+	IdealPayments              *string `json:"ideal_payments"`
+	IndiaInternationalPayments *string `json:"india_international_payments"`
+	JcbPayments                *string `json:"jcb_payments"`
+	KlarnaPayments             *string `json:"klarna_payments"`
+	KonbiniPayments            *string `json:"konbini_payments"`
+	LegacyPayments             *string `json:"legacy_payments"`
+	LinkPayments               *string `json:"link_payments"`
+	OxxoPayments               *string `json:"oxxo_payments"`
+	P24Payments                *string `json:"p24_payments"`
+	PaynowPayments             *string `json:"paynow_payments"`
+	PromptpayPayments          *string `json:"promptpay_payments"`
+	SepaDebitPayments          *string `json:"sepa_debit_payments"`
+	SofortPayments             *string `json:"sofort_payments"`
+	TaxReportingUs1099K        *string `json:"tax_reporting_us_1099_k"`
+	TaxReportingUs1099Misc     *string `json:"tax_reporting_us_1099_misc"`
+	Transfers                  *string `json:"transfers"`
+	Treasury                   *string `json:"treasury"`
+	UsBankAccountAchPayments   *string `json:"us_bank_account_ach_payments"`
+	ZipPayments                *string `json:"zip_payments"`
+}
+
+// AccountCompany defines model for AccountCompany.
+type AccountCompany struct {
+	Address              *Address                            `json:"address,omitempty"`
+	AddressKana          *AddressJapan                       `json:"address_kana,omitempty"`
+	AddressKanji         *AddressJapan                       `json:"address_kanji,omitempty"`
+	DirectorsProvided    *bool                               `json:"directors_provided,omitempty"`
+	ExecutivesProvided   *bool                               `json:"executives_provided,omitempty"`
+	ExportLicenseId      *string                             `json:"export_license_id"`
+	ExportPurposeCode    *string                             `json:"export_purpose_code"`
+	Name                 *string                             `json:"name"`
+	NameKana             *string                             `json:"name_kana"`
+	NameKanji            *string                             `json:"name_kanji"`
+	OwnersProvided       *bool                               `json:"owners_provided,omitempty"`
+	OwnershipDeclaration *AccountCompanyOwnershipDeclaration `json:"ownership_declaration,omitempty"`
+	Phone                *string                             `json:"phone"`
+	Structure            *string                             `json:"structure"`
+	TaxIdProvided        *bool                               `json:"tax_id_provided,omitempty"`
+	TaxIdRegistrar       *string                             `json:"tax_id_registrar"`
+	VatIdProvided        *bool                               `json:"vat_id_provided,omitempty"`
+	Verification         *AccountCompanyVerification         `json:"verification,omitempty"`
+}
+
+// AccountCompanyOwnershipDeclaration defines model for AccountCompanyOwnershipDeclaration.
+type AccountCompanyOwnershipDeclaration struct {
+	Date      *time.Time `json:"date"`
+	Ip        *string    `json:"ip"`
+	UserAgent *string    `json:"user_agent"`
+}
+
+// AccountCompanyVerification defines model for AccountCompanyVerification.
+type AccountCompanyVerification struct {
+	Document *AccountCompanyVerificationDocument `json:"document,omitempty"`
+}
+
+// AccountCompanyVerificationDocument defines model for AccountCompanyVerificationDocument.
+type AccountCompanyVerificationDocument struct {
+	Back        *ExpandableFieldOfFile `json:"back,omitempty"`
+	Details     *string                `json:"details"`
+	DetailsCode *string                `json:"details_code"`
+	Front       *ExpandableFieldOfFile `json:"front,omitempty"`
+}
+
+// AccountController defines model for AccountController.
+type AccountController struct {
+	IsController *bool   `json:"is_controller,omitempty"`
+	Type         *string `json:"type"`
+}
+
+// AccountFutureRequirements defines model for AccountFutureRequirements.
+type AccountFutureRequirements struct {
+	Alternatives        *[]AccountFutureRequirementsAlternative `json:"alternatives"`
+	CurrentDeadline     *time.Time                              `json:"current_deadline"`
+	CurrentlyDue        *[]string                               `json:"currently_due"`
+	DisabledReason      *string                                 `json:"disabled_reason"`
+	Errors              *[]AccountFutureRequirementsError       `json:"errors"`
+	EventuallyDue       *[]string                               `json:"eventually_due"`
+	PastDue             *[]string                               `json:"past_due"`
+	PendingVerification *[]string                               `json:"pending_verification"`
+}
+
+// AccountFutureRequirementsAlternative defines model for AccountFutureRequirementsAlternative.
+type AccountFutureRequirementsAlternative struct {
+	AlternativeFieldsDue *[]string `json:"alternative_fields_due"`
+	OriginalFieldsDue    *[]string `json:"original_fields_due"`
+}
+
+// AccountFutureRequirementsError defines model for AccountFutureRequirementsError.
+type AccountFutureRequirementsError struct {
+	Code        *string `json:"code"`
+	Reason      *string `json:"reason"`
+	Requirement *string `json:"requirement"`
+}
+
+// AccountRequirements defines model for AccountRequirements.
+type AccountRequirements struct {
+	Alternatives        *[]AccountRequirementsAlternative `json:"alternatives"`
+	CurrentDeadline     *time.Time                        `json:"current_deadline"`
+	CurrentlyDue        *[]string                         `json:"currently_due"`
+	DisabledReason      *string                           `json:"disabled_reason"`
+	Errors              *[]AccountRequirementsError       `json:"errors"`
+	EventuallyDue       *[]string                         `json:"eventually_due"`
+	PastDue             *[]string                         `json:"past_due"`
+	PendingVerification *[]string                         `json:"pending_verification"`
+}
+
+// AccountRequirementsAlternative defines model for AccountRequirementsAlternative.
+type AccountRequirementsAlternative struct {
+	AlternativeFieldsDue *[]string `json:"alternative_fields_due"`
+	OriginalFieldsDue    *[]string `json:"original_fields_due"`
+}
+
+// AccountRequirementsError defines model for AccountRequirementsError.
+type AccountRequirementsError struct {
+	Code        *string `json:"code"`
+	Reason      *string `json:"reason"`
+	Requirement *string `json:"requirement"`
+}
+
+// AccountSettings defines model for AccountSettings.
+type AccountSettings struct {
+	BacsDebitPayments *AccountSettingsBacsDebitPayments `json:"bacs_debit_payments,omitempty"`
+	Branding          *AccountSettingsBranding          `json:"branding,omitempty"`
+	CardIssuing       *AccountSettingsCardIssuing       `json:"card_issuing,omitempty"`
+	CardPayments      *AccountSettingsCardPayments      `json:"card_payments,omitempty"`
+	Dashboard         *AccountSettingsDashboard         `json:"dashboard,omitempty"`
+	Payments          *AccountSettingsPayments          `json:"payments,omitempty"`
+	Payouts           *AccountSettingsPayouts           `json:"payouts,omitempty"`
+	SepaDebitPayments *AccountSettingsSepaDebitPayments `json:"sepa_debit_payments,omitempty"`
+	Treasury          *AccountSettingsTreasury          `json:"treasury,omitempty"`
+}
+
+// AccountSettingsBacsDebitPayments defines model for AccountSettingsBacsDebitPayments.
+type AccountSettingsBacsDebitPayments struct {
+	DisplayName *string `json:"display_name"`
+}
+
+// AccountSettingsBranding defines model for AccountSettingsBranding.
+type AccountSettingsBranding struct {
+	Icon           *ExpandableFieldOfFile `json:"icon,omitempty"`
+	Logo           *ExpandableFieldOfFile `json:"logo,omitempty"`
+	PrimaryColor   *string                `json:"primary_color"`
+	SecondaryColor *string                `json:"secondary_color"`
+}
+
+// AccountSettingsCardIssuing defines model for AccountSettingsCardIssuing.
+type AccountSettingsCardIssuing struct {
+	TosAcceptance *AccountSettingsCardIssuingTosAcceptance `json:"tos_acceptance,omitempty"`
+}
+
+// AccountSettingsCardIssuingTosAcceptance defines model for AccountSettingsCardIssuingTosAcceptance.
+type AccountSettingsCardIssuingTosAcceptance struct {
+	Date      *int64  `json:"date"`
+	Ip        *string `json:"ip"`
+	UserAgent *string `json:"user_agent"`
+}
+
+// AccountSettingsCardPayments defines model for AccountSettingsCardPayments.
+type AccountSettingsCardPayments struct {
+	DeclineOn                      *AccountSettingsDeclineOn `json:"decline_on,omitempty"`
+	StatementDescriptorPrefix      *string                   `json:"statement_descriptor_prefix"`
+	StatementDescriptorPrefixKana  *string                   `json:"statement_descriptor_prefix_kana"`
+	StatementDescriptorPrefixKanji *string                   `json:"statement_descriptor_prefix_kanji"`
+}
+
+// AccountSettingsDashboard defines model for AccountSettingsDashboard.
+type AccountSettingsDashboard struct {
+	DisplayName *string `json:"display_name"`
+	Timezone    *string `json:"timezone"`
+}
+
+// AccountSettingsDeclineOn defines model for AccountSettingsDeclineOn.
+type AccountSettingsDeclineOn struct {
+	AvsFailure *bool `json:"avs_failure,omitempty"`
+	CvcFailure *bool `json:"cvc_failure,omitempty"`
+}
+
+// AccountSettingsPayments defines model for AccountSettingsPayments.
+type AccountSettingsPayments struct {
+	StatementDescriptor            *string `json:"statement_descriptor"`
+	StatementDescriptorKana        *string `json:"statement_descriptor_kana"`
+	StatementDescriptorKanji       *string `json:"statement_descriptor_kanji"`
+	StatementDescriptorPrefixKana  *string `json:"statement_descriptor_prefix_kana"`
+	StatementDescriptorPrefixKanji *string `json:"statement_descriptor_prefix_kanji"`
+}
+
+// AccountSettingsPayouts defines model for AccountSettingsPayouts.
+type AccountSettingsPayouts struct {
+	DebitNegativeBalances *bool                           `json:"debit_negative_balances,omitempty"`
+	Schedule              *AccountSettingsPayoutsSchedule `json:"schedule,omitempty"`
+	StatementDescriptor   *string                         `json:"statement_descriptor"`
+}
+
+// AccountSettingsPayoutsSchedule defines model for AccountSettingsPayoutsSchedule.
+type AccountSettingsPayoutsSchedule struct {
+	DelayDays     *int64  `json:"delay_days,omitempty"`
+	Interval      *string `json:"interval"`
+	MonthlyAnchor *int64  `json:"monthly_anchor,omitempty"`
+	WeeklyAnchor  *string `json:"weekly_anchor"`
+}
+
+// AccountSettingsSepaDebitPayments defines model for AccountSettingsSepaDebitPayments.
+type AccountSettingsSepaDebitPayments struct {
+	CreditorId *string `json:"creditor_id"`
+}
+
+// AccountSettingsTreasury defines model for AccountSettingsTreasury.
+type AccountSettingsTreasury struct {
+	TosAcceptance *AccountSettingsTreasuryTosAcceptance `json:"tos_acceptance,omitempty"`
+}
+
+// AccountSettingsTreasuryTosAcceptance defines model for AccountSettingsTreasuryTosAcceptance.
+type AccountSettingsTreasuryTosAcceptance struct {
+	Date      *int64  `json:"date"`
+	Ip        *string `json:"ip"`
+	UserAgent *string `json:"user_agent"`
+}
+
+// AccountTosAcceptance defines model for AccountTosAcceptance.
+type AccountTosAcceptance struct {
+	Date             *time.Time `json:"date"`
+	Ip               *string    `json:"ip"`
+	ServiceAgreement *string    `json:"service_agreement"`
+	UserAgent        *string    `json:"user_agent"`
+}
+
+// Address defines model for Address.
+type Address struct {
+	City       *string `json:"city"`
+	Country    *string `json:"country"`
+	Line1      *string `json:"line1"`
+	Line2      *string `json:"line2"`
+	PostalCode *string `json:"postal_code"`
+	State      *string `json:"state"`
+}
+
+// AddressJapan defines model for AddressJapan.
+type AddressJapan struct {
+	City       *string `json:"city"`
+	Country    *string `json:"country"`
+	Line1      *string `json:"line1"`
+	Line2      *string `json:"line2"`
+	PostalCode *string `json:"postal_code"`
+	State      *string `json:"state"`
+	Town       *string `json:"town"`
+}
+
+// Application defines model for Application.
+type Application struct {
+	Id     *string `json:"id"`
+	Name   *string `json:"name"`
+	Object *string `json:"object"`
+}
+
+// ApplicationFee defines model for ApplicationFee.
+type ApplicationFee struct {
+	Account                *ExpandableFieldOfAccount            `json:"account,omitempty"`
+	Amount                 *int64                               `json:"amount,omitempty"`
+	AmountRefunded         *int64                               `json:"amount_refunded,omitempty"`
+	Application            *ExpandableFieldOfApplication        `json:"application,omitempty"`
+	BalanceTransaction     *ExpandableFieldOfBalanceTransaction `json:"balance_transaction,omitempty"`
+	Charge                 *ExpandableFieldOfCharge             `json:"charge,omitempty"`
+	Created                *time.Time                           `json:"created,omitempty"`
+	Currency               *string                              `json:"currency"`
+	Id                     *string                              `json:"id"`
+	Livemode               *bool                                `json:"livemode,omitempty"`
+	Object                 *string                              `json:"object"`
+	OriginatingTransaction *ExpandableFieldOfCharge             `json:"originating_transaction,omitempty"`
+	Refunded               *bool                                `json:"refunded,omitempty"`
+	Refunds                *StripeListOfApplicationFeeRefund    `json:"refunds,omitempty"`
+}
+
+// ApplicationFeeRefund defines model for ApplicationFeeRefund.
+type ApplicationFeeRefund struct {
+	Amount             *int64                               `json:"amount,omitempty"`
+	BalanceTransaction *ExpandableFieldOfBalanceTransaction `json:"balance_transaction,omitempty"`
+	Created            *time.Time                           `json:"created,omitempty"`
+	Currency           *string                              `json:"currency"`
+	Fee                *ExpandableFieldOfApplicationFee     `json:"fee,omitempty"`
+	Id                 *string                              `json:"id"`
+	Metadata           *map[string]*string                  `json:"metadata"`
+	Object             *string                              `json:"object"`
+}
+
 // ApplicationsApiApplicationConfig defines model for ApplicationsApiApplicationConfig.
 type ApplicationsApiApplicationConfig struct {
 	Clusters                *[]string `json:"clusters"`
@@ -215,10 +629,708 @@ type ApplicationsApiRuntimeLogsResponse struct {
 	Logs *string `json:"logs"`
 }
 
+// BalanceTransaction defines model for BalanceTransaction.
+type BalanceTransaction struct {
+	Amount            *int64                                      `json:"amount,omitempty"`
+	AvailableOn       *time.Time                                  `json:"available_on,omitempty"`
+	Created           *time.Time                                  `json:"created,omitempty"`
+	Currency          *string                                     `json:"currency"`
+	Description       *string                                     `json:"description"`
+	ExchangeRate      *float64                                    `json:"exchange_rate"`
+	Fee               *int64                                      `json:"fee,omitempty"`
+	FeeDetails        *[]BalanceTransactionFeeDetail              `json:"fee_details"`
+	Id                *string                                     `json:"id"`
+	Net               *int64                                      `json:"net,omitempty"`
+	Object            *string                                     `json:"object"`
+	ReportingCategory *string                                     `json:"reporting_category"`
+	Source            *ExpandableFieldOfIBalanceTransactionSource `json:"source,omitempty"`
+	Status            *string                                     `json:"status"`
+	Type              *string                                     `json:"type"`
+}
+
+// BalanceTransactionFeeDetail defines model for BalanceTransactionFeeDetail.
+type BalanceTransactionFeeDetail struct {
+	Amount      *int64  `json:"amount,omitempty"`
+	Application *string `json:"application"`
+	Currency    *string `json:"currency"`
+	Description *string `json:"description"`
+	Type        *string `json:"type"`
+}
+
+// CashBalance defines model for CashBalance.
+type CashBalance struct {
+	Available *map[string]*int64   `json:"available"`
+	Customer  *string              `json:"customer"`
+	Livemode  *bool                `json:"livemode,omitempty"`
+	Object    *string              `json:"object"`
+	Settings  *CashBalanceSettings `json:"settings,omitempty"`
+}
+
+// CashBalanceSettings defines model for CashBalanceSettings.
+type CashBalanceSettings struct {
+	ReconciliationMode   *string `json:"reconciliation_mode"`
+	UsingMerchantDefault *bool   `json:"using_merchant_default,omitempty"`
+}
+
+// Charge defines model for Charge.
+type Charge struct {
+	Amount                        *int64                               `json:"amount,omitempty"`
+	AmountCaptured                *int64                               `json:"amount_captured,omitempty"`
+	AmountRefunded                *int64                               `json:"amount_refunded,omitempty"`
+	Application                   *ExpandableFieldOfApplication        `json:"application,omitempty"`
+	ApplicationFee                *ExpandableFieldOfApplicationFee     `json:"application_fee,omitempty"`
+	ApplicationFeeAmount          *int64                               `json:"application_fee_amount"`
+	AuthorizationCode             *string                              `json:"authorization_code"`
+	BalanceTransaction            *ExpandableFieldOfBalanceTransaction `json:"balance_transaction,omitempty"`
+	BillingDetails                *ChargeBillingDetails                `json:"billing_details,omitempty"`
+	CalculatedStatementDescriptor *string                              `json:"calculated_statement_descriptor"`
+	Captured                      *bool                                `json:"captured,omitempty"`
+	Created                       *time.Time                           `json:"created,omitempty"`
+	Currency                      *string                              `json:"currency"`
+	Customer                      *ExpandableFieldOfCustomer           `json:"customer,omitempty"`
+	Description                   *string                              `json:"description"`
+	Destination                   *ExpandableFieldOfAccount            `json:"destination,omitempty"`
+	Dispute                       *ExpandableFieldOfDispute            `json:"dispute,omitempty"`
+	Disputed                      *bool                                `json:"disputed,omitempty"`
+	FailureBalanceTransaction     *ExpandableFieldOfBalanceTransaction `json:"failure_balance_transaction,omitempty"`
+	FailureCode                   *string                              `json:"failure_code"`
+	FailureMessage                *string                              `json:"failure_message"`
+	FraudDetails                  *ChargeFraudDetails                  `json:"fraud_details,omitempty"`
+	Id                            *string                              `json:"id"`
+	Invoice                       *ExpandableFieldOfInvoice            `json:"invoice,omitempty"`
+	Level3                        *ChargeLevel3                        `json:"level3,omitempty"`
+	Livemode                      *bool                                `json:"livemode,omitempty"`
+	Metadata                      *map[string]*string                  `json:"metadata"`
+	Object                        *string                              `json:"object"`
+	OnBehalfOf                    *ExpandableFieldOfAccount            `json:"on_behalf_of,omitempty"`
+	Outcome                       *ChargeOutcome                       `json:"outcome,omitempty"`
+	Paid                          *bool                                `json:"paid,omitempty"`
+	PaymentIntent                 *ExpandableFieldOfPaymentIntent      `json:"payment_intent,omitempty"`
+	PaymentMethod                 *string                              `json:"payment_method"`
+	PaymentMethodDetails          *ChargePaymentMethodDetails          `json:"payment_method_details,omitempty"`
+	RadarOptions                  *ChargeRadarOptions                  `json:"radar_options,omitempty"`
+	ReceiptEmail                  *string                              `json:"receipt_email"`
+	ReceiptNumber                 *string                              `json:"receipt_number"`
+	ReceiptUrl                    *string                              `json:"receipt_url"`
+	Refunded                      *bool                                `json:"refunded,omitempty"`
+	Refunds                       *StripeListOfRefund                  `json:"refunds,omitempty"`
+	Review                        *ExpandableFieldOfReview             `json:"review,omitempty"`
+	Shipping                      *Shipping                            `json:"shipping,omitempty"`
+	Source                        *IPaymentSource                      `json:"source,omitempty"`
+	SourceTransfer                *ExpandableFieldOfTransfer           `json:"source_transfer,omitempty"`
+	StatementDescriptor           *string                              `json:"statement_descriptor"`
+	StatementDescriptorSuffix     *string                              `json:"statement_descriptor_suffix"`
+	Status                        *string                              `json:"status"`
+	Transfer                      *ExpandableFieldOfTransfer           `json:"transfer,omitempty"`
+	TransferData                  *ChargeTransferData                  `json:"transfer_data,omitempty"`
+	TransferGroup                 *string                              `json:"transfer_group"`
+}
+
+// ChargeBillingDetails defines model for ChargeBillingDetails.
+type ChargeBillingDetails struct {
+	Address *Address `json:"address,omitempty"`
+	Email   *string  `json:"email"`
+	Name    *string  `json:"name"`
+	Phone   *string  `json:"phone"`
+}
+
+// ChargeFraudDetails defines model for ChargeFraudDetails.
+type ChargeFraudDetails struct {
+	StripeReport *string `json:"stripe_report"`
+	UserReport   *string `json:"user_report"`
+}
+
+// ChargeLevel3 defines model for ChargeLevel3.
+type ChargeLevel3 struct {
+	CustomerReference  *string                 `json:"customer_reference"`
+	LineItems          *[]ChargeLevel3LineItem `json:"line_items"`
+	MerchantReference  *string                 `json:"merchant_reference"`
+	ShippingAddressZip *string                 `json:"shipping_address_zip"`
+	ShippingAmount     *int64                  `json:"shipping_amount,omitempty"`
+	ShippingFromZip    *string                 `json:"shipping_from_zip"`
+}
+
+// ChargeLevel3LineItem defines model for ChargeLevel3LineItem.
+type ChargeLevel3LineItem struct {
+	DiscountAmount     *int64  `json:"discount_amount"`
+	ProductCode        *string `json:"product_code"`
+	ProductDescription *string `json:"product_description"`
+	Quantity           *int64  `json:"quantity"`
+	TaxAmount          *int64  `json:"tax_amount"`
+	UnitCost           *int64  `json:"unit_cost"`
+}
+
+// ChargeOutcome defines model for ChargeOutcome.
+type ChargeOutcome struct {
+	NetworkStatus *string                `json:"network_status"`
+	Reason        *string                `json:"reason"`
+	RiskLevel     *string                `json:"risk_level"`
+	RiskScore     *int64                 `json:"risk_score,omitempty"`
+	Rule          *ExpandableFieldOfRule `json:"rule,omitempty"`
+	SellerMessage *string                `json:"seller_message"`
+	Type          *string                `json:"type"`
+}
+
+// ChargePaymentMethodDetails defines model for ChargePaymentMethodDetails.
+type ChargePaymentMethodDetails struct {
+	AchCreditTransfer *ChargePaymentMethodDetailsAchCreditTransfer `json:"ach_credit_transfer,omitempty"`
+	AchDebit          *ChargePaymentMethodDetailsAchDebit          `json:"ach_debit,omitempty"`
+	AcssDebit         *ChargePaymentMethodDetailsAcssDebit         `json:"acss_debit,omitempty"`
+	Affirm            *ChargePaymentMethodDetailsAffirm            `json:"affirm,omitempty"`
+	AfterpayClearpay  *ChargePaymentMethodDetailsAfterpayClearpay  `json:"afterpay_clearpay,omitempty"`
+	Alipay            *ChargePaymentMethodDetailsAlipay            `json:"alipay,omitempty"`
+	AuBecsDebit       *ChargePaymentMethodDetailsAuBecsDebit       `json:"au_becs_debit,omitempty"`
+	BacsDebit         *ChargePaymentMethodDetailsBacsDebit         `json:"bacs_debit,omitempty"`
+	Bancontact        *ChargePaymentMethodDetailsBancontact        `json:"bancontact,omitempty"`
+	Blik              *ChargePaymentMethodDetailsBlik              `json:"blik,omitempty"`
+	Boleto            *ChargePaymentMethodDetailsBoleto            `json:"boleto,omitempty"`
+	Card              *ChargePaymentMethodDetailsCard              `json:"card,omitempty"`
+	CardPresent       *ChargePaymentMethodDetailsCardPresent       `json:"card_present,omitempty"`
+	Cashapp           *ChargePaymentMethodDetailsCashapp           `json:"cashapp,omitempty"`
+	CustomerBalance   *ChargePaymentMethodDetailsCustomerBalance   `json:"customer_balance,omitempty"`
+	Eps               *ChargePaymentMethodDetailsEps               `json:"eps,omitempty"`
+	Fpx               *ChargePaymentMethodDetailsFpx               `json:"fpx,omitempty"`
+	Giropay           *ChargePaymentMethodDetailsGiropay           `json:"giropay,omitempty"`
+	Grabpay           *ChargePaymentMethodDetailsGrabpay           `json:"grabpay,omitempty"`
+	Ideal             *ChargePaymentMethodDetailsIdeal             `json:"ideal,omitempty"`
+	InteracPresent    *ChargePaymentMethodDetailsInteracPresent    `json:"interac_present,omitempty"`
+	Klarna            *ChargePaymentMethodDetailsKlarna            `json:"klarna,omitempty"`
+	Konbini           *ChargePaymentMethodDetailsKonbini           `json:"konbini,omitempty"`
+	Link              *ChargePaymentMethodDetailsLink              `json:"link,omitempty"`
+	Multibanco        *ChargePaymentMethodDetailsMultibanco        `json:"multibanco,omitempty"`
+	Oxxo              *ChargePaymentMethodDetailsOxxo              `json:"oxxo,omitempty"`
+	P24               *ChargePaymentMethodDetailsP24               `json:"p24,omitempty"`
+	Paynow            *ChargePaymentMethodDetailsPaynow            `json:"paynow,omitempty"`
+	Paypal            *ChargePaymentMethodDetailsPaypal            `json:"paypal,omitempty"`
+	Pix               *ChargePaymentMethodDetailsPix               `json:"pix,omitempty"`
+	Promptpay         *ChargePaymentMethodDetailsPromptpay         `json:"promptpay,omitempty"`
+	SepaDebit         *ChargePaymentMethodDetailsSepaDebit         `json:"sepa_debit,omitempty"`
+	Sofort            *ChargePaymentMethodDetailsSofort            `json:"sofort,omitempty"`
+	StripeAccount     *ChargePaymentMethodDetailsStripeAccount     `json:"stripe_account,omitempty"`
+	Type              *string                                      `json:"type"`
+	UsBankAccount     *ChargePaymentMethodDetailsUsBankAccount     `json:"us_bank_account,omitempty"`
+	Wechat            *ChargePaymentMethodDetailsWechat            `json:"wechat,omitempty"`
+	WechatPay         *ChargePaymentMethodDetailsWechatPay         `json:"wechat_pay,omitempty"`
+	Zip               *ChargePaymentMethodDetailsZip               `json:"zip,omitempty"`
+}
+
+// ChargePaymentMethodDetailsAchCreditTransfer defines model for ChargePaymentMethodDetailsAchCreditTransfer.
+type ChargePaymentMethodDetailsAchCreditTransfer struct {
+	AccountNumber *string `json:"account_number"`
+	BankName      *string `json:"bank_name"`
+	RoutingNumber *string `json:"routing_number"`
+	SwiftCode     *string `json:"swift_code"`
+}
+
+// ChargePaymentMethodDetailsAchDebit defines model for ChargePaymentMethodDetailsAchDebit.
+type ChargePaymentMethodDetailsAchDebit struct {
+	AccountHolderType *string `json:"account_holder_type"`
+	BankName          *string `json:"bank_name"`
+	Country           *string `json:"country"`
+	Fingerprint       *string `json:"fingerprint"`
+	Last4             *string `json:"last4"`
+	RoutingNumber     *string `json:"routing_number"`
+}
+
+// ChargePaymentMethodDetailsAcssDebit defines model for ChargePaymentMethodDetailsAcssDebit.
+type ChargePaymentMethodDetailsAcssDebit struct {
+	BankName          *string `json:"bank_name"`
+	Fingerprint       *string `json:"fingerprint"`
+	InstitutionNumber *string `json:"institution_number"`
+	Last4             *string `json:"last4"`
+	Mandate           *string `json:"mandate"`
+	TransitNumber     *string `json:"transit_number"`
+}
+
+// ChargePaymentMethodDetailsAffirm defines model for ChargePaymentMethodDetailsAffirm.
+type ChargePaymentMethodDetailsAffirm = map[string]interface{}
+
+// ChargePaymentMethodDetailsAfterpayClearpay defines model for ChargePaymentMethodDetailsAfterpayClearpay.
+type ChargePaymentMethodDetailsAfterpayClearpay struct {
+	OrderId   *string `json:"order_id"`
+	Reference *string `json:"reference"`
+}
+
+// ChargePaymentMethodDetailsAlipay defines model for ChargePaymentMethodDetailsAlipay.
+type ChargePaymentMethodDetailsAlipay struct {
+	BuyerId       *string `json:"buyer_id"`
+	Fingerprint   *string `json:"fingerprint"`
+	TransactionId *string `json:"transaction_id"`
+}
+
+// ChargePaymentMethodDetailsAuBecsDebit defines model for ChargePaymentMethodDetailsAuBecsDebit.
+type ChargePaymentMethodDetailsAuBecsDebit struct {
+	BsbNumber   *string `json:"bsb_number"`
+	Fingerprint *string `json:"fingerprint"`
+	Last4       *string `json:"last4"`
+	Mandate     *string `json:"mandate"`
+}
+
+// ChargePaymentMethodDetailsBacsDebit defines model for ChargePaymentMethodDetailsBacsDebit.
+type ChargePaymentMethodDetailsBacsDebit struct {
+	Fingerprint *string `json:"fingerprint"`
+	Last4       *string `json:"last4"`
+	Mandate     *string `json:"mandate"`
+	SortCode    *string `json:"sort_code"`
+}
+
+// ChargePaymentMethodDetailsBancontact defines model for ChargePaymentMethodDetailsBancontact.
+type ChargePaymentMethodDetailsBancontact struct {
+	BankCode                  *string                         `json:"bank_code"`
+	BankName                  *string                         `json:"bank_name"`
+	Bic                       *string                         `json:"bic"`
+	GeneratedSepaDebit        *ExpandableFieldOfPaymentMethod `json:"generated_sepa_debit,omitempty"`
+	GeneratedSepaDebitMandate *ExpandableFieldOfMandate       `json:"generated_sepa_debit_mandate,omitempty"`
+	IbanLast4                 *string                         `json:"iban_last4"`
+	PreferredLanguage         *string                         `json:"preferred_language"`
+	VerifiedName              *string                         `json:"verified_name"`
+}
+
+// ChargePaymentMethodDetailsBlik defines model for ChargePaymentMethodDetailsBlik.
+type ChargePaymentMethodDetailsBlik = map[string]interface{}
+
+// ChargePaymentMethodDetailsBoleto defines model for ChargePaymentMethodDetailsBoleto.
+type ChargePaymentMethodDetailsBoleto struct {
+	TaxId *string `json:"tax_id"`
+}
+
+// ChargePaymentMethodDetailsCard defines model for ChargePaymentMethodDetailsCard.
+type ChargePaymentMethodDetailsCard struct {
+	Brand        *string                                     `json:"brand"`
+	Checks       *ChargePaymentMethodDetailsCardChecks       `json:"checks,omitempty"`
+	Country      *string                                     `json:"country"`
+	Description  *string                                     `json:"description"`
+	ExpMonth     *int64                                      `json:"exp_month,omitempty"`
+	ExpYear      *int64                                      `json:"exp_year,omitempty"`
+	Fingerprint  *string                                     `json:"fingerprint"`
+	Funding      *string                                     `json:"funding"`
+	Iin          *string                                     `json:"iin"`
+	Installments *ChargePaymentMethodDetailsCardInstallments `json:"installments,omitempty"`
+	Issuer       *string                                     `json:"issuer"`
+	Last4        *string                                     `json:"last4"`
+	Mandate      *string                                     `json:"mandate"`
+	Moto         *bool                                       `json:"moto"`
+	Network      *string                                     `json:"network"`
+	NetworkToken *ChargePaymentMethodDetailsCardNetworkToken `json:"network_token,omitempty"`
+	ThreeDSecure *ChargePaymentMethodDetailsCardThreeDSecure `json:"three_d_secure,omitempty"`
+	Wallet       *ChargePaymentMethodDetailsCardWallet       `json:"wallet,omitempty"`
+}
+
+// ChargePaymentMethodDetailsCardChecks defines model for ChargePaymentMethodDetailsCardChecks.
+type ChargePaymentMethodDetailsCardChecks struct {
+	AddressLine1Check      *string `json:"address_line1_check"`
+	AddressPostalCodeCheck *string `json:"address_postal_code_check"`
+	CvcCheck               *string `json:"cvc_check"`
+}
+
+// ChargePaymentMethodDetailsCardInstallments defines model for ChargePaymentMethodDetailsCardInstallments.
+type ChargePaymentMethodDetailsCardInstallments struct {
+	Plan *PaymentIntentPaymentMethodOptionsCardInstallmentsPlan `json:"plan,omitempty"`
+}
+
+// ChargePaymentMethodDetailsCardNetworkToken defines model for ChargePaymentMethodDetailsCardNetworkToken.
+type ChargePaymentMethodDetailsCardNetworkToken struct {
+	Used *bool `json:"used,omitempty"`
+}
+
+// ChargePaymentMethodDetailsCardPresent defines model for ChargePaymentMethodDetailsCardPresent.
+type ChargePaymentMethodDetailsCardPresent struct {
+	AmountAuthorized                  *int64                                        `json:"amount_authorized"`
+	Brand                             *string                                       `json:"brand"`
+	CaptureBefore                     *time.Time                                    `json:"capture_before,omitempty"`
+	CardholderName                    *string                                       `json:"cardholder_name"`
+	Country                           *string                                       `json:"country"`
+	Description                       *string                                       `json:"description"`
+	EmvAuthData                       *string                                       `json:"emv_auth_data"`
+	ExpMonth                          *int64                                        `json:"exp_month,omitempty"`
+	ExpYear                           *int64                                        `json:"exp_year,omitempty"`
+	Fingerprint                       *string                                       `json:"fingerprint"`
+	Funding                           *string                                       `json:"funding"`
+	GeneratedCard                     *string                                       `json:"generated_card"`
+	Iin                               *string                                       `json:"iin"`
+	IncrementalAuthorizationSupported *bool                                         `json:"incremental_authorization_supported,omitempty"`
+	Issuer                            *string                                       `json:"issuer"`
+	Last4                             *string                                       `json:"last4"`
+	Network                           *string                                       `json:"network"`
+	OvercaptureSupported              *bool                                         `json:"overcapture_supported,omitempty"`
+	ReadMethod                        *string                                       `json:"read_method"`
+	Receipt                           *ChargePaymentMethodDetailsCardPresentReceipt `json:"receipt,omitempty"`
+}
+
+// ChargePaymentMethodDetailsCardPresentReceipt defines model for ChargePaymentMethodDetailsCardPresentReceipt.
+type ChargePaymentMethodDetailsCardPresentReceipt struct {
+	AccountType                  *string `json:"account_type"`
+	ApplicationCryptogram        *string `json:"application_cryptogram"`
+	ApplicationPreferredName     *string `json:"application_preferred_name"`
+	AuthorizationCode            *string `json:"authorization_code"`
+	AuthorizationResponseCode    *string `json:"authorization_response_code"`
+	CardholderVerificationMethod *string `json:"cardholder_verification_method"`
+	DedicatedFileName            *string `json:"dedicated_file_name"`
+	TerminalVerificationResults  *string `json:"terminal_verification_results"`
+	TransactionStatusInformation *string `json:"transaction_status_information"`
+}
+
+// ChargePaymentMethodDetailsCardThreeDSecure defines model for ChargePaymentMethodDetailsCardThreeDSecure.
+type ChargePaymentMethodDetailsCardThreeDSecure struct {
+	AuthenticationFlow *string `json:"authentication_flow"`
+	Result             *string `json:"result"`
+	ResultReason       *string `json:"result_reason"`
+	Version            *string `json:"version"`
+}
+
+// ChargePaymentMethodDetailsCardWallet defines model for ChargePaymentMethodDetailsCardWallet.
+type ChargePaymentMethodDetailsCardWallet struct {
+	AmexExpressCheckout *ChargePaymentMethodDetailsCardWalletAmexExpressCheckout `json:"amex_express_checkout,omitempty"`
+	ApplePay            *ChargePaymentMethodDetailsCardWalletApplePay            `json:"apple_pay,omitempty"`
+	DynamicLast4        *string                                                  `json:"dynamic_last4"`
+	GooglePay           *ChargePaymentMethodDetailsCardWalletGooglePay           `json:"google_pay,omitempty"`
+	Link                *ChargePaymentMethodDetailsCardWalletLink                `json:"link,omitempty"`
+	Masterpass          *ChargePaymentMethodDetailsCardWalletMasterpass          `json:"masterpass,omitempty"`
+	SamsungPay          *ChargePaymentMethodDetailsCardWalletSamsungPay          `json:"samsung_pay,omitempty"`
+	Type                *string                                                  `json:"type"`
+	VisaCheckout        *ChargePaymentMethodDetailsCardWalletVisaCheckout        `json:"visa_checkout,omitempty"`
+}
+
+// ChargePaymentMethodDetailsCardWalletAmexExpressCheckout defines model for ChargePaymentMethodDetailsCardWalletAmexExpressCheckout.
+type ChargePaymentMethodDetailsCardWalletAmexExpressCheckout = map[string]interface{}
+
+// ChargePaymentMethodDetailsCardWalletApplePay defines model for ChargePaymentMethodDetailsCardWalletApplePay.
+type ChargePaymentMethodDetailsCardWalletApplePay = map[string]interface{}
+
+// ChargePaymentMethodDetailsCardWalletGooglePay defines model for ChargePaymentMethodDetailsCardWalletGooglePay.
+type ChargePaymentMethodDetailsCardWalletGooglePay = map[string]interface{}
+
+// ChargePaymentMethodDetailsCardWalletLink defines model for ChargePaymentMethodDetailsCardWalletLink.
+type ChargePaymentMethodDetailsCardWalletLink = map[string]interface{}
+
+// ChargePaymentMethodDetailsCardWalletMasterpass defines model for ChargePaymentMethodDetailsCardWalletMasterpass.
+type ChargePaymentMethodDetailsCardWalletMasterpass struct {
+	BillingAddress  *Address `json:"billing_address,omitempty"`
+	Email           *string  `json:"email"`
+	Name            *string  `json:"name"`
+	ShippingAddress *Address `json:"shipping_address,omitempty"`
+}
+
+// ChargePaymentMethodDetailsCardWalletSamsungPay defines model for ChargePaymentMethodDetailsCardWalletSamsungPay.
+type ChargePaymentMethodDetailsCardWalletSamsungPay = map[string]interface{}
+
+// ChargePaymentMethodDetailsCardWalletVisaCheckout defines model for ChargePaymentMethodDetailsCardWalletVisaCheckout.
+type ChargePaymentMethodDetailsCardWalletVisaCheckout struct {
+	BillingAddress  *Address `json:"billing_address,omitempty"`
+	Email           *string  `json:"email"`
+	Name            *string  `json:"name"`
+	ShippingAddress *Address `json:"shipping_address,omitempty"`
+}
+
+// ChargePaymentMethodDetailsCashapp defines model for ChargePaymentMethodDetailsCashapp.
+type ChargePaymentMethodDetailsCashapp struct {
+	BuyerId *string `json:"buyer_id"`
+	Cashtag *string `json:"cashtag"`
+}
+
+// ChargePaymentMethodDetailsCustomerBalance defines model for ChargePaymentMethodDetailsCustomerBalance.
+type ChargePaymentMethodDetailsCustomerBalance = map[string]interface{}
+
+// ChargePaymentMethodDetailsEps defines model for ChargePaymentMethodDetailsEps.
+type ChargePaymentMethodDetailsEps struct {
+	Bank         *string `json:"bank"`
+	VerifiedName *string `json:"verified_name"`
+}
+
+// ChargePaymentMethodDetailsFpx defines model for ChargePaymentMethodDetailsFpx.
+type ChargePaymentMethodDetailsFpx struct {
+	AccountHolderType *string `json:"account_holder_type"`
+	Bank              *string `json:"bank"`
+	TransactionId     *string `json:"transaction_id"`
+}
+
+// ChargePaymentMethodDetailsGiropay defines model for ChargePaymentMethodDetailsGiropay.
+type ChargePaymentMethodDetailsGiropay struct {
+	BankCode     *string `json:"bank_code"`
+	BankName     *string `json:"bank_name"`
+	Bic          *string `json:"bic"`
+	VerifiedName *string `json:"verified_name"`
+}
+
+// ChargePaymentMethodDetailsGrabpay defines model for ChargePaymentMethodDetailsGrabpay.
+type ChargePaymentMethodDetailsGrabpay struct {
+	TransactionId *string `json:"transaction_id"`
+}
+
+// ChargePaymentMethodDetailsIdeal defines model for ChargePaymentMethodDetailsIdeal.
+type ChargePaymentMethodDetailsIdeal struct {
+	Bank                      *string                         `json:"bank"`
+	Bic                       *string                         `json:"bic"`
+	GeneratedSepaDebit        *ExpandableFieldOfPaymentMethod `json:"generated_sepa_debit,omitempty"`
+	GeneratedSepaDebitMandate *ExpandableFieldOfMandate       `json:"generated_sepa_debit_mandate,omitempty"`
+	IbanLast4                 *string                         `json:"iban_last4"`
+	VerifiedName              *string                         `json:"verified_name"`
+}
+
+// ChargePaymentMethodDetailsInteracPresent defines model for ChargePaymentMethodDetailsInteracPresent.
+type ChargePaymentMethodDetailsInteracPresent struct {
+	Brand            *string                                          `json:"brand"`
+	CardholderName   *string                                          `json:"cardholder_name"`
+	Country          *string                                          `json:"country"`
+	Description      *string                                          `json:"description"`
+	EmvAuthData      *string                                          `json:"emv_auth_data"`
+	ExpMonth         *int64                                           `json:"exp_month,omitempty"`
+	ExpYear          *int64                                           `json:"exp_year,omitempty"`
+	Fingerprint      *string                                          `json:"fingerprint"`
+	Funding          *string                                          `json:"funding"`
+	GeneratedCard    *string                                          `json:"generated_card"`
+	Iin              *string                                          `json:"iin"`
+	Issuer           *string                                          `json:"issuer"`
+	Last4            *string                                          `json:"last4"`
+	Network          *string                                          `json:"network"`
+	PreferredLocales *[]string                                        `json:"preferred_locales"`
+	ReadMethod       *string                                          `json:"read_method"`
+	Receipt          *ChargePaymentMethodDetailsInteracPresentReceipt `json:"receipt,omitempty"`
+}
+
+// ChargePaymentMethodDetailsInteracPresentReceipt defines model for ChargePaymentMethodDetailsInteracPresentReceipt.
+type ChargePaymentMethodDetailsInteracPresentReceipt struct {
+	AccountType                  *string `json:"account_type"`
+	ApplicationCryptogram        *string `json:"application_cryptogram"`
+	ApplicationPreferredName     *string `json:"application_preferred_name"`
+	AuthorizationCode            *string `json:"authorization_code"`
+	AuthorizationResponseCode    *string `json:"authorization_response_code"`
+	CardholderVerificationMethod *string `json:"cardholder_verification_method"`
+	DedicatedFileName            *string `json:"dedicated_file_name"`
+	TerminalVerificationResults  *string `json:"terminal_verification_results"`
+	TransactionStatusInformation *string `json:"transaction_status_information"`
+}
+
+// ChargePaymentMethodDetailsKlarna defines model for ChargePaymentMethodDetailsKlarna.
+type ChargePaymentMethodDetailsKlarna struct {
+	PaymentMethodCategory *string `json:"payment_method_category"`
+	PreferredLocale       *string `json:"preferred_locale"`
+}
+
+// ChargePaymentMethodDetailsKonbini defines model for ChargePaymentMethodDetailsKonbini.
+type ChargePaymentMethodDetailsKonbini struct {
+	Store *ChargePaymentMethodDetailsKonbiniStore `json:"store,omitempty"`
+}
+
+// ChargePaymentMethodDetailsKonbiniStore defines model for ChargePaymentMethodDetailsKonbiniStore.
+type ChargePaymentMethodDetailsKonbiniStore struct {
+	Chain *string `json:"chain"`
+}
+
+// ChargePaymentMethodDetailsLink defines model for ChargePaymentMethodDetailsLink.
+type ChargePaymentMethodDetailsLink struct {
+	Country *string `json:"country"`
+}
+
+// ChargePaymentMethodDetailsMultibanco defines model for ChargePaymentMethodDetailsMultibanco.
+type ChargePaymentMethodDetailsMultibanco struct {
+	Entity    *string `json:"entity"`
+	Reference *string `json:"reference"`
+}
+
+// ChargePaymentMethodDetailsOxxo defines model for ChargePaymentMethodDetailsOxxo.
+type ChargePaymentMethodDetailsOxxo struct {
+	Number *string `json:"number"`
+}
+
+// ChargePaymentMethodDetailsP24 defines model for ChargePaymentMethodDetailsP24.
+type ChargePaymentMethodDetailsP24 struct {
+	Bank         *string `json:"bank"`
+	Reference    *string `json:"reference"`
+	VerifiedName *string `json:"verified_name"`
+}
+
+// ChargePaymentMethodDetailsPaynow defines model for ChargePaymentMethodDetailsPaynow.
+type ChargePaymentMethodDetailsPaynow struct {
+	Reference *string `json:"reference"`
+}
+
+// ChargePaymentMethodDetailsPaypal defines model for ChargePaymentMethodDetailsPaypal.
+type ChargePaymentMethodDetailsPaypal struct {
+	PayerEmail       *string                                           `json:"payer_email"`
+	PayerId          *string                                           `json:"payer_id"`
+	PayerName        *string                                           `json:"payer_name"`
+	SellerProtection *ChargePaymentMethodDetailsPaypalSellerProtection `json:"seller_protection,omitempty"`
+	TransactionId    *string                                           `json:"transaction_id"`
+}
+
+// ChargePaymentMethodDetailsPaypalSellerProtection defines model for ChargePaymentMethodDetailsPaypalSellerProtection.
+type ChargePaymentMethodDetailsPaypalSellerProtection struct {
+	DisputeCategories *[]string `json:"dispute_categories"`
+	Status            *string   `json:"status"`
+}
+
+// ChargePaymentMethodDetailsPix defines model for ChargePaymentMethodDetailsPix.
+type ChargePaymentMethodDetailsPix struct {
+	BankTransactionId *string `json:"bank_transaction_id"`
+}
+
+// ChargePaymentMethodDetailsPromptpay defines model for ChargePaymentMethodDetailsPromptpay.
+type ChargePaymentMethodDetailsPromptpay struct {
+	Reference *string `json:"reference"`
+}
+
+// ChargePaymentMethodDetailsSepaDebit defines model for ChargePaymentMethodDetailsSepaDebit.
+type ChargePaymentMethodDetailsSepaDebit struct {
+	BankCode    *string `json:"bank_code"`
+	BranchCode  *string `json:"branch_code"`
+	Country     *string `json:"country"`
+	Fingerprint *string `json:"fingerprint"`
+	Last4       *string `json:"last4"`
+	Mandate     *string `json:"mandate"`
+}
+
+// ChargePaymentMethodDetailsSofort defines model for ChargePaymentMethodDetailsSofort.
+type ChargePaymentMethodDetailsSofort struct {
+	BankCode                  *string                         `json:"bank_code"`
+	BankName                  *string                         `json:"bank_name"`
+	Bic                       *string                         `json:"bic"`
+	Country                   *string                         `json:"country"`
+	GeneratedSepaDebit        *ExpandableFieldOfPaymentMethod `json:"generated_sepa_debit,omitempty"`
+	GeneratedSepaDebitMandate *ExpandableFieldOfMandate       `json:"generated_sepa_debit_mandate,omitempty"`
+	IbanLast4                 *string                         `json:"iban_last4"`
+	PreferredLanguage         *string                         `json:"preferred_language"`
+	VerifiedName              *string                         `json:"verified_name"`
+}
+
+// ChargePaymentMethodDetailsStripeAccount defines model for ChargePaymentMethodDetailsStripeAccount.
+type ChargePaymentMethodDetailsStripeAccount = map[string]interface{}
+
+// ChargePaymentMethodDetailsUsBankAccount defines model for ChargePaymentMethodDetailsUsBankAccount.
+type ChargePaymentMethodDetailsUsBankAccount struct {
+	AccountHolderType *string `json:"account_holder_type"`
+	AccountType       *string `json:"account_type"`
+	BankName          *string `json:"bank_name"`
+	Fingerprint       *string `json:"fingerprint"`
+	Last4             *string `json:"last4"`
+	RoutingNumber     *string `json:"routing_number"`
+}
+
+// ChargePaymentMethodDetailsWechat defines model for ChargePaymentMethodDetailsWechat.
+type ChargePaymentMethodDetailsWechat = map[string]interface{}
+
+// ChargePaymentMethodDetailsWechatPay defines model for ChargePaymentMethodDetailsWechatPay.
+type ChargePaymentMethodDetailsWechatPay struct {
+	Fingerprint   *string `json:"fingerprint"`
+	TransactionId *string `json:"transaction_id"`
+}
+
+// ChargePaymentMethodDetailsZip defines model for ChargePaymentMethodDetailsZip.
+type ChargePaymentMethodDetailsZip = map[string]interface{}
+
+// ChargeRadarOptions defines model for ChargeRadarOptions.
+type ChargeRadarOptions struct {
+	Session *string `json:"session"`
+}
+
+// ChargeTransferData defines model for ChargeTransferData.
+type ChargeTransferData struct {
+	Amount      *int64                    `json:"amount"`
+	Destination *ExpandableFieldOfAccount `json:"destination,omitempty"`
+}
+
 // Child defines model for Child.
 type Child struct {
 	Children *[]Child `json:"children"`
 	Data     *Data    `json:"data,omitempty"`
+}
+
+// Coupon defines model for Coupon.
+type Coupon struct {
+	AmountOff        *int64                            `json:"amount_off"`
+	AppliesTo        *CouponAppliesTo                  `json:"applies_to,omitempty"`
+	Created          *time.Time                        `json:"created,omitempty"`
+	Currency         *string                           `json:"currency"`
+	CurrencyOptions  *map[string]CouponCurrencyOptions `json:"currency_options"`
+	Deleted          *bool                             `json:"deleted"`
+	Duration         *string                           `json:"duration"`
+	DurationInMonths *int64                            `json:"duration_in_months"`
+	Id               *string                           `json:"id"`
+	Livemode         *bool                             `json:"livemode,omitempty"`
+	MaxRedemptions   *int64                            `json:"max_redemptions"`
+	Metadata         *map[string]*string               `json:"metadata"`
+	Name             *string                           `json:"name"`
+	Object           *string                           `json:"object"`
+	PercentOff       *float64                          `json:"percent_off"`
+	RedeemBy         *time.Time                        `json:"redeem_by"`
+	TimesRedeemed    *int64                            `json:"times_redeemed,omitempty"`
+	Valid            *bool                             `json:"valid,omitempty"`
+}
+
+// CouponAppliesTo defines model for CouponAppliesTo.
+type CouponAppliesTo struct {
+	Products *[]string `json:"products"`
+}
+
+// CouponCurrencyOptions defines model for CouponCurrencyOptions.
+type CouponCurrencyOptions struct {
+	AmountOff *int64 `json:"amount_off,omitempty"`
+}
+
+// Customer defines model for Customer.
+type Customer struct {
+	Address              *Address                         `json:"address,omitempty"`
+	Balance              *int64                           `json:"balance,omitempty"`
+	CashBalance          *CashBalance                     `json:"cash_balance,omitempty"`
+	Created              *time.Time                       `json:"created,omitempty"`
+	Currency             *string                          `json:"currency"`
+	DefaultSource        *ExpandableFieldOfIPaymentSource `json:"default_source,omitempty"`
+	Deleted              *bool                            `json:"deleted"`
+	Delinquent           *bool                            `json:"delinquent"`
+	Description          *string                          `json:"description"`
+	Discount             *Discount                        `json:"discount,omitempty"`
+	Email                *string                          `json:"email"`
+	Id                   *string                          `json:"id"`
+	InvoiceCreditBalance *map[string]*int64               `json:"invoice_credit_balance"`
+	InvoicePrefix        *string                          `json:"invoice_prefix"`
+	InvoiceSettings      *CustomerInvoiceSettings         `json:"invoice_settings,omitempty"`
+	Livemode             *bool                            `json:"livemode,omitempty"`
+	Metadata             *map[string]*string              `json:"metadata"`
+	Name                 *string                          `json:"name"`
+	NextInvoiceSequence  *int64                           `json:"next_invoice_sequence,omitempty"`
+	Object               *string                          `json:"object"`
+	Phone                *string                          `json:"phone"`
+	PreferredLocales     *[]string                        `json:"preferred_locales"`
+	Shipping             *Shipping                        `json:"shipping,omitempty"`
+	Sources              *StripeListOfIPaymentSource      `json:"sources,omitempty"`
+	Subscriptions        *StripeListOfSubscription        `json:"subscriptions,omitempty"`
+	Tax                  *CustomerTax                     `json:"tax,omitempty"`
+	TaxExempt            *string                          `json:"tax_exempt"`
+	TaxIds               *StripeListOfTaxId               `json:"tax_ids,omitempty"`
+	TestClock            *ExpandableFieldOfTestClock      `json:"test_clock,omitempty"`
+}
+
+// CustomerInvoiceSettings defines model for CustomerInvoiceSettings.
+type CustomerInvoiceSettings struct {
+	CustomFields         *[]CustomerInvoiceSettingsCustomField    `json:"custom_fields"`
+	DefaultPaymentMethod *ExpandableFieldOfPaymentMethod          `json:"default_payment_method,omitempty"`
+	Footer               *string                                  `json:"footer"`
+	RenderingOptions     *CustomerInvoiceSettingsRenderingOptions `json:"rendering_options,omitempty"`
+}
+
+// CustomerInvoiceSettingsCustomField defines model for CustomerInvoiceSettingsCustomField.
+type CustomerInvoiceSettingsCustomField struct {
+	Name  *string `json:"name"`
+	Value *string `json:"value"`
+}
+
+// CustomerInvoiceSettingsRenderingOptions defines model for CustomerInvoiceSettingsRenderingOptions.
+type CustomerInvoiceSettingsRenderingOptions struct {
+	AmountTaxDisplay *string `json:"amount_tax_display"`
+}
+
+// CustomerTax defines model for CustomerTax.
+type CustomerTax struct {
+	AutomaticTax *string              `json:"automatic_tax"`
+	IpAddress    *string              `json:"ip_address"`
+	Location     *CustomerTaxLocation `json:"location,omitempty"`
+}
+
+// CustomerTaxLocation defines model for CustomerTaxLocation.
+type CustomerTaxLocation struct {
+	Country *string `json:"country"`
+	Source  *string `json:"source"`
+	State   *string `json:"state"`
 }
 
 // Data defines model for Data.
@@ -227,6 +1339,352 @@ type Data struct {
 	EndTime   *time.Time `json:"endTime,omitempty"`
 	Name      *string    `json:"name"`
 	StartTime *time.Time `json:"startTime,omitempty"`
+}
+
+// Discount defines model for Discount.
+type Discount struct {
+	CheckoutSession *string                         `json:"checkout_session"`
+	Coupon          *Coupon                         `json:"coupon,omitempty"`
+	Customer        *ExpandableFieldOfCustomer      `json:"customer,omitempty"`
+	Deleted         *bool                           `json:"deleted"`
+	End             *time.Time                      `json:"end"`
+	Id              *string                         `json:"id"`
+	Invoice         *string                         `json:"invoice"`
+	InvoiceItem     *string                         `json:"invoice_item"`
+	Object          *string                         `json:"object"`
+	PromotionCode   *ExpandableFieldOfPromotionCode `json:"promotion_code,omitempty"`
+	Start           *time.Time                      `json:"start"`
+	Subscription    *ExpandableFieldOfSubscription  `json:"subscription,omitempty"`
+}
+
+// Dispute defines model for Dispute.
+type Dispute struct {
+	Amount              *int64                          `json:"amount,omitempty"`
+	BalanceTransactions *[]BalanceTransaction           `json:"balance_transactions"`
+	Charge              *ExpandableFieldOfCharge        `json:"charge,omitempty"`
+	Created             *time.Time                      `json:"created,omitempty"`
+	Currency            *string                         `json:"currency"`
+	Evidence            *DisputeEvidence                `json:"evidence,omitempty"`
+	EvidenceDetails     *DisputeEvidenceDetails         `json:"evidence_details,omitempty"`
+	Id                  *string                         `json:"id"`
+	IsChargeRefundable  *bool                           `json:"is_charge_refundable,omitempty"`
+	Livemode            *bool                           `json:"livemode,omitempty"`
+	Metadata            *map[string]*string             `json:"metadata"`
+	NetworkReasonCode   *string                         `json:"network_reason_code"`
+	Object              *string                         `json:"object"`
+	PaymentIntent       *ExpandableFieldOfPaymentIntent `json:"payment_intent,omitempty"`
+	Reason              *string                         `json:"reason"`
+	Status              *string                         `json:"status"`
+}
+
+// DisputeEvidence defines model for DisputeEvidence.
+type DisputeEvidence struct {
+	AccessActivityLog            *string                `json:"access_activity_log"`
+	BillingAddress               *string                `json:"billing_address"`
+	CancellationPolicy           *ExpandableFieldOfFile `json:"cancellation_policy,omitempty"`
+	CancellationPolicyDisclosure *string                `json:"cancellation_policy_disclosure"`
+	CancellationRebuttal         *string                `json:"cancellation_rebuttal"`
+	CustomerCommunication        *ExpandableFieldOfFile `json:"customer_communication,omitempty"`
+	CustomerEmailAddress         *string                `json:"customer_email_address"`
+	CustomerName                 *string                `json:"customer_name"`
+	CustomerPurchaseIp           *string                `json:"customer_purchase_ip"`
+	CustomerSignature            *ExpandableFieldOfFile `json:"customer_signature,omitempty"`
+	DuplicateChargeDocumentation *ExpandableFieldOfFile `json:"duplicate_charge_documentation,omitempty"`
+	DuplicateChargeExplanation   *string                `json:"duplicate_charge_explanation"`
+	DuplicateChargeId            *string                `json:"duplicate_charge_id"`
+	ProductDescription           *string                `json:"product_description"`
+	Receipt                      *ExpandableFieldOfFile `json:"receipt,omitempty"`
+	RefundPolicy                 *ExpandableFieldOfFile `json:"refund_policy,omitempty"`
+	RefundPolicyDisclosure       *string                `json:"refund_policy_disclosure"`
+	RefundRefusalExplanation     *string                `json:"refund_refusal_explanation"`
+	ServiceDate                  *string                `json:"service_date"`
+	ServiceDocumentation         *ExpandableFieldOfFile `json:"service_documentation,omitempty"`
+	ShippingAddress              *string                `json:"shipping_address"`
+	ShippingCarrier              *string                `json:"shipping_carrier"`
+	ShippingDate                 *string                `json:"shipping_date"`
+	ShippingDocumentation        *ExpandableFieldOfFile `json:"shipping_documentation,omitempty"`
+	ShippingTrackingNumber       *string                `json:"shipping_tracking_number"`
+	UncategorizedFile            *ExpandableFieldOfFile `json:"uncategorized_file,omitempty"`
+	UncategorizedText            *string                `json:"uncategorized_text"`
+}
+
+// DisputeEvidenceDetails defines model for DisputeEvidenceDetails.
+type DisputeEvidenceDetails struct {
+	DueBy           *time.Time `json:"due_by"`
+	HasEvidence     *bool      `json:"has_evidence,omitempty"`
+	PastDue         *bool      `json:"past_due,omitempty"`
+	SubmissionCount *int64     `json:"submission_count,omitempty"`
+}
+
+// Dob defines model for Dob.
+type Dob struct {
+	Day   *int64 `json:"day"`
+	Month *int64 `json:"month"`
+	Year  *int64 `json:"year"`
+}
+
+// ExpandableFieldOfAccount defines model for ExpandableFieldOfAccount.
+type ExpandableFieldOfAccount struct {
+	ExpandedObject *Account `json:"expandedObject,omitempty"`
+	Id             *string  `json:"id"`
+}
+
+// ExpandableFieldOfApplication defines model for ExpandableFieldOfApplication.
+type ExpandableFieldOfApplication struct {
+	ExpandedObject *Application `json:"expandedObject,omitempty"`
+	Id             *string      `json:"id"`
+}
+
+// ExpandableFieldOfApplicationFee defines model for ExpandableFieldOfApplicationFee.
+type ExpandableFieldOfApplicationFee struct {
+	ExpandedObject *ApplicationFee `json:"expandedObject,omitempty"`
+	Id             *string         `json:"id"`
+}
+
+// ExpandableFieldOfBalanceTransaction defines model for ExpandableFieldOfBalanceTransaction.
+type ExpandableFieldOfBalanceTransaction struct {
+	ExpandedObject *BalanceTransaction `json:"expandedObject,omitempty"`
+	Id             *string             `json:"id"`
+}
+
+// ExpandableFieldOfCharge defines model for ExpandableFieldOfCharge.
+type ExpandableFieldOfCharge struct {
+	ExpandedObject *Charge `json:"expandedObject,omitempty"`
+	Id             *string `json:"id"`
+}
+
+// ExpandableFieldOfCoupon defines model for ExpandableFieldOfCoupon.
+type ExpandableFieldOfCoupon struct {
+	ExpandedObject *Coupon `json:"expandedObject,omitempty"`
+	Id             *string `json:"id"`
+}
+
+// ExpandableFieldOfCustomer defines model for ExpandableFieldOfCustomer.
+type ExpandableFieldOfCustomer struct {
+	ExpandedObject *Customer `json:"expandedObject,omitempty"`
+	Id             *string   `json:"id"`
+}
+
+// ExpandableFieldOfDiscount defines model for ExpandableFieldOfDiscount.
+type ExpandableFieldOfDiscount struct {
+	ExpandedObject *Discount `json:"expandedObject,omitempty"`
+	Id             *string   `json:"id"`
+}
+
+// ExpandableFieldOfDispute defines model for ExpandableFieldOfDispute.
+type ExpandableFieldOfDispute struct {
+	ExpandedObject *Dispute `json:"expandedObject,omitempty"`
+	Id             *string  `json:"id"`
+}
+
+// ExpandableFieldOfFile defines model for ExpandableFieldOfFile.
+type ExpandableFieldOfFile struct {
+	ExpandedObject *File   `json:"expandedObject,omitempty"`
+	Id             *string `json:"id"`
+}
+
+// ExpandableFieldOfIBalanceTransactionSource defines model for ExpandableFieldOfIBalanceTransactionSource.
+type ExpandableFieldOfIBalanceTransactionSource struct {
+	ExpandedObject *IBalanceTransactionSource `json:"expandedObject,omitempty"`
+	Id             *string                    `json:"id"`
+}
+
+// ExpandableFieldOfIPaymentSource defines model for ExpandableFieldOfIPaymentSource.
+type ExpandableFieldOfIPaymentSource struct {
+	ExpandedObject *IPaymentSource `json:"expandedObject,omitempty"`
+	Id             *string         `json:"id"`
+}
+
+// ExpandableFieldOfInvoice defines model for ExpandableFieldOfInvoice.
+type ExpandableFieldOfInvoice struct {
+	ExpandedObject *Invoice `json:"expandedObject,omitempty"`
+	Id             *string  `json:"id"`
+}
+
+// ExpandableFieldOfMandate defines model for ExpandableFieldOfMandate.
+type ExpandableFieldOfMandate struct {
+	ExpandedObject *Mandate `json:"expandedObject,omitempty"`
+	Id             *string  `json:"id"`
+}
+
+// ExpandableFieldOfPaymentIntent defines model for ExpandableFieldOfPaymentIntent.
+type ExpandableFieldOfPaymentIntent struct {
+	ExpandedObject *PaymentIntent `json:"expandedObject,omitempty"`
+	Id             *string        `json:"id"`
+}
+
+// ExpandableFieldOfPaymentMethod defines model for ExpandableFieldOfPaymentMethod.
+type ExpandableFieldOfPaymentMethod struct {
+	ExpandedObject *PaymentMethod `json:"expandedObject,omitempty"`
+	Id             *string        `json:"id"`
+}
+
+// ExpandableFieldOfPlan defines model for ExpandableFieldOfPlan.
+type ExpandableFieldOfPlan struct {
+	ExpandedObject *Plan   `json:"expandedObject,omitempty"`
+	Id             *string `json:"id"`
+}
+
+// ExpandableFieldOfPrice defines model for ExpandableFieldOfPrice.
+type ExpandableFieldOfPrice struct {
+	ExpandedObject *Price  `json:"expandedObject,omitempty"`
+	Id             *string `json:"id"`
+}
+
+// ExpandableFieldOfProduct defines model for ExpandableFieldOfProduct.
+type ExpandableFieldOfProduct struct {
+	ExpandedObject *Product `json:"expandedObject,omitempty"`
+	Id             *string  `json:"id"`
+}
+
+// ExpandableFieldOfPromotionCode defines model for ExpandableFieldOfPromotionCode.
+type ExpandableFieldOfPromotionCode struct {
+	ExpandedObject *PromotionCode `json:"expandedObject,omitempty"`
+	Id             *string        `json:"id"`
+}
+
+// ExpandableFieldOfQuote defines model for ExpandableFieldOfQuote.
+type ExpandableFieldOfQuote struct {
+	ExpandedObject *Quote  `json:"expandedObject,omitempty"`
+	Id             *string `json:"id"`
+}
+
+// ExpandableFieldOfRefund defines model for ExpandableFieldOfRefund.
+type ExpandableFieldOfRefund struct {
+	ExpandedObject *Refund `json:"expandedObject,omitempty"`
+	Id             *string `json:"id"`
+}
+
+// ExpandableFieldOfReview defines model for ExpandableFieldOfReview.
+type ExpandableFieldOfReview struct {
+	ExpandedObject *Review `json:"expandedObject,omitempty"`
+	Id             *string `json:"id"`
+}
+
+// ExpandableFieldOfRule defines model for ExpandableFieldOfRule.
+type ExpandableFieldOfRule struct {
+	ExpandedObject *Rule   `json:"expandedObject,omitempty"`
+	Id             *string `json:"id"`
+}
+
+// ExpandableFieldOfSetupAttempt defines model for ExpandableFieldOfSetupAttempt.
+type ExpandableFieldOfSetupAttempt struct {
+	ExpandedObject *SetupAttempt `json:"expandedObject,omitempty"`
+	Id             *string       `json:"id"`
+}
+
+// ExpandableFieldOfSetupIntent defines model for ExpandableFieldOfSetupIntent.
+type ExpandableFieldOfSetupIntent struct {
+	ExpandedObject *SetupIntent `json:"expandedObject,omitempty"`
+	Id             *string      `json:"id"`
+}
+
+// ExpandableFieldOfShippingRate defines model for ExpandableFieldOfShippingRate.
+type ExpandableFieldOfShippingRate struct {
+	ExpandedObject *ShippingRate `json:"expandedObject,omitempty"`
+	Id             *string       `json:"id"`
+}
+
+// ExpandableFieldOfSubscription defines model for ExpandableFieldOfSubscription.
+type ExpandableFieldOfSubscription struct {
+	ExpandedObject *Subscription `json:"expandedObject,omitempty"`
+	Id             *string       `json:"id"`
+}
+
+// ExpandableFieldOfSubscriptionSchedule defines model for ExpandableFieldOfSubscriptionSchedule.
+type ExpandableFieldOfSubscriptionSchedule struct {
+	ExpandedObject *SubscriptionSchedule `json:"expandedObject,omitempty"`
+	Id             *string               `json:"id"`
+}
+
+// ExpandableFieldOfTaxCode defines model for ExpandableFieldOfTaxCode.
+type ExpandableFieldOfTaxCode struct {
+	ExpandedObject *TaxCode `json:"expandedObject,omitempty"`
+	Id             *string  `json:"id"`
+}
+
+// ExpandableFieldOfTaxId defines model for ExpandableFieldOfTaxId.
+type ExpandableFieldOfTaxId struct {
+	ExpandedObject *TaxId  `json:"expandedObject,omitempty"`
+	Id             *string `json:"id"`
+}
+
+// ExpandableFieldOfTaxRate defines model for ExpandableFieldOfTaxRate.
+type ExpandableFieldOfTaxRate struct {
+	ExpandedObject *TaxRate `json:"expandedObject,omitempty"`
+	Id             *string  `json:"id"`
+}
+
+// ExpandableFieldOfTestClock defines model for ExpandableFieldOfTestClock.
+type ExpandableFieldOfTestClock struct {
+	ExpandedObject *TestClock `json:"expandedObject,omitempty"`
+	Id             *string    `json:"id"`
+}
+
+// ExpandableFieldOfTransfer defines model for ExpandableFieldOfTransfer.
+type ExpandableFieldOfTransfer struct {
+	ExpandedObject *Transfer `json:"expandedObject,omitempty"`
+	Id             *string   `json:"id"`
+}
+
+// ExpandableFieldOfTransferReversal defines model for ExpandableFieldOfTransferReversal.
+type ExpandableFieldOfTransferReversal struct {
+	ExpandedObject *TransferReversal `json:"expandedObject,omitempty"`
+	Id             *string           `json:"id"`
+}
+
+// File defines model for File.
+type File struct {
+	Created   *time.Time            `json:"created,omitempty"`
+	ExpiresAt *time.Time            `json:"expires_at"`
+	Filename  *string               `json:"filename"`
+	Id        *string               `json:"id"`
+	Links     *StripeListOfFileLink `json:"links,omitempty"`
+	Object    *string               `json:"object"`
+	Purpose   *string               `json:"purpose"`
+	Size      *int64                `json:"size,omitempty"`
+	Title     *string               `json:"title"`
+	Type      *string               `json:"type"`
+	Url       *string               `json:"url"`
+}
+
+// FileLink defines model for FileLink.
+type FileLink struct {
+	Created   *time.Time             `json:"created,omitempty"`
+	Expired   *bool                  `json:"expired,omitempty"`
+	ExpiresAt *time.Time             `json:"expires_at"`
+	File      *ExpandableFieldOfFile `json:"file,omitempty"`
+	Id        *string                `json:"id"`
+	Livemode  *bool                  `json:"livemode,omitempty"`
+	Metadata  *map[string]*string    `json:"metadata"`
+	Object    *string                `json:"object"`
+	Url       *string                `json:"url"`
+}
+
+// HttpStatusCode defines model for HttpStatusCode.
+type HttpStatusCode int32
+
+// IBalanceTransactionSource defines model for IBalanceTransactionSource.
+type IBalanceTransactionSource struct {
+	Id             *string         `json:"id"`
+	Object         *string         `json:"object"`
+	StripeResponse *StripeResponse `json:"stripeResponse,omitempty"`
+}
+
+// IExternalAccount defines model for IExternalAccount.
+type IExternalAccount struct {
+	Account        *Account        `json:"account,omitempty"`
+	AccountId      *string         `json:"accountId"`
+	Id             *string         `json:"id"`
+	Object         *string         `json:"object"`
+	StripeResponse *StripeResponse `json:"stripeResponse,omitempty"`
+}
+
+// IPaymentSource defines model for IPaymentSource.
+type IPaymentSource struct {
+	Id             *string         `json:"id"`
+	Object         *string         `json:"object"`
+	StripeResponse *StripeResponse `json:"stripeResponse,omitempty"`
 }
 
 // ImageRepositoryDto defines model for ImageRepositoryDto.
@@ -261,7 +1719,7 @@ type InstanceDetails struct {
 	EnvironmentVariables           *map[string]*string `json:"environmentVariables"`
 	Id                             *string             `json:"id"`
 	ImageCmdOverride               *string             `json:"imageCmdOverride"`
-	LastUpdated                    *time.Time          `json:"lastUpdated,omitempty"`
+	LastUpdated                    *time.Time          `json:"lastUpdated"`
 	PersistedDirectAttachedStorage *bool               `json:"persistedDirectAttachedStorage,omitempty"`
 	PersonalSharedStorage          *bool               `json:"personalSharedStorage,omitempty"`
 	PrivateIp                      *string             `json:"privateIp"`
@@ -277,6 +1735,363 @@ type InstanceDetails struct {
 	StatusReason        *string `json:"statusReason"`
 	Tenant              *string `json:"tenant"`
 	TenantSharedStorage *bool   `json:"tenantSharedStorage,omitempty"`
+}
+
+// Invoice defines model for Invoice.
+type Invoice struct {
+	AccountCountry               *string                          `json:"account_country"`
+	AccountName                  *string                          `json:"account_name"`
+	AccountTaxIds                *[]ExpandableFieldOfTaxId        `json:"account_tax_ids,omitempty"`
+	AmountDue                    *int64                           `json:"amount_due,omitempty"`
+	AmountPaid                   *int64                           `json:"amount_paid,omitempty"`
+	AmountRemaining              *int64                           `json:"amount_remaining,omitempty"`
+	AmountShipping               *int64                           `json:"amount_shipping,omitempty"`
+	Application                  *ExpandableFieldOfApplication    `json:"application,omitempty"`
+	ApplicationFeeAmount         *int64                           `json:"application_fee_amount"`
+	AttemptCount                 *int64                           `json:"attempt_count,omitempty"`
+	Attempted                    *bool                            `json:"attempted,omitempty"`
+	AutoAdvance                  *bool                            `json:"auto_advance,omitempty"`
+	AutomaticTax                 *InvoiceAutomaticTax             `json:"automatic_tax,omitempty"`
+	BillingReason                *string                          `json:"billing_reason"`
+	Charge                       *ExpandableFieldOfCharge         `json:"charge,omitempty"`
+	CollectionMethod             *string                          `json:"collection_method"`
+	Created                      *time.Time                       `json:"created,omitempty"`
+	Currency                     *string                          `json:"currency"`
+	CustomFields                 *[]InvoiceCustomField            `json:"custom_fields"`
+	Customer                     *ExpandableFieldOfCustomer       `json:"customer,omitempty"`
+	CustomerAddress              *Address                         `json:"customer_address,omitempty"`
+	CustomerEmail                *string                          `json:"customer_email"`
+	CustomerName                 *string                          `json:"customer_name"`
+	CustomerPhone                *string                          `json:"customer_phone"`
+	CustomerShipping             *Shipping                        `json:"customer_shipping,omitempty"`
+	CustomerTaxExempt            *string                          `json:"customer_tax_exempt"`
+	CustomerTaxIds               *[]InvoiceCustomerTaxId          `json:"customer_tax_ids"`
+	DefaultPaymentMethod         *ExpandableFieldOfPaymentMethod  `json:"default_payment_method,omitempty"`
+	DefaultSource                *ExpandableFieldOfIPaymentSource `json:"default_source,omitempty"`
+	DefaultTaxRates              *[]TaxRate                       `json:"default_tax_rates"`
+	Deleted                      *bool                            `json:"deleted"`
+	Description                  *string                          `json:"description"`
+	Discount                     *Discount                        `json:"discount,omitempty"`
+	Discounts                    *[]ExpandableFieldOfDiscount     `json:"discounts,omitempty"`
+	DueDate                      *time.Time                       `json:"due_date"`
+	EffectiveAt                  *time.Time                       `json:"effective_at"`
+	EndingBalance                *int64                           `json:"ending_balance"`
+	Footer                       *string                          `json:"footer"`
+	FromInvoice                  *InvoiceFromInvoice              `json:"from_invoice,omitempty"`
+	HostedInvoiceUrl             *string                          `json:"hosted_invoice_url"`
+	Id                           *string                          `json:"id"`
+	InvoicePdf                   *string                          `json:"invoice_pdf"`
+	LastFinalizationError        *StripeError                     `json:"last_finalization_error,omitempty"`
+	LatestRevision               *ExpandableFieldOfInvoice        `json:"latest_revision,omitempty"`
+	Lines                        *StripeListOfInvoiceLineItem     `json:"lines,omitempty"`
+	Livemode                     *bool                            `json:"livemode,omitempty"`
+	Metadata                     *map[string]*string              `json:"metadata"`
+	NextPaymentAttempt           *time.Time                       `json:"next_payment_attempt"`
+	Number                       *string                          `json:"number"`
+	Object                       *string                          `json:"object"`
+	OnBehalfOf                   *ExpandableFieldOfAccount        `json:"on_behalf_of,omitempty"`
+	Paid                         *bool                            `json:"paid,omitempty"`
+	PaidOutOfBand                *bool                            `json:"paid_out_of_band,omitempty"`
+	PaymentIntent                *ExpandableFieldOfPaymentIntent  `json:"payment_intent,omitempty"`
+	PaymentSettings              *InvoicePaymentSettings          `json:"payment_settings,omitempty"`
+	PeriodEnd                    *time.Time                       `json:"period_end,omitempty"`
+	PeriodStart                  *time.Time                       `json:"period_start,omitempty"`
+	PostPaymentCreditNotesAmount *int64                           `json:"post_payment_credit_notes_amount,omitempty"`
+	PrePaymentCreditNotesAmount  *int64                           `json:"pre_payment_credit_notes_amount,omitempty"`
+	Quote                        *ExpandableFieldOfQuote          `json:"quote,omitempty"`
+	ReceiptNumber                *string                          `json:"receipt_number"`
+	RenderingOptions             *InvoiceRenderingOptions         `json:"rendering_options,omitempty"`
+	ShippingCost                 *InvoiceShippingCost             `json:"shipping_cost,omitempty"`
+	ShippingDetails              *InvoiceShippingDetails          `json:"shipping_details,omitempty"`
+	StartingBalance              *int64                           `json:"starting_balance,omitempty"`
+	StatementDescriptor          *string                          `json:"statement_descriptor"`
+	Status                       *string                          `json:"status"`
+	StatusTransitions            *InvoiceStatusTransitions        `json:"status_transitions,omitempty"`
+	Subscription                 *ExpandableFieldOfSubscription   `json:"subscription,omitempty"`
+	SubscriptionDetails          *InvoiceSubscriptionDetails      `json:"subscription_details,omitempty"`
+	SubscriptionProrationDate    *time.Time                       `json:"subscription_proration_date,omitempty"`
+	Subtotal                     *int64                           `json:"subtotal,omitempty"`
+	SubtotalExcludingTax         *int64                           `json:"subtotal_excluding_tax"`
+	Tax                          *int64                           `json:"tax"`
+	TestClock                    *ExpandableFieldOfTestClock      `json:"test_clock,omitempty"`
+	ThresholdReason              *InvoiceThresholdReason          `json:"threshold_reason,omitempty"`
+	Total                        *int64                           `json:"total,omitempty"`
+	TotalDiscountAmounts         *[]InvoiceDiscountAmount         `json:"total_discount_amounts"`
+	TotalExcludingTax            *int64                           `json:"total_excluding_tax"`
+	TotalTaxAmounts              *[]InvoiceTaxAmount              `json:"total_tax_amounts"`
+	TransferData                 *InvoiceTransferData             `json:"transfer_data,omitempty"`
+	WebhooksDeliveredAt          *time.Time                       `json:"webhooks_delivered_at"`
+}
+
+// InvoiceAutomaticTax defines model for InvoiceAutomaticTax.
+type InvoiceAutomaticTax struct {
+	Enabled *bool   `json:"enabled,omitempty"`
+	Status  *string `json:"status"`
+}
+
+// InvoiceCustomField defines model for InvoiceCustomField.
+type InvoiceCustomField struct {
+	Name  *string `json:"name"`
+	Value *string `json:"value"`
+}
+
+// InvoiceCustomerTaxId defines model for InvoiceCustomerTaxId.
+type InvoiceCustomerTaxId struct {
+	Type  *string `json:"type"`
+	Value *string `json:"value"`
+}
+
+// InvoiceDiscountAmount defines model for InvoiceDiscountAmount.
+type InvoiceDiscountAmount struct {
+	Amount   *int64                     `json:"amount,omitempty"`
+	Discount *ExpandableFieldOfDiscount `json:"discount,omitempty"`
+}
+
+// InvoiceFromInvoice defines model for InvoiceFromInvoice.
+type InvoiceFromInvoice struct {
+	Action  *string                   `json:"action"`
+	Invoice *ExpandableFieldOfInvoice `json:"invoice,omitempty"`
+}
+
+// InvoiceLineItem defines model for InvoiceLineItem.
+type InvoiceLineItem struct {
+	Amount                 *int64                           `json:"amount,omitempty"`
+	AmountExcludingTax     *int64                           `json:"amount_excluding_tax"`
+	Currency               *string                          `json:"currency"`
+	Description            *string                          `json:"description"`
+	DiscountAmounts        *[]InvoiceLineItemDiscountAmount `json:"discount_amounts"`
+	Discountable           *bool                            `json:"discountable,omitempty"`
+	Discounts              *[]ExpandableFieldOfDiscount     `json:"discounts,omitempty"`
+	Id                     *string                          `json:"id"`
+	InvoiceItem            *string                          `json:"invoice_item"`
+	Livemode               *bool                            `json:"livemode,omitempty"`
+	Metadata               *map[string]*string              `json:"metadata"`
+	Object                 *string                          `json:"object"`
+	Period                 *InvoiceLineItemPeriod           `json:"period,omitempty"`
+	Plan                   *Plan                            `json:"plan,omitempty"`
+	Price                  *Price                           `json:"price,omitempty"`
+	Proration              *bool                            `json:"proration,omitempty"`
+	ProrationDetails       *InvoiceLineItemProrationDetails `json:"proration_details,omitempty"`
+	Quantity               *int64                           `json:"quantity"`
+	Subscription           *string                          `json:"subscription"`
+	SubscriptionItem       *string                          `json:"subscription_item"`
+	TaxAmounts             *[]InvoiceLineItemTaxAmount      `json:"tax_amounts"`
+	TaxRates               *[]TaxRate                       `json:"tax_rates"`
+	Type                   *string                          `json:"type"`
+	UnitAmountExcludingTax *float64                         `json:"unit_amount_excluding_tax"`
+}
+
+// InvoiceLineItemDiscountAmount defines model for InvoiceLineItemDiscountAmount.
+type InvoiceLineItemDiscountAmount struct {
+	Amount   *int64                     `json:"amount,omitempty"`
+	Discount *ExpandableFieldOfDiscount `json:"discount,omitempty"`
+}
+
+// InvoiceLineItemPeriod defines model for InvoiceLineItemPeriod.
+type InvoiceLineItemPeriod struct {
+	End   *time.Time `json:"end,omitempty"`
+	Start *time.Time `json:"start,omitempty"`
+}
+
+// InvoiceLineItemProrationDetails defines model for InvoiceLineItemProrationDetails.
+type InvoiceLineItemProrationDetails struct {
+	CreditedItems *InvoiceLineItemProrationDetailsCreditedItems `json:"credited_items,omitempty"`
+}
+
+// InvoiceLineItemProrationDetailsCreditedItems defines model for InvoiceLineItemProrationDetailsCreditedItems.
+type InvoiceLineItemProrationDetailsCreditedItems struct {
+	Invoice          *string   `json:"invoice"`
+	InvoiceLineItems *[]string `json:"invoice_line_items"`
+}
+
+// InvoiceLineItemTaxAmount defines model for InvoiceLineItemTaxAmount.
+type InvoiceLineItemTaxAmount struct {
+	Amount           *int64                    `json:"amount,omitempty"`
+	Inclusive        *bool                     `json:"inclusive,omitempty"`
+	TaxRate          *ExpandableFieldOfTaxRate `json:"tax_rate,omitempty"`
+	TaxabilityReason *string                   `json:"taxability_reason"`
+	TaxableAmount    *int64                    `json:"taxable_amount"`
+}
+
+// InvoicePaymentSettings defines model for InvoicePaymentSettings.
+type InvoicePaymentSettings struct {
+	DefaultMandate       *string                                     `json:"default_mandate"`
+	PaymentMethodOptions *InvoicePaymentSettingsPaymentMethodOptions `json:"payment_method_options,omitempty"`
+	PaymentMethodTypes   *[]string                                   `json:"payment_method_types"`
+}
+
+// InvoicePaymentSettingsPaymentMethodOptions defines model for InvoicePaymentSettingsPaymentMethodOptions.
+type InvoicePaymentSettingsPaymentMethodOptions struct {
+	AcssDebit       *InvoicePaymentSettingsPaymentMethodOptionsAcssDebit       `json:"acss_debit,omitempty"`
+	Bancontact      *InvoicePaymentSettingsPaymentMethodOptionsBancontact      `json:"bancontact,omitempty"`
+	Card            *InvoicePaymentSettingsPaymentMethodOptionsCard            `json:"card,omitempty"`
+	CustomerBalance *InvoicePaymentSettingsPaymentMethodOptionsCustomerBalance `json:"customer_balance,omitempty"`
+	Konbini         *InvoicePaymentSettingsPaymentMethodOptionsKonbini         `json:"konbini,omitempty"`
+	UsBankAccount   *InvoicePaymentSettingsPaymentMethodOptionsUsBankAccount   `json:"us_bank_account,omitempty"`
+}
+
+// InvoicePaymentSettingsPaymentMethodOptionsAcssDebit defines model for InvoicePaymentSettingsPaymentMethodOptionsAcssDebit.
+type InvoicePaymentSettingsPaymentMethodOptionsAcssDebit struct {
+	MandateOptions     *InvoicePaymentSettingsPaymentMethodOptionsAcssDebitMandateOptions `json:"mandate_options,omitempty"`
+	VerificationMethod *string                                                            `json:"verification_method"`
+}
+
+// InvoicePaymentSettingsPaymentMethodOptionsAcssDebitMandateOptions defines model for InvoicePaymentSettingsPaymentMethodOptionsAcssDebitMandateOptions.
+type InvoicePaymentSettingsPaymentMethodOptionsAcssDebitMandateOptions struct {
+	TransactionType *string `json:"transaction_type"`
+}
+
+// InvoicePaymentSettingsPaymentMethodOptionsBancontact defines model for InvoicePaymentSettingsPaymentMethodOptionsBancontact.
+type InvoicePaymentSettingsPaymentMethodOptionsBancontact struct {
+	PreferredLanguage *string `json:"preferred_language"`
+}
+
+// InvoicePaymentSettingsPaymentMethodOptionsCard defines model for InvoicePaymentSettingsPaymentMethodOptionsCard.
+type InvoicePaymentSettingsPaymentMethodOptionsCard struct {
+	Installments        *InvoicePaymentSettingsPaymentMethodOptionsCardInstallments `json:"installments,omitempty"`
+	RequestThreeDSecure *string                                                     `json:"request_three_d_secure"`
+}
+
+// InvoicePaymentSettingsPaymentMethodOptionsCardInstallments defines model for InvoicePaymentSettingsPaymentMethodOptionsCardInstallments.
+type InvoicePaymentSettingsPaymentMethodOptionsCardInstallments struct {
+	Enabled *bool `json:"enabled"`
+}
+
+// InvoicePaymentSettingsPaymentMethodOptionsCustomerBalance defines model for InvoicePaymentSettingsPaymentMethodOptionsCustomerBalance.
+type InvoicePaymentSettingsPaymentMethodOptionsCustomerBalance struct {
+	BankTransfer *InvoicePaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransfer `json:"bank_transfer,omitempty"`
+	FundingType  *string                                                                `json:"funding_type"`
+}
+
+// InvoicePaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransfer defines model for InvoicePaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransfer.
+type InvoicePaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransfer struct {
+	EuBankTransfer *InvoicePaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer `json:"eu_bank_transfer,omitempty"`
+	Type           *string                                                                              `json:"type"`
+}
+
+// InvoicePaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer defines model for InvoicePaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer.
+type InvoicePaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer struct {
+	Country *string `json:"country"`
+}
+
+// InvoicePaymentSettingsPaymentMethodOptionsKonbini defines model for InvoicePaymentSettingsPaymentMethodOptionsKonbini.
+type InvoicePaymentSettingsPaymentMethodOptionsKonbini = map[string]interface{}
+
+// InvoicePaymentSettingsPaymentMethodOptionsUsBankAccount defines model for InvoicePaymentSettingsPaymentMethodOptionsUsBankAccount.
+type InvoicePaymentSettingsPaymentMethodOptionsUsBankAccount struct {
+	FinancialConnections *InvoicePaymentSettingsPaymentMethodOptionsUsBankAccountFinancialConnections `json:"financial_connections,omitempty"`
+	VerificationMethod   *string                                                                      `json:"verification_method"`
+}
+
+// InvoicePaymentSettingsPaymentMethodOptionsUsBankAccountFinancialConnections defines model for InvoicePaymentSettingsPaymentMethodOptionsUsBankAccountFinancialConnections.
+type InvoicePaymentSettingsPaymentMethodOptionsUsBankAccountFinancialConnections struct {
+	Permissions *[]string `json:"permissions"`
+}
+
+// InvoiceRenderingOptions defines model for InvoiceRenderingOptions.
+type InvoiceRenderingOptions struct {
+	AmountTaxDisplay *string `json:"amount_tax_display"`
+}
+
+// InvoiceShippingCost defines model for InvoiceShippingCost.
+type InvoiceShippingCost struct {
+	AmountSubtotal *int64                         `json:"amount_subtotal,omitempty"`
+	AmountTax      *int64                         `json:"amount_tax,omitempty"`
+	AmountTotal    *int64                         `json:"amount_total,omitempty"`
+	ShippingRate   *ExpandableFieldOfShippingRate `json:"shipping_rate,omitempty"`
+	Taxes          *[]InvoiceShippingCostTax      `json:"taxes"`
+}
+
+// InvoiceShippingCostTax defines model for InvoiceShippingCostTax.
+type InvoiceShippingCostTax struct {
+	Amount           *int64   `json:"amount,omitempty"`
+	Rate             *TaxRate `json:"rate,omitempty"`
+	TaxabilityReason *string  `json:"taxability_reason"`
+	TaxableAmount    *int64   `json:"taxable_amount"`
+}
+
+// InvoiceShippingDetails defines model for InvoiceShippingDetails.
+type InvoiceShippingDetails struct {
+	Address        *Address `json:"address,omitempty"`
+	Carrier        *string  `json:"carrier"`
+	Name           *string  `json:"name"`
+	Phone          *string  `json:"phone"`
+	TrackingNumber *string  `json:"tracking_number"`
+}
+
+// InvoiceStatusTransitions defines model for InvoiceStatusTransitions.
+type InvoiceStatusTransitions struct {
+	FinalizedAt           *time.Time `json:"finalized_at"`
+	MarkedUncollectibleAt *time.Time `json:"marked_uncollectible_at"`
+	PaidAt                *time.Time `json:"paid_at"`
+	VoidedAt              *time.Time `json:"voided_at"`
+}
+
+// InvoiceSubscriptionDetails defines model for InvoiceSubscriptionDetails.
+type InvoiceSubscriptionDetails struct {
+	Metadata *map[string]*string `json:"metadata"`
+}
+
+// InvoiceTaxAmount defines model for InvoiceTaxAmount.
+type InvoiceTaxAmount struct {
+	Amount    *int64                    `json:"amount,omitempty"`
+	Inclusive *bool                     `json:"inclusive,omitempty"`
+	TaxRate   *ExpandableFieldOfTaxRate `json:"tax_rate,omitempty"`
+}
+
+// InvoiceThresholdReason defines model for InvoiceThresholdReason.
+type InvoiceThresholdReason struct {
+	AmountGte   *int64                              `json:"amount_gte"`
+	ItemReasons *[]InvoiceThresholdReasonItemReason `json:"item_reasons"`
+}
+
+// InvoiceThresholdReasonItemReason defines model for InvoiceThresholdReasonItemReason.
+type InvoiceThresholdReasonItemReason struct {
+	LineItemIds *[]string `json:"line_item_ids"`
+	UsageGte    *int64    `json:"usage_gte,omitempty"`
+}
+
+// InvoiceTransferData defines model for InvoiceTransferData.
+type InvoiceTransferData struct {
+	Amount      *int64                    `json:"amount"`
+	Destination *ExpandableFieldOfAccount `json:"destination,omitempty"`
+}
+
+// KeyValuePairOfStringIEnumerableOfString defines model for KeyValuePairOfStringIEnumerableOfString.
+type KeyValuePairOfStringIEnumerableOfString struct {
+	Key   *string   `json:"key"`
+	Value *[]string `json:"value"`
+}
+
+// LineItem defines model for LineItem.
+type LineItem struct {
+	AmountDiscount *int64              `json:"amount_discount,omitempty"`
+	AmountSubtotal *int64              `json:"amount_subtotal,omitempty"`
+	AmountTax      *int64              `json:"amount_tax,omitempty"`
+	AmountTotal    *int64              `json:"amount_total,omitempty"`
+	Currency       *string             `json:"currency"`
+	Deleted        *bool               `json:"deleted"`
+	Description    *string             `json:"description"`
+	Discounts      *[]LineItemDiscount `json:"discounts"`
+	Id             *string             `json:"id"`
+	Object         *string             `json:"object"`
+	Price          *Price              `json:"price,omitempty"`
+	Quantity       *int64              `json:"quantity"`
+	Taxes          *[]LineItemTax      `json:"taxes"`
+}
+
+// LineItemDiscount defines model for LineItemDiscount.
+type LineItemDiscount struct {
+	Amount   *int64    `json:"amount,omitempty"`
+	Discount *Discount `json:"discount,omitempty"`
+}
+
+// LineItemTax defines model for LineItemTax.
+type LineItemTax struct {
+	Amount           *int64   `json:"amount,omitempty"`
+	Rate             *TaxRate `json:"rate,omitempty"`
+	TaxabilityReason *string  `json:"taxability_reason"`
+	TaxableAmount    *int64   `json:"taxable_amount"`
 }
 
 // ListResultDtoOfApplicationsApiApplicationConfig defines model for ListResultDtoOfApplicationsApiApplicationConfig.
@@ -299,6 +2114,1652 @@ type ListResultDtoOfApplicationsApiOverview struct {
 	Items *[]ApplicationsApiOverview `json:"items"`
 }
 
+// Mandate defines model for Mandate.
+type Mandate struct {
+	CustomerAcceptance   *MandateCustomerAcceptance      `json:"customer_acceptance,omitempty"`
+	Id                   *string                         `json:"id"`
+	Livemode             *bool                           `json:"livemode,omitempty"`
+	MultiUse             *MandateMultiUse                `json:"multi_use,omitempty"`
+	Object               *string                         `json:"object"`
+	OnBehalfOf           *string                         `json:"on_behalf_of"`
+	PaymentMethod        *ExpandableFieldOfPaymentMethod `json:"payment_method,omitempty"`
+	PaymentMethodDetails *MandatePaymentMethodDetails    `json:"payment_method_details,omitempty"`
+	SingleUse            *MandateSingleUse               `json:"single_use,omitempty"`
+	Status               *string                         `json:"status"`
+	Type                 *string                         `json:"type"`
+}
+
+// MandateCustomerAcceptance defines model for MandateCustomerAcceptance.
+type MandateCustomerAcceptance struct {
+	AcceptedAt *time.Time                        `json:"accepted_at"`
+	Offline    *MandateCustomerAcceptanceOffline `json:"offline,omitempty"`
+	Online     *MandateCustomerAcceptanceOnline  `json:"online,omitempty"`
+	Type       *string                           `json:"type"`
+}
+
+// MandateCustomerAcceptanceOffline defines model for MandateCustomerAcceptanceOffline.
+type MandateCustomerAcceptanceOffline = map[string]interface{}
+
+// MandateCustomerAcceptanceOnline defines model for MandateCustomerAcceptanceOnline.
+type MandateCustomerAcceptanceOnline struct {
+	IpAddress *string `json:"ip_address"`
+	UserAgent *string `json:"user_agent"`
+}
+
+// MandateMultiUse defines model for MandateMultiUse.
+type MandateMultiUse = map[string]interface{}
+
+// MandatePaymentMethodDetails defines model for MandatePaymentMethodDetails.
+type MandatePaymentMethodDetails struct {
+	AcssDebit     *MandatePaymentMethodDetailsAcssDebit     `json:"acss_debit,omitempty"`
+	AuBecsDebit   *MandatePaymentMethodDetailsAuBecsDebit   `json:"au_becs_debit,omitempty"`
+	BacsDebit     *MandatePaymentMethodDetailsBacsDebit     `json:"bacs_debit,omitempty"`
+	Blik          *MandatePaymentMethodDetailsBlik          `json:"blik,omitempty"`
+	Card          *MandatePaymentMethodDetailsCard          `json:"card,omitempty"`
+	Cashapp       *MandatePaymentMethodDetailsCashapp       `json:"cashapp,omitempty"`
+	Link          *MandatePaymentMethodDetailsLink          `json:"link,omitempty"`
+	Paypal        *MandatePaymentMethodDetailsPaypal        `json:"paypal,omitempty"`
+	SepaDebit     *MandatePaymentMethodDetailsSepaDebit     `json:"sepa_debit,omitempty"`
+	Type          *string                                   `json:"type"`
+	UsBankAccount *MandatePaymentMethodDetailsUsBankAccount `json:"us_bank_account,omitempty"`
+}
+
+// MandatePaymentMethodDetailsAcssDebit defines model for MandatePaymentMethodDetailsAcssDebit.
+type MandatePaymentMethodDetailsAcssDebit struct {
+	DefaultFor          *[]string `json:"default_for"`
+	IntervalDescription *string   `json:"interval_description"`
+	PaymentSchedule     *string   `json:"payment_schedule"`
+	TransactionType     *string   `json:"transaction_type"`
+}
+
+// MandatePaymentMethodDetailsAuBecsDebit defines model for MandatePaymentMethodDetailsAuBecsDebit.
+type MandatePaymentMethodDetailsAuBecsDebit struct {
+	Url *string `json:"url"`
+}
+
+// MandatePaymentMethodDetailsBacsDebit defines model for MandatePaymentMethodDetailsBacsDebit.
+type MandatePaymentMethodDetailsBacsDebit struct {
+	NetworkStatus *string `json:"network_status"`
+	Reference     *string `json:"reference"`
+	Url           *string `json:"url"`
+}
+
+// MandatePaymentMethodDetailsBlik defines model for MandatePaymentMethodDetailsBlik.
+type MandatePaymentMethodDetailsBlik struct {
+	ExpiresAfter *time.Time                                 `json:"expires_after"`
+	OffSession   *MandatePaymentMethodDetailsBlikOffSession `json:"off_session,omitempty"`
+	Type         *string                                    `json:"type"`
+}
+
+// MandatePaymentMethodDetailsBlikOffSession defines model for MandatePaymentMethodDetailsBlikOffSession.
+type MandatePaymentMethodDetailsBlikOffSession struct {
+	Amount        *int64  `json:"amount"`
+	Currency      *string `json:"currency"`
+	Interval      *string `json:"interval"`
+	IntervalCount *int64  `json:"interval_count"`
+}
+
+// MandatePaymentMethodDetailsCard defines model for MandatePaymentMethodDetailsCard.
+type MandatePaymentMethodDetailsCard = map[string]interface{}
+
+// MandatePaymentMethodDetailsCashapp defines model for MandatePaymentMethodDetailsCashapp.
+type MandatePaymentMethodDetailsCashapp = map[string]interface{}
+
+// MandatePaymentMethodDetailsLink defines model for MandatePaymentMethodDetailsLink.
+type MandatePaymentMethodDetailsLink = map[string]interface{}
+
+// MandatePaymentMethodDetailsPaypal defines model for MandatePaymentMethodDetailsPaypal.
+type MandatePaymentMethodDetailsPaypal struct {
+	BillingAgreementId *string `json:"billing_agreement_id"`
+	PayerId            *string `json:"payer_id"`
+}
+
+// MandatePaymentMethodDetailsSepaDebit defines model for MandatePaymentMethodDetailsSepaDebit.
+type MandatePaymentMethodDetailsSepaDebit struct {
+	Reference *string `json:"reference"`
+	Url       *string `json:"url"`
+}
+
+// MandatePaymentMethodDetailsUsBankAccount defines model for MandatePaymentMethodDetailsUsBankAccount.
+type MandatePaymentMethodDetailsUsBankAccount = map[string]interface{}
+
+// MandateSingleUse defines model for MandateSingleUse.
+type MandateSingleUse struct {
+	Amount   *int64  `json:"amount,omitempty"`
+	Currency *string `json:"currency"`
+}
+
+// PaymentIntent defines model for PaymentIntent.
+type PaymentIntent struct {
+	Amount                    *int64                                `json:"amount,omitempty"`
+	AmountCapturable          *int64                                `json:"amount_capturable,omitempty"`
+	AmountDetails             *PaymentIntentAmountDetails           `json:"amount_details,omitempty"`
+	AmountReceived            *int64                                `json:"amount_received,omitempty"`
+	Application               *ExpandableFieldOfApplication         `json:"application,omitempty"`
+	ApplicationFeeAmount      *int64                                `json:"application_fee_amount"`
+	AutomaticPaymentMethods   *PaymentIntentAutomaticPaymentMethods `json:"automatic_payment_methods,omitempty"`
+	CanceledAt                *time.Time                            `json:"canceled_at"`
+	CancellationReason        *string                               `json:"cancellation_reason"`
+	CaptureMethod             *string                               `json:"capture_method"`
+	ClientSecret              *string                               `json:"client_secret"`
+	ConfirmationMethod        *string                               `json:"confirmation_method"`
+	Created                   *time.Time                            `json:"created,omitempty"`
+	Currency                  *string                               `json:"currency"`
+	Customer                  *ExpandableFieldOfCustomer            `json:"customer,omitempty"`
+	Description               *string                               `json:"description"`
+	Id                        *string                               `json:"id"`
+	Invoice                   *ExpandableFieldOfInvoice             `json:"invoice,omitempty"`
+	LastPaymentError          *StripeError                          `json:"last_payment_error,omitempty"`
+	LatestCharge              *ExpandableFieldOfCharge              `json:"latest_charge,omitempty"`
+	Livemode                  *bool                                 `json:"livemode,omitempty"`
+	Metadata                  *map[string]*string                   `json:"metadata"`
+	NextAction                *PaymentIntentNextAction              `json:"next_action,omitempty"`
+	Object                    *string                               `json:"object"`
+	OnBehalfOf                *ExpandableFieldOfAccount             `json:"on_behalf_of,omitempty"`
+	PaymentMethod             *ExpandableFieldOfPaymentMethod       `json:"payment_method,omitempty"`
+	PaymentMethodOptions      *PaymentIntentPaymentMethodOptions    `json:"payment_method_options,omitempty"`
+	PaymentMethodTypes        *[]string                             `json:"payment_method_types"`
+	Processing                *PaymentIntentProcessing              `json:"processing,omitempty"`
+	ReceiptEmail              *string                               `json:"receipt_email"`
+	Review                    *ExpandableFieldOfReview              `json:"review,omitempty"`
+	SetupFutureUsage          *string                               `json:"setup_future_usage"`
+	Shipping                  *Shipping                             `json:"shipping,omitempty"`
+	Source                    *ExpandableFieldOfIPaymentSource      `json:"source,omitempty"`
+	StatementDescriptor       *string                               `json:"statement_descriptor"`
+	StatementDescriptorSuffix *string                               `json:"statement_descriptor_suffix"`
+	Status                    *string                               `json:"status"`
+	TransferData              *PaymentIntentTransferData            `json:"transfer_data,omitempty"`
+	TransferGroup             *string                               `json:"transfer_group"`
+}
+
+// PaymentIntentAmountDetails defines model for PaymentIntentAmountDetails.
+type PaymentIntentAmountDetails struct {
+	Tip *PaymentIntentAmountDetailsTip `json:"tip,omitempty"`
+}
+
+// PaymentIntentAmountDetailsTip defines model for PaymentIntentAmountDetailsTip.
+type PaymentIntentAmountDetailsTip struct {
+	Amount *int64 `json:"amount,omitempty"`
+}
+
+// PaymentIntentAutomaticPaymentMethods defines model for PaymentIntentAutomaticPaymentMethods.
+type PaymentIntentAutomaticPaymentMethods struct {
+	AllowRedirects *string `json:"allow_redirects"`
+	Enabled        *bool   `json:"enabled,omitempty"`
+}
+
+// PaymentIntentNextAction defines model for PaymentIntentNextAction.
+type PaymentIntentNextAction struct {
+	AlipayHandleRedirect                 *PaymentIntentNextActionAlipayHandleRedirect                 `json:"alipay_handle_redirect,omitempty"`
+	BoletoDisplayDetails                 *PaymentIntentNextActionBoletoDisplayDetails                 `json:"boleto_display_details,omitempty"`
+	CardAwaitNotification                *PaymentIntentNextActionCardAwaitNotification                `json:"card_await_notification,omitempty"`
+	CashappHandleRedirectOrDisplayQrCode *PaymentIntentNextActionCashappHandleRedirectOrDisplayQrCode `json:"cashapp_handle_redirect_or_display_qr_code,omitempty"`
+	DisplayBankTransferInstructions      *PaymentIntentNextActionDisplayBankTransferInstructions      `json:"display_bank_transfer_instructions,omitempty"`
+	KonbiniDisplayDetails                *PaymentIntentNextActionKonbiniDisplayDetails                `json:"konbini_display_details,omitempty"`
+	OxxoDisplayDetails                   *PaymentIntentNextActionOxxoDisplayDetails                   `json:"oxxo_display_details,omitempty"`
+	PaynowDisplayQrCode                  *PaymentIntentNextActionPaynowDisplayQrCode                  `json:"paynow_display_qr_code,omitempty"`
+	PixDisplayQrCode                     *PaymentIntentNextActionPixDisplayQrCode                     `json:"pix_display_qr_code,omitempty"`
+	PromptpayDisplayQrCode               *PaymentIntentNextActionPromptpayDisplayQrCode               `json:"promptpay_display_qr_code,omitempty"`
+	RedirectToUrl                        *PaymentIntentNextActionRedirectToUrl                        `json:"redirect_to_url,omitempty"`
+	Type                                 *string                                                      `json:"type"`
+	UseStripeSdk                         *PaymentIntentNextActionUseStripeSdk                         `json:"use_stripe_sdk,omitempty"`
+	VerifyWithMicrodeposits              *PaymentIntentNextActionVerifyWithMicrodeposits              `json:"verify_with_microdeposits,omitempty"`
+	WechatPayDisplayQrCode               *PaymentIntentNextActionWechatPayDisplayQrCode               `json:"wechat_pay_display_qr_code,omitempty"`
+	WechatPayRedirectToAndroidApp        *PaymentIntentNextActionWechatPayRedirectToAndroidApp        `json:"wechat_pay_redirect_to_android_app,omitempty"`
+	WechatPayRedirectToIosApp            *PaymentIntentNextActionWechatPayRedirectToIosApp            `json:"wechat_pay_redirect_to_ios_app,omitempty"`
+}
+
+// PaymentIntentNextActionAlipayHandleRedirect defines model for PaymentIntentNextActionAlipayHandleRedirect.
+type PaymentIntentNextActionAlipayHandleRedirect struct {
+	NativeData *string `json:"native_data"`
+	NativeUrl  *string `json:"native_url"`
+	ReturnUrl  *string `json:"return_url"`
+	Url        *string `json:"url"`
+}
+
+// PaymentIntentNextActionBoletoDisplayDetails defines model for PaymentIntentNextActionBoletoDisplayDetails.
+type PaymentIntentNextActionBoletoDisplayDetails struct {
+	ExpiresAt        *time.Time `json:"expires_at"`
+	HostedVoucherUrl *string    `json:"hosted_voucher_url"`
+	Number           *string    `json:"number"`
+	Pdf              *string    `json:"pdf"`
+}
+
+// PaymentIntentNextActionCardAwaitNotification defines model for PaymentIntentNextActionCardAwaitNotification.
+type PaymentIntentNextActionCardAwaitNotification struct {
+	ChargeAttemptAt          *time.Time `json:"charge_attempt_at"`
+	CustomerApprovalRequired *bool      `json:"customer_approval_required"`
+}
+
+// PaymentIntentNextActionCashappHandleRedirectOrDisplayQrCode defines model for PaymentIntentNextActionCashappHandleRedirectOrDisplayQrCode.
+type PaymentIntentNextActionCashappHandleRedirectOrDisplayQrCode struct {
+	HostedInstructionsUrl *string                                                            `json:"hosted_instructions_url"`
+	MobileAuthUrl         *string                                                            `json:"mobile_auth_url"`
+	QrCode                *PaymentIntentNextActionCashappHandleRedirectOrDisplayQrCodeQrCode `json:"qr_code,omitempty"`
+}
+
+// PaymentIntentNextActionCashappHandleRedirectOrDisplayQrCodeQrCode defines model for PaymentIntentNextActionCashappHandleRedirectOrDisplayQrCodeQrCode.
+type PaymentIntentNextActionCashappHandleRedirectOrDisplayQrCodeQrCode struct {
+	ExpiresAt   *time.Time `json:"expires_at,omitempty"`
+	ImageUrlPng *string    `json:"image_url_png"`
+	ImageUrlSvg *string    `json:"image_url_svg"`
+}
+
+// PaymentIntentNextActionDisplayBankTransferInstructions defines model for PaymentIntentNextActionDisplayBankTransferInstructions.
+type PaymentIntentNextActionDisplayBankTransferInstructions struct {
+	AmountRemaining       *int64                                                                    `json:"amount_remaining"`
+	Currency              *string                                                                   `json:"currency"`
+	FinancialAddresses    *[]PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddress `json:"financial_addresses"`
+	HostedInstructionsUrl *string                                                                   `json:"hosted_instructions_url"`
+	Reference             *string                                                                   `json:"reference"`
+	Type                  *string                                                                   `json:"type"`
+}
+
+// PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddress defines model for PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddress.
+type PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddress struct {
+	Iban              *PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressIban     `json:"iban,omitempty"`
+	SortCode          *PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressSortCode `json:"sort_code,omitempty"`
+	Spei              *PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressSpei     `json:"spei,omitempty"`
+	SupportedNetworks *[]string                                                                       `json:"supported_networks"`
+	Type              *string                                                                         `json:"type"`
+	Zengin            *PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressZengin   `json:"zengin,omitempty"`
+}
+
+// PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressIban defines model for PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressIban.
+type PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressIban struct {
+	AccountHolderName *string `json:"account_holder_name"`
+	Bic               *string `json:"bic"`
+	Country           *string `json:"country"`
+	Iban              *string `json:"iban"`
+}
+
+// PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressSortCode defines model for PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressSortCode.
+type PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressSortCode struct {
+	AccountHolderName *string `json:"account_holder_name"`
+	AccountNumber     *string `json:"account_number"`
+	SortCode          *string `json:"sort_code"`
+}
+
+// PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressSpei defines model for PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressSpei.
+type PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressSpei struct {
+	BankCode *string `json:"bank_code"`
+	BankName *string `json:"bank_name"`
+	Clabe    *string `json:"clabe"`
+}
+
+// PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressZengin defines model for PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressZengin.
+type PaymentIntentNextActionDisplayBankTransferInstructionsFinancialAddressZengin struct {
+	AccountHolderName *string `json:"account_holder_name"`
+	AccountNumber     *string `json:"account_number"`
+	AccountType       *string `json:"account_type"`
+	BankCode          *string `json:"bank_code"`
+	BankName          *string `json:"bank_name"`
+	BranchCode        *string `json:"branch_code"`
+	BranchName        *string `json:"branch_name"`
+}
+
+// PaymentIntentNextActionKonbiniDisplayDetails defines model for PaymentIntentNextActionKonbiniDisplayDetails.
+type PaymentIntentNextActionKonbiniDisplayDetails struct {
+	ExpiresAt        *time.Time                                          `json:"expires_at,omitempty"`
+	HostedVoucherUrl *string                                             `json:"hosted_voucher_url"`
+	Stores           *PaymentIntentNextActionKonbiniDisplayDetailsStores `json:"stores,omitempty"`
+}
+
+// PaymentIntentNextActionKonbiniDisplayDetailsStores defines model for PaymentIntentNextActionKonbiniDisplayDetailsStores.
+type PaymentIntentNextActionKonbiniDisplayDetailsStores struct {
+	Familymart *PaymentIntentNextActionKonbiniDisplayDetailsStoresFamilymart `json:"familymart,omitempty"`
+	Lawson     *PaymentIntentNextActionKonbiniDisplayDetailsStoresLawson     `json:"lawson,omitempty"`
+	Ministop   *PaymentIntentNextActionKonbiniDisplayDetailsStoresMinistop   `json:"ministop,omitempty"`
+	Seicomart  *PaymentIntentNextActionKonbiniDisplayDetailsStoresSeicomart  `json:"seicomart,omitempty"`
+}
+
+// PaymentIntentNextActionKonbiniDisplayDetailsStoresFamilymart defines model for PaymentIntentNextActionKonbiniDisplayDetailsStoresFamilymart.
+type PaymentIntentNextActionKonbiniDisplayDetailsStoresFamilymart struct {
+	ConfirmationNumber *string `json:"confirmation_number"`
+	PaymentCode        *string `json:"payment_code"`
+}
+
+// PaymentIntentNextActionKonbiniDisplayDetailsStoresLawson defines model for PaymentIntentNextActionKonbiniDisplayDetailsStoresLawson.
+type PaymentIntentNextActionKonbiniDisplayDetailsStoresLawson struct {
+	ConfirmationNumber *string `json:"confirmation_number"`
+	PaymentCode        *string `json:"payment_code"`
+}
+
+// PaymentIntentNextActionKonbiniDisplayDetailsStoresMinistop defines model for PaymentIntentNextActionKonbiniDisplayDetailsStoresMinistop.
+type PaymentIntentNextActionKonbiniDisplayDetailsStoresMinistop struct {
+	ConfirmationNumber *string `json:"confirmation_number"`
+	PaymentCode        *string `json:"payment_code"`
+}
+
+// PaymentIntentNextActionKonbiniDisplayDetailsStoresSeicomart defines model for PaymentIntentNextActionKonbiniDisplayDetailsStoresSeicomart.
+type PaymentIntentNextActionKonbiniDisplayDetailsStoresSeicomart struct {
+	ConfirmationNumber *string `json:"confirmation_number"`
+	PaymentCode        *string `json:"payment_code"`
+}
+
+// PaymentIntentNextActionOxxoDisplayDetails defines model for PaymentIntentNextActionOxxoDisplayDetails.
+type PaymentIntentNextActionOxxoDisplayDetails struct {
+	ExpiresAfter     *time.Time `json:"expires_after"`
+	HostedVoucherUrl *string    `json:"hosted_voucher_url"`
+	Number           *string    `json:"number"`
+}
+
+// PaymentIntentNextActionPaynowDisplayQrCode defines model for PaymentIntentNextActionPaynowDisplayQrCode.
+type PaymentIntentNextActionPaynowDisplayQrCode struct {
+	Data                  *string `json:"data"`
+	HostedInstructionsUrl *string `json:"hosted_instructions_url"`
+	ImageUrlPng           *string `json:"image_url_png"`
+	ImageUrlSvg           *string `json:"image_url_svg"`
+}
+
+// PaymentIntentNextActionPixDisplayQrCode defines model for PaymentIntentNextActionPixDisplayQrCode.
+type PaymentIntentNextActionPixDisplayQrCode struct {
+	Data                  *string `json:"data"`
+	ExpiresAt             *int64  `json:"expires_at,omitempty"`
+	HostedInstructionsUrl *string `json:"hosted_instructions_url"`
+	ImageUrlPng           *string `json:"image_url_png"`
+	ImageUrlSvg           *string `json:"image_url_svg"`
+}
+
+// PaymentIntentNextActionPromptpayDisplayQrCode defines model for PaymentIntentNextActionPromptpayDisplayQrCode.
+type PaymentIntentNextActionPromptpayDisplayQrCode struct {
+	Data                  *string `json:"data"`
+	HostedInstructionsUrl *string `json:"hosted_instructions_url"`
+	ImageUrlPng           *string `json:"image_url_png"`
+	ImageUrlSvg           *string `json:"image_url_svg"`
+}
+
+// PaymentIntentNextActionRedirectToUrl defines model for PaymentIntentNextActionRedirectToUrl.
+type PaymentIntentNextActionRedirectToUrl struct {
+	ReturnUrl *string `json:"return_url"`
+	Url       *string `json:"url"`
+}
+
+// PaymentIntentNextActionUseStripeSdk defines model for PaymentIntentNextActionUseStripeSdk.
+type PaymentIntentNextActionUseStripeSdk = map[string]interface{}
+
+// PaymentIntentNextActionVerifyWithMicrodeposits defines model for PaymentIntentNextActionVerifyWithMicrodeposits.
+type PaymentIntentNextActionVerifyWithMicrodeposits struct {
+	ArrivalDate           *time.Time `json:"arrival_date,omitempty"`
+	HostedVerificationUrl *string    `json:"hosted_verification_url"`
+	MicrodepositType      *string    `json:"microdeposit_type"`
+}
+
+// PaymentIntentNextActionWechatPayDisplayQrCode defines model for PaymentIntentNextActionWechatPayDisplayQrCode.
+type PaymentIntentNextActionWechatPayDisplayQrCode struct {
+	Data                  *string `json:"data"`
+	HostedInstructionsUrl *string `json:"hosted_instructions_url"`
+	ImageDataUrl          *string `json:"image_data_url"`
+	ImageUrlPng           *string `json:"image_url_png"`
+	ImageUrlSvg           *string `json:"image_url_svg"`
+}
+
+// PaymentIntentNextActionWechatPayRedirectToAndroidApp defines model for PaymentIntentNextActionWechatPayRedirectToAndroidApp.
+type PaymentIntentNextActionWechatPayRedirectToAndroidApp struct {
+	AppId     *string `json:"app_id"`
+	NonceStr  *string `json:"nonce_str"`
+	Package   *string `json:"package"`
+	PartnerId *string `json:"partner_id"`
+	PrepayId  *string `json:"prepay_id"`
+	Sign      *string `json:"sign"`
+	Timestamp *string `json:"timestamp"`
+}
+
+// PaymentIntentNextActionWechatPayRedirectToIosApp defines model for PaymentIntentNextActionWechatPayRedirectToIosApp.
+type PaymentIntentNextActionWechatPayRedirectToIosApp struct {
+	NativeUrl *string `json:"native_url"`
+}
+
+// PaymentIntentPaymentMethodOptions defines model for PaymentIntentPaymentMethodOptions.
+type PaymentIntentPaymentMethodOptions struct {
+	AcssDebit        *PaymentIntentPaymentMethodOptionsAcssDebit        `json:"acss_debit,omitempty"`
+	Affirm           *PaymentIntentPaymentMethodOptionsAffirm           `json:"affirm,omitempty"`
+	AfterpayClearpay *PaymentIntentPaymentMethodOptionsAfterpayClearpay `json:"afterpay_clearpay,omitempty"`
+	Alipay           *PaymentIntentPaymentMethodOptionsAlipay           `json:"alipay,omitempty"`
+	AuBecsDebit      *PaymentIntentPaymentMethodOptionsAuBecsDebit      `json:"au_becs_debit,omitempty"`
+	BacsDebit        *PaymentIntentPaymentMethodOptionsBacsDebit        `json:"bacs_debit,omitempty"`
+	Bancontact       *PaymentIntentPaymentMethodOptionsBancontact       `json:"bancontact,omitempty"`
+	Blik             *PaymentIntentPaymentMethodOptionsBlik             `json:"blik,omitempty"`
+	Boleto           *PaymentIntentPaymentMethodOptionsBoleto           `json:"boleto,omitempty"`
+	Card             *PaymentIntentPaymentMethodOptionsCard             `json:"card,omitempty"`
+	CardPresent      *PaymentIntentPaymentMethodOptionsCardPresent      `json:"card_present,omitempty"`
+	Cashapp          *PaymentIntentPaymentMethodOptionsCashapp          `json:"cashapp,omitempty"`
+	CustomerBalance  *PaymentIntentPaymentMethodOptionsCustomerBalance  `json:"customer_balance,omitempty"`
+	Eps              *PaymentIntentPaymentMethodOptionsEps              `json:"eps,omitempty"`
+	Fpx              *PaymentIntentPaymentMethodOptionsFpx              `json:"fpx,omitempty"`
+	Giropay          *PaymentIntentPaymentMethodOptionsGiropay          `json:"giropay,omitempty"`
+	Grabpay          *PaymentIntentPaymentMethodOptionsGrabpay          `json:"grabpay,omitempty"`
+	Ideal            *PaymentIntentPaymentMethodOptionsIdeal            `json:"ideal,omitempty"`
+	InteracPresent   *PaymentIntentPaymentMethodOptionsInteracPresent   `json:"interac_present,omitempty"`
+	Klarna           *PaymentIntentPaymentMethodOptionsKlarna           `json:"klarna,omitempty"`
+	Konbini          *PaymentIntentPaymentMethodOptionsKonbini          `json:"konbini,omitempty"`
+	Link             *PaymentIntentPaymentMethodOptionsLink             `json:"link,omitempty"`
+	Oxxo             *PaymentIntentPaymentMethodOptionsOxxo             `json:"oxxo,omitempty"`
+	P24              *PaymentIntentPaymentMethodOptionsP24              `json:"p24,omitempty"`
+	Paynow           *PaymentIntentPaymentMethodOptionsPaynow           `json:"paynow,omitempty"`
+	Paypal           *PaymentIntentPaymentMethodOptionsPaypal           `json:"paypal,omitempty"`
+	Pix              *PaymentIntentPaymentMethodOptionsPix              `json:"pix,omitempty"`
+	Promptpay        *PaymentIntentPaymentMethodOptionsPromptpay        `json:"promptpay,omitempty"`
+	SepaDebit        *PaymentIntentPaymentMethodOptionsSepaDebit        `json:"sepa_debit,omitempty"`
+	Sofort           *PaymentIntentPaymentMethodOptionsSofort           `json:"sofort,omitempty"`
+	UsBankAccount    *PaymentIntentPaymentMethodOptionsUsBankAccount    `json:"us_bank_account,omitempty"`
+	WechatPay        *PaymentIntentPaymentMethodOptionsWechatPay        `json:"wechat_pay,omitempty"`
+	Zip              *PaymentIntentPaymentMethodOptionsZip              `json:"zip,omitempty"`
+}
+
+// PaymentIntentPaymentMethodOptionsAcssDebit defines model for PaymentIntentPaymentMethodOptionsAcssDebit.
+type PaymentIntentPaymentMethodOptionsAcssDebit struct {
+	MandateOptions     *PaymentIntentPaymentMethodOptionsAcssDebitMandateOptions `json:"mandate_options,omitempty"`
+	SetupFutureUsage   *string                                                   `json:"setup_future_usage"`
+	VerificationMethod *string                                                   `json:"verification_method"`
+}
+
+// PaymentIntentPaymentMethodOptionsAcssDebitMandateOptions defines model for PaymentIntentPaymentMethodOptionsAcssDebitMandateOptions.
+type PaymentIntentPaymentMethodOptionsAcssDebitMandateOptions struct {
+	CustomMandateUrl    *string `json:"custom_mandate_url"`
+	IntervalDescription *string `json:"interval_description"`
+	PaymentSchedule     *string `json:"payment_schedule"`
+	TransactionType     *string `json:"transaction_type"`
+}
+
+// PaymentIntentPaymentMethodOptionsAffirm defines model for PaymentIntentPaymentMethodOptionsAffirm.
+type PaymentIntentPaymentMethodOptionsAffirm struct {
+	CaptureMethod    *string `json:"capture_method"`
+	PreferredLocale  *string `json:"preferred_locale"`
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsAfterpayClearpay defines model for PaymentIntentPaymentMethodOptionsAfterpayClearpay.
+type PaymentIntentPaymentMethodOptionsAfterpayClearpay struct {
+	CaptureMethod    *string `json:"capture_method"`
+	Reference        *string `json:"reference"`
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsAlipay defines model for PaymentIntentPaymentMethodOptionsAlipay.
+type PaymentIntentPaymentMethodOptionsAlipay struct {
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsAuBecsDebit defines model for PaymentIntentPaymentMethodOptionsAuBecsDebit.
+type PaymentIntentPaymentMethodOptionsAuBecsDebit struct {
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsBacsDebit defines model for PaymentIntentPaymentMethodOptionsBacsDebit.
+type PaymentIntentPaymentMethodOptionsBacsDebit struct {
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsBancontact defines model for PaymentIntentPaymentMethodOptionsBancontact.
+type PaymentIntentPaymentMethodOptionsBancontact struct {
+	PreferredLanguage *string `json:"preferred_language"`
+	SetupFutureUsage  *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsBlik defines model for PaymentIntentPaymentMethodOptionsBlik.
+type PaymentIntentPaymentMethodOptionsBlik = map[string]interface{}
+
+// PaymentIntentPaymentMethodOptionsBoleto defines model for PaymentIntentPaymentMethodOptionsBoleto.
+type PaymentIntentPaymentMethodOptionsBoleto struct {
+	ExpiresAfterDays *int64  `json:"expires_after_days,omitempty"`
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsCard defines model for PaymentIntentPaymentMethodOptionsCard.
+type PaymentIntentPaymentMethodOptionsCard struct {
+	CaptureMethod                  *string                                              `json:"capture_method"`
+	Installments                   *PaymentIntentPaymentMethodOptionsCardInstallments   `json:"installments,omitempty"`
+	MandateOptions                 *PaymentIntentPaymentMethodOptionsCardMandateOptions `json:"mandate_options,omitempty"`
+	Network                        *string                                              `json:"network"`
+	RequestThreeDSecure            *string                                              `json:"request_three_d_secure"`
+	SetupFutureUsage               *string                                              `json:"setup_future_usage"`
+	StatementDescriptorSuffixKana  *string                                              `json:"statement_descriptor_suffix_kana"`
+	StatementDescriptorSuffixKanji *string                                              `json:"statement_descriptor_suffix_kanji"`
+}
+
+// PaymentIntentPaymentMethodOptionsCardInstallments defines model for PaymentIntentPaymentMethodOptionsCardInstallments.
+type PaymentIntentPaymentMethodOptionsCardInstallments struct {
+	AvailablePlans *[]PaymentIntentPaymentMethodOptionsCardInstallmentsPlan `json:"available_plans"`
+	Enabled        *bool                                                    `json:"enabled,omitempty"`
+	Plan           *PaymentIntentPaymentMethodOptionsCardInstallmentsPlan   `json:"plan,omitempty"`
+}
+
+// PaymentIntentPaymentMethodOptionsCardInstallmentsPlan defines model for PaymentIntentPaymentMethodOptionsCardInstallmentsPlan.
+type PaymentIntentPaymentMethodOptionsCardInstallmentsPlan struct {
+	Count    *int64  `json:"count"`
+	Interval *string `json:"interval"`
+	Type     *string `json:"type"`
+}
+
+// PaymentIntentPaymentMethodOptionsCardMandateOptions defines model for PaymentIntentPaymentMethodOptionsCardMandateOptions.
+type PaymentIntentPaymentMethodOptionsCardMandateOptions struct {
+	Amount         *int64     `json:"amount,omitempty"`
+	AmountType     *string    `json:"amount_type"`
+	Description    *string    `json:"description"`
+	EndDate        *time.Time `json:"end_date"`
+	Interval       *string    `json:"interval"`
+	IntervalCount  *int64     `json:"interval_count"`
+	Reference      *string    `json:"reference"`
+	StartDate      *time.Time `json:"start_date,omitempty"`
+	SupportedTypes *[]string  `json:"supported_types"`
+}
+
+// PaymentIntentPaymentMethodOptionsCardPresent defines model for PaymentIntentPaymentMethodOptionsCardPresent.
+type PaymentIntentPaymentMethodOptionsCardPresent struct {
+	RequestExtendedAuthorization           *bool `json:"request_extended_authorization"`
+	RequestIncrementalAuthorizationSupport *bool `json:"request_incremental_authorization_support"`
+}
+
+// PaymentIntentPaymentMethodOptionsCashapp defines model for PaymentIntentPaymentMethodOptionsCashapp.
+type PaymentIntentPaymentMethodOptionsCashapp struct {
+	CaptureMethod    *string `json:"capture_method"`
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsCustomerBalance defines model for PaymentIntentPaymentMethodOptionsCustomerBalance.
+type PaymentIntentPaymentMethodOptionsCustomerBalance struct {
+	BankTransfer     *PaymentIntentPaymentMethodOptionsCustomerBalanceBankTransfer `json:"bank_transfer,omitempty"`
+	FundingType      *string                                                       `json:"funding_type"`
+	SetupFutureUsage *string                                                       `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsCustomerBalanceBankTransfer defines model for PaymentIntentPaymentMethodOptionsCustomerBalanceBankTransfer.
+type PaymentIntentPaymentMethodOptionsCustomerBalanceBankTransfer struct {
+	EuBankTransfer        *PaymentIntentPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer `json:"eu_bank_transfer,omitempty"`
+	RequestedAddressTypes *[]string                                                                   `json:"requested_address_types"`
+	Type                  *string                                                                     `json:"type"`
+}
+
+// PaymentIntentPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer defines model for PaymentIntentPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer.
+type PaymentIntentPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer struct {
+	Country *string `json:"country"`
+}
+
+// PaymentIntentPaymentMethodOptionsEps defines model for PaymentIntentPaymentMethodOptionsEps.
+type PaymentIntentPaymentMethodOptionsEps struct {
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsFpx defines model for PaymentIntentPaymentMethodOptionsFpx.
+type PaymentIntentPaymentMethodOptionsFpx struct {
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsGiropay defines model for PaymentIntentPaymentMethodOptionsGiropay.
+type PaymentIntentPaymentMethodOptionsGiropay struct {
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsGrabpay defines model for PaymentIntentPaymentMethodOptionsGrabpay.
+type PaymentIntentPaymentMethodOptionsGrabpay struct {
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsIdeal defines model for PaymentIntentPaymentMethodOptionsIdeal.
+type PaymentIntentPaymentMethodOptionsIdeal struct {
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsInteracPresent defines model for PaymentIntentPaymentMethodOptionsInteracPresent.
+type PaymentIntentPaymentMethodOptionsInteracPresent = map[string]interface{}
+
+// PaymentIntentPaymentMethodOptionsKlarna defines model for PaymentIntentPaymentMethodOptionsKlarna.
+type PaymentIntentPaymentMethodOptionsKlarna struct {
+	CaptureMethod    *string `json:"capture_method"`
+	PreferredLocale  *string `json:"preferred_locale"`
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsKonbini defines model for PaymentIntentPaymentMethodOptionsKonbini.
+type PaymentIntentPaymentMethodOptionsKonbini struct {
+	ConfirmationNumber *string    `json:"confirmation_number"`
+	ExpiresAfterDays   *int64     `json:"expires_after_days"`
+	ExpiresAt          *time.Time `json:"expires_at"`
+	ProductDescription *string    `json:"product_description"`
+	SetupFutureUsage   *string    `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsLink defines model for PaymentIntentPaymentMethodOptionsLink.
+type PaymentIntentPaymentMethodOptionsLink struct {
+	CaptureMethod    *string `json:"capture_method"`
+	PersistentToken  *string `json:"persistent_token"`
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsOxxo defines model for PaymentIntentPaymentMethodOptionsOxxo.
+type PaymentIntentPaymentMethodOptionsOxxo struct {
+	ExpiresAfterDays *int64  `json:"expires_after_days,omitempty"`
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsP24 defines model for PaymentIntentPaymentMethodOptionsP24.
+type PaymentIntentPaymentMethodOptionsP24 struct {
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsPaynow defines model for PaymentIntentPaymentMethodOptionsPaynow.
+type PaymentIntentPaymentMethodOptionsPaynow struct {
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsPaypal defines model for PaymentIntentPaymentMethodOptionsPaypal.
+type PaymentIntentPaymentMethodOptionsPaypal struct {
+	CaptureMethod    *string `json:"capture_method"`
+	PreferredLocale  *string `json:"preferred_locale"`
+	Reference        *string `json:"reference"`
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsPix defines model for PaymentIntentPaymentMethodOptionsPix.
+type PaymentIntentPaymentMethodOptionsPix struct {
+	ExpiresAfterSeconds *int64  `json:"expires_after_seconds"`
+	ExpiresAt           *int64  `json:"expires_at"`
+	SetupFutureUsage    *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsPromptpay defines model for PaymentIntentPaymentMethodOptionsPromptpay.
+type PaymentIntentPaymentMethodOptionsPromptpay struct {
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsSepaDebit defines model for PaymentIntentPaymentMethodOptionsSepaDebit.
+type PaymentIntentPaymentMethodOptionsSepaDebit struct {
+	MandateOptions   *PaymentIntentPaymentMethodOptionsSepaDebitMandateOptions `json:"mandate_options,omitempty"`
+	SetupFutureUsage *string                                                   `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsSepaDebitMandateOptions defines model for PaymentIntentPaymentMethodOptionsSepaDebitMandateOptions.
+type PaymentIntentPaymentMethodOptionsSepaDebitMandateOptions = map[string]interface{}
+
+// PaymentIntentPaymentMethodOptionsSofort defines model for PaymentIntentPaymentMethodOptionsSofort.
+type PaymentIntentPaymentMethodOptionsSofort struct {
+	PreferredLanguage *string `json:"preferred_language"`
+	SetupFutureUsage  *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsUsBankAccount defines model for PaymentIntentPaymentMethodOptionsUsBankAccount.
+type PaymentIntentPaymentMethodOptionsUsBankAccount struct {
+	FinancialConnections     *PaymentIntentPaymentMethodOptionsUsBankAccountFinancialConnections `json:"financial_connections,omitempty"`
+	PreferredSettlementSpeed *string                                                             `json:"preferred_settlement_speed"`
+	SetupFutureUsage         *string                                                             `json:"setup_future_usage"`
+	VerificationMethod       *string                                                             `json:"verification_method"`
+}
+
+// PaymentIntentPaymentMethodOptionsUsBankAccountFinancialConnections defines model for PaymentIntentPaymentMethodOptionsUsBankAccountFinancialConnections.
+type PaymentIntentPaymentMethodOptionsUsBankAccountFinancialConnections struct {
+	Permissions *[]string `json:"permissions"`
+	ReturnUrl   *string   `json:"return_url"`
+}
+
+// PaymentIntentPaymentMethodOptionsWechatPay defines model for PaymentIntentPaymentMethodOptionsWechatPay.
+type PaymentIntentPaymentMethodOptionsWechatPay struct {
+	AppId            *string `json:"app_id"`
+	Client           *string `json:"client"`
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentPaymentMethodOptionsZip defines model for PaymentIntentPaymentMethodOptionsZip.
+type PaymentIntentPaymentMethodOptionsZip struct {
+	SetupFutureUsage *string `json:"setup_future_usage"`
+}
+
+// PaymentIntentProcessing defines model for PaymentIntentProcessing.
+type PaymentIntentProcessing struct {
+	Card *PaymentIntentProcessingCard `json:"card,omitempty"`
+	Type *string                      `json:"type"`
+}
+
+// PaymentIntentProcessingCard defines model for PaymentIntentProcessingCard.
+type PaymentIntentProcessingCard struct {
+	CustomerNotification *PaymentIntentProcessingCardCustomerNotification `json:"customer_notification,omitempty"`
+}
+
+// PaymentIntentProcessingCardCustomerNotification defines model for PaymentIntentProcessingCardCustomerNotification.
+type PaymentIntentProcessingCardCustomerNotification struct {
+	ApprovalRequested *bool      `json:"approval_requested"`
+	CompletesAt       *time.Time `json:"completes_at"`
+}
+
+// PaymentIntentTransferData defines model for PaymentIntentTransferData.
+type PaymentIntentTransferData struct {
+	Amount      *int64                    `json:"amount,omitempty"`
+	Destination *ExpandableFieldOfAccount `json:"destination,omitempty"`
+}
+
+// PaymentMethod defines model for PaymentMethod.
+type PaymentMethod struct {
+	AcssDebit        *PaymentMethodAcssDebit        `json:"acss_debit,omitempty"`
+	Affirm           *PaymentMethodAffirm           `json:"affirm,omitempty"`
+	AfterpayClearpay *PaymentMethodAfterpayClearpay `json:"afterpay_clearpay,omitempty"`
+	Alipay           *PaymentMethodAlipay           `json:"alipay,omitempty"`
+	AuBecsDebit      *PaymentMethodAuBecsDebit      `json:"au_becs_debit,omitempty"`
+	BacsDebit        *PaymentMethodBacsDebit        `json:"bacs_debit,omitempty"`
+	Bancontact       *PaymentMethodBancontact       `json:"bancontact,omitempty"`
+	BillingDetails   *PaymentMethodBillingDetails   `json:"billing_details,omitempty"`
+	Blik             *PaymentMethodBlik             `json:"blik,omitempty"`
+	Boleto           *PaymentMethodBoleto           `json:"boleto,omitempty"`
+	Card             *PaymentMethodCard             `json:"card,omitempty"`
+	CardPresent      *PaymentMethodCardPresent      `json:"card_present,omitempty"`
+	Cashapp          *PaymentMethodCashapp          `json:"cashapp,omitempty"`
+	Created          *time.Time                     `json:"created,omitempty"`
+	Customer         *ExpandableFieldOfCustomer     `json:"customer,omitempty"`
+	CustomerBalance  *PaymentMethodCustomerBalance  `json:"customer_balance,omitempty"`
+	Eps              *PaymentMethodEps              `json:"eps,omitempty"`
+	Fpx              *PaymentMethodFpx              `json:"fpx,omitempty"`
+	Giropay          *PaymentMethodGiropay          `json:"giropay,omitempty"`
+	Grabpay          *PaymentMethodGrabpay          `json:"grabpay,omitempty"`
+	Id               *string                        `json:"id"`
+	Ideal            *PaymentMethodIdeal            `json:"ideal,omitempty"`
+	InteracPresent   *PaymentMethodInteracPresent   `json:"interac_present,omitempty"`
+	Klarna           *PaymentMethodKlarna           `json:"klarna,omitempty"`
+	Konbini          *PaymentMethodKonbini          `json:"konbini,omitempty"`
+	Link             *PaymentMethodLink             `json:"link,omitempty"`
+	Livemode         *bool                          `json:"livemode,omitempty"`
+	Metadata         *map[string]*string            `json:"metadata"`
+	Object           *string                        `json:"object"`
+	Oxxo             *PaymentMethodOxxo             `json:"oxxo,omitempty"`
+	P24              *PaymentMethodP24              `json:"p24,omitempty"`
+	Paynow           *PaymentMethodPaynow           `json:"paynow,omitempty"`
+	Paypal           *PaymentMethodPaypal           `json:"paypal,omitempty"`
+	Pix              *PaymentMethodPix              `json:"pix,omitempty"`
+	Promptpay        *PaymentMethodPromptpay        `json:"promptpay,omitempty"`
+	RadarOptions     *PaymentMethodRadarOptions     `json:"radar_options,omitempty"`
+	SepaDebit        *PaymentMethodSepaDebit        `json:"sepa_debit,omitempty"`
+	Sofort           *PaymentMethodSofort           `json:"sofort,omitempty"`
+	Type             *string                        `json:"type"`
+	UsBankAccount    *PaymentMethodUsBankAccount    `json:"us_bank_account,omitempty"`
+	WechatPay        *PaymentMethodWechatPay        `json:"wechat_pay,omitempty"`
+	Zip              *PaymentMethodZip              `json:"zip,omitempty"`
+}
+
+// PaymentMethodAcssDebit defines model for PaymentMethodAcssDebit.
+type PaymentMethodAcssDebit struct {
+	BankName          *string `json:"bank_name"`
+	Fingerprint       *string `json:"fingerprint"`
+	InstitutionNumber *string `json:"institution_number"`
+	Last4             *string `json:"last4"`
+	TransitNumber     *string `json:"transit_number"`
+}
+
+// PaymentMethodAffirm defines model for PaymentMethodAffirm.
+type PaymentMethodAffirm = map[string]interface{}
+
+// PaymentMethodAfterpayClearpay defines model for PaymentMethodAfterpayClearpay.
+type PaymentMethodAfterpayClearpay = map[string]interface{}
+
+// PaymentMethodAlipay defines model for PaymentMethodAlipay.
+type PaymentMethodAlipay = map[string]interface{}
+
+// PaymentMethodAuBecsDebit defines model for PaymentMethodAuBecsDebit.
+type PaymentMethodAuBecsDebit struct {
+	BsbNumber   *string `json:"bsb_number"`
+	Fingerprint *string `json:"fingerprint"`
+	Last4       *string `json:"last4"`
+}
+
+// PaymentMethodBacsDebit defines model for PaymentMethodBacsDebit.
+type PaymentMethodBacsDebit struct {
+	Fingerprint *string `json:"fingerprint"`
+	Last4       *string `json:"last4"`
+	SortCode    *string `json:"sort_code"`
+}
+
+// PaymentMethodBancontact defines model for PaymentMethodBancontact.
+type PaymentMethodBancontact = map[string]interface{}
+
+// PaymentMethodBillingDetails defines model for PaymentMethodBillingDetails.
+type PaymentMethodBillingDetails struct {
+	Address *Address `json:"address,omitempty"`
+	Email   *string  `json:"email"`
+	Name    *string  `json:"name"`
+	Phone   *string  `json:"phone"`
+}
+
+// PaymentMethodBlik defines model for PaymentMethodBlik.
+type PaymentMethodBlik = map[string]interface{}
+
+// PaymentMethodBoleto defines model for PaymentMethodBoleto.
+type PaymentMethodBoleto struct {
+	TaxId *string `json:"tax_id"`
+}
+
+// PaymentMethodCard defines model for PaymentMethodCard.
+type PaymentMethodCard struct {
+	Brand             *string                             `json:"brand"`
+	Checks            *PaymentMethodCardChecks            `json:"checks,omitempty"`
+	Country           *string                             `json:"country"`
+	Description       *string                             `json:"description"`
+	ExpMonth          *int64                              `json:"exp_month,omitempty"`
+	ExpYear           *int64                              `json:"exp_year,omitempty"`
+	Fingerprint       *string                             `json:"fingerprint"`
+	Funding           *string                             `json:"funding"`
+	Iin               *string                             `json:"iin"`
+	Issuer            *string                             `json:"issuer"`
+	Last4             *string                             `json:"last4"`
+	Networks          *PaymentMethodCardNetworks          `json:"networks,omitempty"`
+	ThreeDSecureUsage *PaymentMethodCardThreeDSecureUsage `json:"three_d_secure_usage,omitempty"`
+	Wallet            *PaymentMethodCardWallet            `json:"wallet,omitempty"`
+}
+
+// PaymentMethodCardChecks defines model for PaymentMethodCardChecks.
+type PaymentMethodCardChecks struct {
+	AddressLine1Check      *string `json:"address_line1_check"`
+	AddressPostalCodeCheck *string `json:"address_postal_code_check"`
+	CvcCheck               *string `json:"cvc_check"`
+}
+
+// PaymentMethodCardNetworks defines model for PaymentMethodCardNetworks.
+type PaymentMethodCardNetworks struct {
+	Available *[]string `json:"available"`
+	Preferred *string   `json:"preferred"`
+}
+
+// PaymentMethodCardPresent defines model for PaymentMethodCardPresent.
+type PaymentMethodCardPresent struct {
+	Brand          *string                           `json:"brand"`
+	CardholderName *string                           `json:"cardholder_name"`
+	Country        *string                           `json:"country"`
+	Description    *string                           `json:"description"`
+	ExpMonth       *int64                            `json:"exp_month,omitempty"`
+	ExpYear        *int64                            `json:"exp_year,omitempty"`
+	Fingerprint    *string                           `json:"fingerprint"`
+	Funding        *string                           `json:"funding"`
+	Iin            *string                           `json:"iin"`
+	Issuer         *string                           `json:"issuer"`
+	Last4          *string                           `json:"last4"`
+	Networks       *PaymentMethodCardPresentNetworks `json:"networks,omitempty"`
+	ReadMethod     *string                           `json:"read_method"`
+}
+
+// PaymentMethodCardPresentNetworks defines model for PaymentMethodCardPresentNetworks.
+type PaymentMethodCardPresentNetworks struct {
+	Available *[]string `json:"available"`
+	Preferred *string   `json:"preferred"`
+}
+
+// PaymentMethodCardThreeDSecureUsage defines model for PaymentMethodCardThreeDSecureUsage.
+type PaymentMethodCardThreeDSecureUsage struct {
+	Supported *bool `json:"supported,omitempty"`
+}
+
+// PaymentMethodCardWallet defines model for PaymentMethodCardWallet.
+type PaymentMethodCardWallet struct {
+	AmexExpressCheckout *PaymentMethodCardWalletAmexExpressCheckout `json:"amex_express_checkout,omitempty"`
+	ApplePay            *PaymentMethodCardWalletApplePay            `json:"apple_pay,omitempty"`
+	DynamicLast4        *string                                     `json:"dynamic_last4"`
+	GooglePay           *PaymentMethodCardWalletGooglePay           `json:"google_pay,omitempty"`
+	Link                *PaymentMethodCardWalletLink                `json:"link,omitempty"`
+	Masterpass          *PaymentMethodCardWalletMasterpass          `json:"masterpass,omitempty"`
+	SamsungPay          *PaymentMethodCardWalletSamsungPay          `json:"samsung_pay,omitempty"`
+	Type                *string                                     `json:"type"`
+	VisaCheckout        *PaymentMethodCardWalletVisaCheckout        `json:"visa_checkout,omitempty"`
+}
+
+// PaymentMethodCardWalletAmexExpressCheckout defines model for PaymentMethodCardWalletAmexExpressCheckout.
+type PaymentMethodCardWalletAmexExpressCheckout = map[string]interface{}
+
+// PaymentMethodCardWalletApplePay defines model for PaymentMethodCardWalletApplePay.
+type PaymentMethodCardWalletApplePay = map[string]interface{}
+
+// PaymentMethodCardWalletGooglePay defines model for PaymentMethodCardWalletGooglePay.
+type PaymentMethodCardWalletGooglePay = map[string]interface{}
+
+// PaymentMethodCardWalletLink defines model for PaymentMethodCardWalletLink.
+type PaymentMethodCardWalletLink = map[string]interface{}
+
+// PaymentMethodCardWalletMasterpass defines model for PaymentMethodCardWalletMasterpass.
+type PaymentMethodCardWalletMasterpass struct {
+	BillingAddress  *Address `json:"billing_address,omitempty"`
+	Email           *string  `json:"email"`
+	Name            *string  `json:"name"`
+	ShippingAddress *Address `json:"shipping_address,omitempty"`
+}
+
+// PaymentMethodCardWalletSamsungPay defines model for PaymentMethodCardWalletSamsungPay.
+type PaymentMethodCardWalletSamsungPay = map[string]interface{}
+
+// PaymentMethodCardWalletVisaCheckout defines model for PaymentMethodCardWalletVisaCheckout.
+type PaymentMethodCardWalletVisaCheckout struct {
+	BillingAddress  *Address `json:"billing_address,omitempty"`
+	Email           *string  `json:"email"`
+	Name            *string  `json:"name"`
+	ShippingAddress *Address `json:"shipping_address,omitempty"`
+}
+
+// PaymentMethodCashapp defines model for PaymentMethodCashapp.
+type PaymentMethodCashapp struct {
+	BuyerId *string `json:"buyer_id"`
+	Cashtag *string `json:"cashtag"`
+}
+
+// PaymentMethodCustomerBalance defines model for PaymentMethodCustomerBalance.
+type PaymentMethodCustomerBalance = map[string]interface{}
+
+// PaymentMethodEps defines model for PaymentMethodEps.
+type PaymentMethodEps struct {
+	Bank *string `json:"bank"`
+}
+
+// PaymentMethodFpx defines model for PaymentMethodFpx.
+type PaymentMethodFpx struct {
+	AccountHolderType *string `json:"account_holder_type"`
+	Bank              *string `json:"bank"`
+}
+
+// PaymentMethodGiropay defines model for PaymentMethodGiropay.
+type PaymentMethodGiropay = map[string]interface{}
+
+// PaymentMethodGrabpay defines model for PaymentMethodGrabpay.
+type PaymentMethodGrabpay = map[string]interface{}
+
+// PaymentMethodIdeal defines model for PaymentMethodIdeal.
+type PaymentMethodIdeal struct {
+	Bank *string `json:"bank"`
+	Bic  *string `json:"bic"`
+}
+
+// PaymentMethodInteracPresent defines model for PaymentMethodInteracPresent.
+type PaymentMethodInteracPresent struct {
+	Brand            *string                              `json:"brand"`
+	CardholderName   *string                              `json:"cardholder_name"`
+	Country          *string                              `json:"country"`
+	Description      *string                              `json:"description"`
+	ExpMonth         *int64                               `json:"exp_month,omitempty"`
+	ExpYear          *int64                               `json:"exp_year,omitempty"`
+	Fingerprint      *string                              `json:"fingerprint"`
+	Funding          *string                              `json:"funding"`
+	Iin              *string                              `json:"iin"`
+	Issuer           *string                              `json:"issuer"`
+	Last4            *string                              `json:"last4"`
+	Networks         *PaymentMethodInteracPresentNetworks `json:"networks,omitempty"`
+	PreferredLocales *[]string                            `json:"preferred_locales"`
+	ReadMethod       *string                              `json:"read_method"`
+}
+
+// PaymentMethodInteracPresentNetworks defines model for PaymentMethodInteracPresentNetworks.
+type PaymentMethodInteracPresentNetworks struct {
+	Available *[]string `json:"available"`
+	Preferred *string   `json:"preferred"`
+}
+
+// PaymentMethodKlarna defines model for PaymentMethodKlarna.
+type PaymentMethodKlarna struct {
+	Dob *PaymentMethodKlarnaDob `json:"dob,omitempty"`
+}
+
+// PaymentMethodKlarnaDob defines model for PaymentMethodKlarnaDob.
+type PaymentMethodKlarnaDob struct {
+	Day   *int64 `json:"day"`
+	Month *int64 `json:"month"`
+	Year  *int64 `json:"year"`
+}
+
+// PaymentMethodKonbini defines model for PaymentMethodKonbini.
+type PaymentMethodKonbini = map[string]interface{}
+
+// PaymentMethodLink defines model for PaymentMethodLink.
+type PaymentMethodLink struct {
+	Country         *string `json:"country"`
+	Email           *string `json:"email"`
+	PersistentToken *string `json:"persistent_token"`
+}
+
+// PaymentMethodOxxo defines model for PaymentMethodOxxo.
+type PaymentMethodOxxo = map[string]interface{}
+
+// PaymentMethodP24 defines model for PaymentMethodP24.
+type PaymentMethodP24 struct {
+	Bank *string `json:"bank"`
+}
+
+// PaymentMethodPaynow defines model for PaymentMethodPaynow.
+type PaymentMethodPaynow = map[string]interface{}
+
+// PaymentMethodPaypal defines model for PaymentMethodPaypal.
+type PaymentMethodPaypal struct {
+	PayerEmail *string `json:"payer_email"`
+	PayerId    *string `json:"payer_id"`
+}
+
+// PaymentMethodPix defines model for PaymentMethodPix.
+type PaymentMethodPix = map[string]interface{}
+
+// PaymentMethodPromptpay defines model for PaymentMethodPromptpay.
+type PaymentMethodPromptpay = map[string]interface{}
+
+// PaymentMethodRadarOptions defines model for PaymentMethodRadarOptions.
+type PaymentMethodRadarOptions struct {
+	Session *string `json:"session"`
+}
+
+// PaymentMethodSepaDebit defines model for PaymentMethodSepaDebit.
+type PaymentMethodSepaDebit struct {
+	BankCode      *string                              `json:"bank_code"`
+	BranchCode    *string                              `json:"branch_code"`
+	Country       *string                              `json:"country"`
+	Fingerprint   *string                              `json:"fingerprint"`
+	GeneratedFrom *PaymentMethodSepaDebitGeneratedFrom `json:"generated_from,omitempty"`
+	Last4         *string                              `json:"last4"`
+}
+
+// PaymentMethodSepaDebitGeneratedFrom defines model for PaymentMethodSepaDebitGeneratedFrom.
+type PaymentMethodSepaDebitGeneratedFrom struct {
+	Charge       *ExpandableFieldOfCharge       `json:"charge,omitempty"`
+	SetupAttempt *ExpandableFieldOfSetupAttempt `json:"setup_attempt,omitempty"`
+}
+
+// PaymentMethodSofort defines model for PaymentMethodSofort.
+type PaymentMethodSofort struct {
+	Country *string `json:"country"`
+}
+
+// PaymentMethodUsBankAccount defines model for PaymentMethodUsBankAccount.
+type PaymentMethodUsBankAccount struct {
+	AccountHolderType           *string                                  `json:"account_holder_type"`
+	AccountType                 *string                                  `json:"account_type"`
+	BankName                    *string                                  `json:"bank_name"`
+	FinancialConnectionsAccount *string                                  `json:"financial_connections_account"`
+	Fingerprint                 *string                                  `json:"fingerprint"`
+	Last4                       *string                                  `json:"last4"`
+	Networks                    *PaymentMethodUsBankAccountNetworks      `json:"networks,omitempty"`
+	RoutingNumber               *string                                  `json:"routing_number"`
+	StatusDetails               *PaymentMethodUsBankAccountStatusDetails `json:"status_details,omitempty"`
+}
+
+// PaymentMethodUsBankAccountNetworks defines model for PaymentMethodUsBankAccountNetworks.
+type PaymentMethodUsBankAccountNetworks struct {
+	Preferred *string   `json:"preferred"`
+	Supported *[]string `json:"supported"`
+}
+
+// PaymentMethodUsBankAccountStatusDetails defines model for PaymentMethodUsBankAccountStatusDetails.
+type PaymentMethodUsBankAccountStatusDetails struct {
+	Blocked *PaymentMethodUsBankAccountStatusDetailsBlocked `json:"blocked,omitempty"`
+}
+
+// PaymentMethodUsBankAccountStatusDetailsBlocked defines model for PaymentMethodUsBankAccountStatusDetailsBlocked.
+type PaymentMethodUsBankAccountStatusDetailsBlocked struct {
+	NetworkCode *string `json:"network_code"`
+	Reason      *string `json:"reason"`
+}
+
+// PaymentMethodWechatPay defines model for PaymentMethodWechatPay.
+type PaymentMethodWechatPay = map[string]interface{}
+
+// PaymentMethodZip defines model for PaymentMethodZip.
+type PaymentMethodZip = map[string]interface{}
+
+// Person defines model for Person.
+type Person struct {
+	Account                   *string                   `json:"account"`
+	Address                   *Address                  `json:"address,omitempty"`
+	AddressKana               *AddressJapan             `json:"address_kana,omitempty"`
+	AddressKanji              *AddressJapan             `json:"address_kanji,omitempty"`
+	Created                   *time.Time                `json:"created,omitempty"`
+	Deleted                   *bool                     `json:"deleted"`
+	Dob                       *Dob                      `json:"dob,omitempty"`
+	Email                     *string                   `json:"email"`
+	FirstName                 *string                   `json:"first_name"`
+	FirstNameKana             *string                   `json:"first_name_kana"`
+	FirstNameKanji            *string                   `json:"first_name_kanji"`
+	FullNameAliases           *[]string                 `json:"full_name_aliases"`
+	FutureRequirements        *PersonFutureRequirements `json:"future_requirements,omitempty"`
+	Gender                    *string                   `json:"gender"`
+	Id                        *string                   `json:"id"`
+	IdNumberProvided          *bool                     `json:"id_number_provided,omitempty"`
+	IdNumberSecondaryProvided *bool                     `json:"id_number_secondary_provided,omitempty"`
+	LastName                  *string                   `json:"last_name"`
+	LastNameKana              *string                   `json:"last_name_kana"`
+	LastNameKanji             *string                   `json:"last_name_kanji"`
+	MaidenName                *string                   `json:"maiden_name"`
+	Metadata                  *map[string]*string       `json:"metadata"`
+	Nationality               *string                   `json:"nationality"`
+	Object                    *string                   `json:"object"`
+	Phone                     *string                   `json:"phone"`
+	PoliticalExposure         *string                   `json:"political_exposure"`
+	RegisteredAddress         *Address                  `json:"registered_address,omitempty"`
+	Relationship              *PersonRelationship       `json:"relationship,omitempty"`
+	Requirements              *PersonRequirements       `json:"requirements,omitempty"`
+	SsnLast4Provided          *bool                     `json:"ssn_last_4_provided,omitempty"`
+	Verification              *PersonVerification       `json:"verification,omitempty"`
+}
+
+// PersonFutureRequirements defines model for PersonFutureRequirements.
+type PersonFutureRequirements struct {
+	Alternatives        *[]PersonFutureRequirementsAlternative `json:"alternatives"`
+	CurrentlyDue        *[]string                              `json:"currently_due"`
+	Errors              *[]PersonFutureRequirementsError       `json:"errors"`
+	EventuallyDue       *[]string                              `json:"eventually_due"`
+	PastDue             *[]string                              `json:"past_due"`
+	PendingVerification *[]string                              `json:"pending_verification"`
+}
+
+// PersonFutureRequirementsAlternative defines model for PersonFutureRequirementsAlternative.
+type PersonFutureRequirementsAlternative struct {
+	AlternativeFieldsDue *[]string `json:"alternative_fields_due"`
+	OriginalFieldsDue    *[]string `json:"original_fields_due"`
+}
+
+// PersonFutureRequirementsError defines model for PersonFutureRequirementsError.
+type PersonFutureRequirementsError struct {
+	Code        *string `json:"code"`
+	Reason      *string `json:"reason"`
+	Requirement *string `json:"requirement"`
+}
+
+// PersonRelationship defines model for PersonRelationship.
+type PersonRelationship struct {
+	Director         *bool    `json:"director"`
+	Executive        *bool    `json:"executive"`
+	Owner            *bool    `json:"owner"`
+	PercentOwnership *float64 `json:"percent_ownership"`
+	Representative   *bool    `json:"representative"`
+	Title            *string  `json:"title"`
+}
+
+// PersonRequirements defines model for PersonRequirements.
+type PersonRequirements struct {
+	Alternatives        *[]PersonRequirementsAlternative `json:"alternatives"`
+	CurrentlyDue        *[]string                        `json:"currently_due"`
+	Errors              *[]PersonRequirementsError       `json:"errors"`
+	EventuallyDue       *[]string                        `json:"eventually_due"`
+	PastDue             *[]string                        `json:"past_due"`
+	PendingVerification *[]string                        `json:"pending_verification"`
+}
+
+// PersonRequirementsAlternative defines model for PersonRequirementsAlternative.
+type PersonRequirementsAlternative struct {
+	AlternativeFieldsDue *[]string `json:"alternative_fields_due"`
+	OriginalFieldsDue    *[]string `json:"original_fields_due"`
+}
+
+// PersonRequirementsError defines model for PersonRequirementsError.
+type PersonRequirementsError struct {
+	Code        *string `json:"code"`
+	Reason      *string `json:"reason"`
+	Requirement *string `json:"requirement"`
+}
+
+// PersonVerification defines model for PersonVerification.
+type PersonVerification struct {
+	AdditionalDocument *PersonVerificationAdditionalDocument `json:"additional_document,omitempty"`
+	Details            *string                               `json:"details"`
+	DetailsCode        *string                               `json:"details_code"`
+	Document           *PersonVerificationDocument           `json:"document,omitempty"`
+	Status             *string                               `json:"status"`
+}
+
+// PersonVerificationAdditionalDocument defines model for PersonVerificationAdditionalDocument.
+type PersonVerificationAdditionalDocument struct {
+	Back        *ExpandableFieldOfFile `json:"back,omitempty"`
+	Details     *string                `json:"details"`
+	DetailsCode *string                `json:"details_code"`
+	Front       *ExpandableFieldOfFile `json:"front,omitempty"`
+}
+
+// PersonVerificationDocument defines model for PersonVerificationDocument.
+type PersonVerificationDocument struct {
+	Back        *ExpandableFieldOfFile `json:"back,omitempty"`
+	Details     *string                `json:"details"`
+	DetailsCode *string                `json:"details_code"`
+	Front       *ExpandableFieldOfFile `json:"front,omitempty"`
+}
+
+// Plan defines model for Plan.
+type Plan struct {
+	Active          *bool                     `json:"active,omitempty"`
+	AggregateUsage  *string                   `json:"aggregate_usage"`
+	Amount          *int64                    `json:"amount"`
+	AmountDecimal   *float64                  `json:"amount_decimal"`
+	BillingScheme   *string                   `json:"billing_scheme"`
+	Created         *time.Time                `json:"created,omitempty"`
+	Currency        *string                   `json:"currency"`
+	Deleted         *bool                     `json:"deleted"`
+	Id              *string                   `json:"id"`
+	Interval        *string                   `json:"interval"`
+	IntervalCount   *int64                    `json:"interval_count,omitempty"`
+	Livemode        *bool                     `json:"livemode,omitempty"`
+	Metadata        *map[string]*string       `json:"metadata"`
+	Nickname        *string                   `json:"nickname"`
+	Object          *string                   `json:"object"`
+	Product         *ExpandableFieldOfProduct `json:"product,omitempty"`
+	Tiers           *[]PlanTier               `json:"tiers"`
+	TiersMode       *string                   `json:"tiers_mode"`
+	TransformUsage  *PlanTransformUsage       `json:"transform_usage,omitempty"`
+	TrialPeriodDays *int64                    `json:"trial_period_days"`
+	UsageType       *string                   `json:"usage_type"`
+}
+
+// PlanTier defines model for PlanTier.
+type PlanTier struct {
+	FlatAmount        *int64   `json:"flat_amount"`
+	FlatAmountDecimal *float64 `json:"flat_amount_decimal"`
+	UnitAmount        *int64   `json:"unit_amount"`
+	UnitAmountDecimal *float64 `json:"unit_amount_decimal"`
+	UpTo              *int64   `json:"up_to"`
+}
+
+// PlanTransformUsage defines model for PlanTransformUsage.
+type PlanTransformUsage struct {
+	DivideBy *int64  `json:"divide_by,omitempty"`
+	Round    *string `json:"round"`
+}
+
+// Price defines model for Price.
+type Price struct {
+	Active            *bool                            `json:"active,omitempty"`
+	BillingScheme     *string                          `json:"billing_scheme"`
+	Created           *time.Time                       `json:"created,omitempty"`
+	Currency          *string                          `json:"currency"`
+	CurrencyOptions   *map[string]PriceCurrencyOptions `json:"currency_options"`
+	CustomUnitAmount  *PriceCustomUnitAmount           `json:"custom_unit_amount,omitempty"`
+	Deleted           *bool                            `json:"deleted"`
+	Id                *string                          `json:"id"`
+	Livemode          *bool                            `json:"livemode,omitempty"`
+	LookupKey         *string                          `json:"lookup_key"`
+	Metadata          *map[string]*string              `json:"metadata"`
+	Nickname          *string                          `json:"nickname"`
+	Object            *string                          `json:"object"`
+	Product           *ExpandableFieldOfProduct        `json:"product,omitempty"`
+	Recurring         *PriceRecurring                  `json:"recurring,omitempty"`
+	TaxBehavior       *string                          `json:"tax_behavior"`
+	Tiers             *[]PriceTier                     `json:"tiers"`
+	TiersMode         *string                          `json:"tiers_mode"`
+	TransformQuantity *PriceTransformQuantity          `json:"transform_quantity,omitempty"`
+	Type              *string                          `json:"type"`
+	UnitAmount        *int64                           `json:"unit_amount"`
+	UnitAmountDecimal *float64                         `json:"unit_amount_decimal"`
+}
+
+// PriceCurrencyOptions defines model for PriceCurrencyOptions.
+type PriceCurrencyOptions struct {
+	CustomUnitAmount  *PriceCurrencyOptionsCustomUnitAmount `json:"custom_unit_amount,omitempty"`
+	TaxBehavior       *string                               `json:"tax_behavior"`
+	Tiers             *[]PriceCurrencyOptionsTier           `json:"tiers"`
+	UnitAmount        *int64                                `json:"unit_amount"`
+	UnitAmountDecimal *float64                              `json:"unit_amount_decimal"`
+}
+
+// PriceCurrencyOptionsCustomUnitAmount defines model for PriceCurrencyOptionsCustomUnitAmount.
+type PriceCurrencyOptionsCustomUnitAmount struct {
+	Maximum *int64 `json:"maximum"`
+	Minimum *int64 `json:"minimum"`
+	Preset  *int64 `json:"preset"`
+}
+
+// PriceCurrencyOptionsTier defines model for PriceCurrencyOptionsTier.
+type PriceCurrencyOptionsTier struct {
+	FlatAmount        *int64   `json:"flat_amount"`
+	FlatAmountDecimal *float64 `json:"flat_amount_decimal"`
+	UnitAmount        *int64   `json:"unit_amount"`
+	UnitAmountDecimal *float64 `json:"unit_amount_decimal"`
+	UpTo              *int64   `json:"up_to"`
+}
+
+// PriceCustomUnitAmount defines model for PriceCustomUnitAmount.
+type PriceCustomUnitAmount struct {
+	Maximum *int64 `json:"maximum"`
+	Minimum *int64 `json:"minimum"`
+	Preset  *int64 `json:"preset"`
+}
+
+// PriceRecurring defines model for PriceRecurring.
+type PriceRecurring struct {
+	AggregateUsage  *string `json:"aggregate_usage"`
+	Interval        *string `json:"interval"`
+	IntervalCount   *int64  `json:"interval_count,omitempty"`
+	TrialPeriodDays *int64  `json:"trial_period_days"`
+	UsageType       *string `json:"usage_type"`
+}
+
+// PriceTier defines model for PriceTier.
+type PriceTier struct {
+	FlatAmount        *int64   `json:"flat_amount"`
+	FlatAmountDecimal *float64 `json:"flat_amount_decimal"`
+	UnitAmount        *int64   `json:"unit_amount"`
+	UnitAmountDecimal *float64 `json:"unit_amount_decimal"`
+	UpTo              *int64   `json:"up_to"`
+}
+
+// PriceTransformQuantity defines model for PriceTransformQuantity.
+type PriceTransformQuantity struct {
+	DivideBy *int64  `json:"divide_by,omitempty"`
+	Round    *string `json:"round"`
+}
+
+// Product defines model for Product.
+type Product struct {
+	Active              *bool                     `json:"active,omitempty"`
+	Attributes          *[]string                 `json:"attributes"`
+	Caption             *string                   `json:"caption"`
+	Created             *time.Time                `json:"created,omitempty"`
+	DeactivateOn        *[]string                 `json:"deactivate_on"`
+	DefaultPrice        *ExpandableFieldOfPrice   `json:"default_price,omitempty"`
+	Deleted             *bool                     `json:"deleted"`
+	Description         *string                   `json:"description"`
+	Id                  *string                   `json:"id"`
+	Images              *[]string                 `json:"images"`
+	Livemode            *bool                     `json:"livemode,omitempty"`
+	Metadata            *map[string]*string       `json:"metadata"`
+	Name                *string                   `json:"name"`
+	Object              *string                   `json:"object"`
+	PackageDimensions   *ProductPackageDimensions `json:"package_dimensions,omitempty"`
+	Shippable           *bool                     `json:"shippable"`
+	StatementDescriptor *string                   `json:"statement_descriptor"`
+	TaxCode             *ExpandableFieldOfTaxCode `json:"tax_code,omitempty"`
+	Type                *string                   `json:"type"`
+	UnitLabel           *string                   `json:"unit_label"`
+	Updated             *time.Time                `json:"updated,omitempty"`
+	Url                 *string                   `json:"url"`
+}
+
+// ProductPackageDimensions defines model for ProductPackageDimensions.
+type ProductPackageDimensions struct {
+	Height *float64 `json:"height,omitempty"`
+	Length *float64 `json:"length,omitempty"`
+	Weight *float64 `json:"weight,omitempty"`
+	Width  *float64 `json:"width,omitempty"`
+}
+
+// PromotionCode defines model for PromotionCode.
+type PromotionCode struct {
+	Active         *bool                      `json:"active,omitempty"`
+	Code           *string                    `json:"code"`
+	Coupon         *Coupon                    `json:"coupon,omitempty"`
+	Created        *time.Time                 `json:"created,omitempty"`
+	Customer       *ExpandableFieldOfCustomer `json:"customer,omitempty"`
+	ExpiresAt      *time.Time                 `json:"expires_at"`
+	Id             *string                    `json:"id"`
+	Livemode       *bool                      `json:"livemode,omitempty"`
+	MaxRedemptions *int64                     `json:"max_redemptions"`
+	Metadata       *map[string]*string        `json:"metadata"`
+	Object         *string                    `json:"object"`
+	Restrictions   *PromotionCodeRestrictions `json:"restrictions,omitempty"`
+	TimesRedeemed  *int64                     `json:"times_redeemed,omitempty"`
+}
+
+// PromotionCodeRestrictions defines model for PromotionCodeRestrictions.
+type PromotionCodeRestrictions struct {
+	CurrencyOptions       *map[string]PromotionCodeRestrictionsCurrencyOptions `json:"currency_options"`
+	FirstTimeTransaction  *bool                                                `json:"first_time_transaction,omitempty"`
+	MinimumAmount         *int64                                               `json:"minimum_amount"`
+	MinimumAmountCurrency *string                                              `json:"minimum_amount_currency"`
+}
+
+// PromotionCodeRestrictionsCurrencyOptions defines model for PromotionCodeRestrictionsCurrencyOptions.
+type PromotionCodeRestrictionsCurrencyOptions struct {
+	MinimumAmount *int64 `json:"minimum_amount,omitempty"`
+}
+
+// Quote defines model for Quote.
+type Quote struct {
+	AmountSubtotal        *int64                                 `json:"amount_subtotal,omitempty"`
+	AmountTotal           *int64                                 `json:"amount_total,omitempty"`
+	Application           *ExpandableFieldOfApplication          `json:"application,omitempty"`
+	ApplicationFeeAmount  *int64                                 `json:"application_fee_amount"`
+	ApplicationFeePercent *float64                               `json:"application_fee_percent"`
+	AutomaticTax          *QuoteAutomaticTax                     `json:"automatic_tax,omitempty"`
+	CollectionMethod      *string                                `json:"collection_method"`
+	Computed              *QuoteComputed                         `json:"computed,omitempty"`
+	Created               *time.Time                             `json:"created,omitempty"`
+	Currency              *string                                `json:"currency"`
+	Customer              *ExpandableFieldOfCustomer             `json:"customer,omitempty"`
+	DefaultTaxRates       *[]ExpandableFieldOfTaxRate            `json:"default_tax_rates,omitempty"`
+	Description           *string                                `json:"description"`
+	Discounts             *[]ExpandableFieldOfDiscount           `json:"discounts,omitempty"`
+	ExpiresAt             *time.Time                             `json:"expires_at,omitempty"`
+	Footer                *string                                `json:"footer"`
+	FromQuote             *QuoteFromQuote                        `json:"from_quote,omitempty"`
+	Header                *string                                `json:"header"`
+	Id                    *string                                `json:"id"`
+	Invoice               *ExpandableFieldOfInvoice              `json:"invoice,omitempty"`
+	InvoiceSettings       *QuoteInvoiceSettings                  `json:"invoice_settings,omitempty"`
+	LineItems             *StripeListOfLineItem                  `json:"line_items,omitempty"`
+	Livemode              *bool                                  `json:"livemode,omitempty"`
+	Metadata              *map[string]*string                    `json:"metadata"`
+	Number                *string                                `json:"number"`
+	Object                *string                                `json:"object"`
+	OnBehalfOf            *ExpandableFieldOfAccount              `json:"on_behalf_of,omitempty"`
+	Status                *string                                `json:"status"`
+	StatusTransitions     *QuoteStatusTransitions                `json:"status_transitions,omitempty"`
+	Subscription          *ExpandableFieldOfSubscription         `json:"subscription,omitempty"`
+	SubscriptionData      *QuoteSubscriptionData                 `json:"subscription_data,omitempty"`
+	SubscriptionSchedule  *ExpandableFieldOfSubscriptionSchedule `json:"subscription_schedule,omitempty"`
+	TestClock             *ExpandableFieldOfTestClock            `json:"test_clock,omitempty"`
+	TotalDetails          *QuoteTotalDetails                     `json:"total_details,omitempty"`
+	TransferData          *QuoteTransferData                     `json:"transfer_data,omitempty"`
+}
+
+// QuoteAutomaticTax defines model for QuoteAutomaticTax.
+type QuoteAutomaticTax struct {
+	Enabled *bool   `json:"enabled,omitempty"`
+	Status  *string `json:"status"`
+}
+
+// QuoteComputed defines model for QuoteComputed.
+type QuoteComputed struct {
+	Recurring *QuoteComputedRecurring `json:"recurring,omitempty"`
+	Upfront   *QuoteComputedUpfront   `json:"upfront,omitempty"`
+}
+
+// QuoteComputedRecurring defines model for QuoteComputedRecurring.
+type QuoteComputedRecurring struct {
+	AmountSubtotal *int64                              `json:"amount_subtotal,omitempty"`
+	AmountTotal    *int64                              `json:"amount_total,omitempty"`
+	Interval       *string                             `json:"interval"`
+	IntervalCount  *int64                              `json:"interval_count,omitempty"`
+	TotalDetails   *QuoteComputedRecurringTotalDetails `json:"total_details,omitempty"`
+}
+
+// QuoteComputedRecurringTotalDetails defines model for QuoteComputedRecurringTotalDetails.
+type QuoteComputedRecurringTotalDetails struct {
+	AmountDiscount *int64                                       `json:"amount_discount,omitempty"`
+	AmountShipping *int64                                       `json:"amount_shipping"`
+	AmountTax      *int64                                       `json:"amount_tax,omitempty"`
+	Breakdown      *QuoteComputedRecurringTotalDetailsBreakdown `json:"breakdown,omitempty"`
+}
+
+// QuoteComputedRecurringTotalDetailsBreakdown defines model for QuoteComputedRecurringTotalDetailsBreakdown.
+type QuoteComputedRecurringTotalDetailsBreakdown struct {
+	Discounts *[]QuoteComputedRecurringTotalDetailsBreakdownDiscount `json:"discounts"`
+	Taxes     *[]QuoteComputedRecurringTotalDetailsBreakdownTax      `json:"taxes"`
+}
+
+// QuoteComputedRecurringTotalDetailsBreakdownDiscount defines model for QuoteComputedRecurringTotalDetailsBreakdownDiscount.
+type QuoteComputedRecurringTotalDetailsBreakdownDiscount struct {
+	Amount   *int64    `json:"amount,omitempty"`
+	Discount *Discount `json:"discount,omitempty"`
+}
+
+// QuoteComputedRecurringTotalDetailsBreakdownTax defines model for QuoteComputedRecurringTotalDetailsBreakdownTax.
+type QuoteComputedRecurringTotalDetailsBreakdownTax struct {
+	Amount           *int64   `json:"amount,omitempty"`
+	Rate             *TaxRate `json:"rate,omitempty"`
+	TaxabilityReason *string  `json:"taxability_reason"`
+	TaxableAmount    *int64   `json:"taxable_amount"`
+}
+
+// QuoteComputedUpfront defines model for QuoteComputedUpfront.
+type QuoteComputedUpfront struct {
+	AmountSubtotal *int64                            `json:"amount_subtotal,omitempty"`
+	AmountTotal    *int64                            `json:"amount_total,omitempty"`
+	LineItems      *StripeListOfLineItem             `json:"line_items,omitempty"`
+	TotalDetails   *QuoteComputedUpfrontTotalDetails `json:"total_details,omitempty"`
+}
+
+// QuoteComputedUpfrontTotalDetails defines model for QuoteComputedUpfrontTotalDetails.
+type QuoteComputedUpfrontTotalDetails struct {
+	AmountDiscount *int64                                     `json:"amount_discount,omitempty"`
+	AmountShipping *int64                                     `json:"amount_shipping"`
+	AmountTax      *int64                                     `json:"amount_tax,omitempty"`
+	Breakdown      *QuoteComputedUpfrontTotalDetailsBreakdown `json:"breakdown,omitempty"`
+}
+
+// QuoteComputedUpfrontTotalDetailsBreakdown defines model for QuoteComputedUpfrontTotalDetailsBreakdown.
+type QuoteComputedUpfrontTotalDetailsBreakdown struct {
+	Discounts *[]QuoteComputedUpfrontTotalDetailsBreakdownDiscount `json:"discounts"`
+	Taxes     *[]QuoteComputedUpfrontTotalDetailsBreakdownTax      `json:"taxes"`
+}
+
+// QuoteComputedUpfrontTotalDetailsBreakdownDiscount defines model for QuoteComputedUpfrontTotalDetailsBreakdownDiscount.
+type QuoteComputedUpfrontTotalDetailsBreakdownDiscount struct {
+	Amount   *int64    `json:"amount,omitempty"`
+	Discount *Discount `json:"discount,omitempty"`
+}
+
+// QuoteComputedUpfrontTotalDetailsBreakdownTax defines model for QuoteComputedUpfrontTotalDetailsBreakdownTax.
+type QuoteComputedUpfrontTotalDetailsBreakdownTax struct {
+	Amount           *int64   `json:"amount,omitempty"`
+	Rate             *TaxRate `json:"rate,omitempty"`
+	TaxabilityReason *string  `json:"taxability_reason"`
+	TaxableAmount    *int64   `json:"taxable_amount"`
+}
+
+// QuoteFromQuote defines model for QuoteFromQuote.
+type QuoteFromQuote struct {
+	IsRevision *bool                   `json:"is_revision,omitempty"`
+	Quote      *ExpandableFieldOfQuote `json:"quote,omitempty"`
+}
+
+// QuoteInvoiceSettings defines model for QuoteInvoiceSettings.
+type QuoteInvoiceSettings struct {
+	DaysUntilDue *int64 `json:"days_until_due"`
+}
+
+// QuoteStatusTransitions defines model for QuoteStatusTransitions.
+type QuoteStatusTransitions struct {
+	AcceptedAt  *time.Time `json:"accepted_at"`
+	CanceledAt  *time.Time `json:"canceled_at"`
+	FinalizedAt *time.Time `json:"finalized_at"`
+}
+
+// QuoteSubscriptionData defines model for QuoteSubscriptionData.
+type QuoteSubscriptionData struct {
+	Description     *string    `json:"description"`
+	EffectiveDate   *time.Time `json:"effective_date"`
+	TrialPeriodDays *int64     `json:"trial_period_days"`
+}
+
+// QuoteTotalDetails defines model for QuoteTotalDetails.
+type QuoteTotalDetails struct {
+	AmountDiscount *int64                      `json:"amount_discount,omitempty"`
+	AmountShipping *int64                      `json:"amount_shipping"`
+	AmountTax      *int64                      `json:"amount_tax,omitempty"`
+	Breakdown      *QuoteTotalDetailsBreakdown `json:"breakdown,omitempty"`
+}
+
+// QuoteTotalDetailsBreakdown defines model for QuoteTotalDetailsBreakdown.
+type QuoteTotalDetailsBreakdown struct {
+	Discounts *[]QuoteTotalDetailsBreakdownDiscount `json:"discounts"`
+	Taxes     *[]QuoteTotalDetailsBreakdownTax      `json:"taxes"`
+}
+
+// QuoteTotalDetailsBreakdownDiscount defines model for QuoteTotalDetailsBreakdownDiscount.
+type QuoteTotalDetailsBreakdownDiscount struct {
+	Amount   *int64    `json:"amount,omitempty"`
+	Discount *Discount `json:"discount,omitempty"`
+}
+
+// QuoteTotalDetailsBreakdownTax defines model for QuoteTotalDetailsBreakdownTax.
+type QuoteTotalDetailsBreakdownTax struct {
+	Amount           *int64   `json:"amount,omitempty"`
+	Rate             *TaxRate `json:"rate,omitempty"`
+	TaxabilityReason *string  `json:"taxability_reason"`
+	TaxableAmount    *int64   `json:"taxable_amount"`
+}
+
+// QuoteTransferData defines model for QuoteTransferData.
+type QuoteTransferData struct {
+	Amount        *int64                    `json:"amount"`
+	AmountPercent *float64                  `json:"amount_percent"`
+	Destination   *ExpandableFieldOfAccount `json:"destination,omitempty"`
+}
+
+// Refund defines model for Refund.
+type Refund struct {
+	Amount                    *int64                               `json:"amount,omitempty"`
+	BalanceTransaction        *ExpandableFieldOfBalanceTransaction `json:"balance_transaction,omitempty"`
+	Charge                    *ExpandableFieldOfCharge             `json:"charge,omitempty"`
+	Created                   *time.Time                           `json:"created,omitempty"`
+	Currency                  *string                              `json:"currency"`
+	Description               *string                              `json:"description"`
+	FailureBalanceTransaction *ExpandableFieldOfBalanceTransaction `json:"failure_balance_transaction,omitempty"`
+	FailureReason             *string                              `json:"failure_reason"`
+	Id                        *string                              `json:"id"`
+	InstructionsEmail         *string                              `json:"instructions_email"`
+	Metadata                  *map[string]*string                  `json:"metadata"`
+	NextAction                *RefundNextAction                    `json:"next_action,omitempty"`
+	Object                    *string                              `json:"object"`
+	PaymentIntent             *ExpandableFieldOfPaymentIntent      `json:"payment_intent,omitempty"`
+	Reason                    *string                              `json:"reason"`
+	ReceiptNumber             *string                              `json:"receipt_number"`
+	SourceTransferReversal    *ExpandableFieldOfTransferReversal   `json:"source_transfer_reversal,omitempty"`
+	Status                    *string                              `json:"status"`
+	TransferReversal          *ExpandableFieldOfTransferReversal   `json:"transfer_reversal,omitempty"`
+}
+
+// RefundNextAction defines model for RefundNextAction.
+type RefundNextAction struct {
+	DisplayDetails *RefundNextActionDisplayDetails `json:"display_details,omitempty"`
+	Type           *string                         `json:"type"`
+}
+
+// RefundNextActionDisplayDetails defines model for RefundNextActionDisplayDetails.
+type RefundNextActionDisplayDetails struct {
+	EmailSent *RefundNextActionDisplayDetailsEmailSent `json:"email_sent,omitempty"`
+	ExpiresAt *time.Time                               `json:"expires_at,omitempty"`
+}
+
+// RefundNextActionDisplayDetailsEmailSent defines model for RefundNextActionDisplayDetailsEmailSent.
+type RefundNextActionDisplayDetailsEmailSent struct {
+	EmailSentAt *time.Time `json:"email_sent_at,omitempty"`
+	EmailSentTo *string    `json:"email_sent_to"`
+}
+
+// Review defines model for Review.
+type Review struct {
+	BillingZip        *string                         `json:"billing_zip"`
+	Charge            *ExpandableFieldOfCharge        `json:"charge,omitempty"`
+	ClosedReason      *string                         `json:"closed_reason"`
+	Created           *time.Time                      `json:"created,omitempty"`
+	Id                *string                         `json:"id"`
+	IpAddress         *string                         `json:"ip_address"`
+	IpAddressLocation *ReviewLocation                 `json:"ip_address_location,omitempty"`
+	Livemode          *bool                           `json:"livemode,omitempty"`
+	Object            *string                         `json:"object"`
+	Open              *bool                           `json:"open,omitempty"`
+	OpenedReason      *string                         `json:"opened_reason"`
+	PaymentIntent     *ExpandableFieldOfPaymentIntent `json:"payment_intent,omitempty"`
+	Reason            *string                         `json:"reason"`
+	Session           *ReviewSession                  `json:"session,omitempty"`
+}
+
+// ReviewLocation defines model for ReviewLocation.
+type ReviewLocation struct {
+	City      *string  `json:"city"`
+	Country   *string  `json:"country"`
+	Latitude  *float64 `json:"latitude"`
+	Longitude *float64 `json:"longitude"`
+	Region    *string  `json:"region"`
+}
+
+// ReviewSession defines model for ReviewSession.
+type ReviewSession struct {
+	Browser  *string `json:"browser"`
+	Device   *string `json:"device"`
+	Platform *string `json:"platform"`
+	Version  *string `json:"version"`
+}
+
+// Rule defines model for Rule.
+type Rule struct {
+	Action    *string `json:"action"`
+	Deleted   *bool   `json:"deleted"`
+	Id        *string `json:"id"`
+	Predicate *string `json:"predicate"`
+}
+
 // SecurityContextDto defines model for SecurityContextDto.
 type SecurityContextDto struct {
 	// ContainerGid Group ID (GID) for running container when not using root privileges
@@ -309,6 +3770,936 @@ type SecurityContextDto struct {
 
 	// RunAsRoot Run container with root privileges. When disabled, requires UID and GID.
 	RunAsRoot *bool `json:"runAsRoot,omitempty"`
+}
+
+// SetupAttempt defines model for SetupAttempt.
+type SetupAttempt struct {
+	Application          *ExpandableFieldOfApplication     `json:"application,omitempty"`
+	AttachToSelf         *bool                             `json:"attach_to_self,omitempty"`
+	Created              *time.Time                        `json:"created,omitempty"`
+	Customer             *ExpandableFieldOfCustomer        `json:"customer,omitempty"`
+	FlowDirections       *[]string                         `json:"flow_directions"`
+	Id                   *string                           `json:"id"`
+	Livemode             *bool                             `json:"livemode,omitempty"`
+	Object               *string                           `json:"object"`
+	OnBehalfOf           *ExpandableFieldOfAccount         `json:"on_behalf_of,omitempty"`
+	PaymentMethod        *ExpandableFieldOfPaymentMethod   `json:"payment_method,omitempty"`
+	PaymentMethodDetails *SetupAttemptPaymentMethodDetails `json:"payment_method_details,omitempty"`
+	SetupError           *StripeError                      `json:"setup_error,omitempty"`
+	SetupIntent          *ExpandableFieldOfSetupIntent     `json:"setup_intent,omitempty"`
+	Status               *string                           `json:"status"`
+	Usage                *string                           `json:"usage"`
+}
+
+// SetupAttemptPaymentMethodDetails defines model for SetupAttemptPaymentMethodDetails.
+type SetupAttemptPaymentMethodDetails struct {
+	AcssDebit     *SetupAttemptPaymentMethodDetailsAcssDebit     `json:"acss_debit,omitempty"`
+	AuBecsDebit   *SetupAttemptPaymentMethodDetailsAuBecsDebit   `json:"au_becs_debit,omitempty"`
+	BacsDebit     *SetupAttemptPaymentMethodDetailsBacsDebit     `json:"bacs_debit,omitempty"`
+	Bancontact    *SetupAttemptPaymentMethodDetailsBancontact    `json:"bancontact,omitempty"`
+	Blik          *SetupAttemptPaymentMethodDetailsBlik          `json:"blik,omitempty"`
+	Boleto        *SetupAttemptPaymentMethodDetailsBoleto        `json:"boleto,omitempty"`
+	Card          *SetupAttemptPaymentMethodDetailsCard          `json:"card,omitempty"`
+	CardPresent   *SetupAttemptPaymentMethodDetailsCardPresent   `json:"card_present,omitempty"`
+	Cashapp       *SetupAttemptPaymentMethodDetailsCashapp       `json:"cashapp,omitempty"`
+	Ideal         *SetupAttemptPaymentMethodDetailsIdeal         `json:"ideal,omitempty"`
+	Klarna        *SetupAttemptPaymentMethodDetailsKlarna        `json:"klarna,omitempty"`
+	Link          *SetupAttemptPaymentMethodDetailsLink          `json:"link,omitempty"`
+	Paypal        *SetupAttemptPaymentMethodDetailsPaypal        `json:"paypal,omitempty"`
+	SepaDebit     *SetupAttemptPaymentMethodDetailsSepaDebit     `json:"sepa_debit,omitempty"`
+	Sofort        *SetupAttemptPaymentMethodDetailsSofort        `json:"sofort,omitempty"`
+	Type          *string                                        `json:"type"`
+	UsBankAccount *SetupAttemptPaymentMethodDetailsUsBankAccount `json:"us_bank_account,omitempty"`
+}
+
+// SetupAttemptPaymentMethodDetailsAcssDebit defines model for SetupAttemptPaymentMethodDetailsAcssDebit.
+type SetupAttemptPaymentMethodDetailsAcssDebit = map[string]interface{}
+
+// SetupAttemptPaymentMethodDetailsAuBecsDebit defines model for SetupAttemptPaymentMethodDetailsAuBecsDebit.
+type SetupAttemptPaymentMethodDetailsAuBecsDebit = map[string]interface{}
+
+// SetupAttemptPaymentMethodDetailsBacsDebit defines model for SetupAttemptPaymentMethodDetailsBacsDebit.
+type SetupAttemptPaymentMethodDetailsBacsDebit = map[string]interface{}
+
+// SetupAttemptPaymentMethodDetailsBancontact defines model for SetupAttemptPaymentMethodDetailsBancontact.
+type SetupAttemptPaymentMethodDetailsBancontact struct {
+	BankCode                  *string                         `json:"bank_code"`
+	BankName                  *string                         `json:"bank_name"`
+	Bic                       *string                         `json:"bic"`
+	GeneratedSepaDebit        *ExpandableFieldOfPaymentMethod `json:"generated_sepa_debit,omitempty"`
+	GeneratedSepaDebitMandate *ExpandableFieldOfMandate       `json:"generated_sepa_debit_mandate,omitempty"`
+	IbanLast4                 *string                         `json:"iban_last4"`
+	PreferredLanguage         *string                         `json:"preferred_language"`
+	VerifiedName              *string                         `json:"verified_name"`
+}
+
+// SetupAttemptPaymentMethodDetailsBlik defines model for SetupAttemptPaymentMethodDetailsBlik.
+type SetupAttemptPaymentMethodDetailsBlik = map[string]interface{}
+
+// SetupAttemptPaymentMethodDetailsBoleto defines model for SetupAttemptPaymentMethodDetailsBoleto.
+type SetupAttemptPaymentMethodDetailsBoleto = map[string]interface{}
+
+// SetupAttemptPaymentMethodDetailsCard defines model for SetupAttemptPaymentMethodDetailsCard.
+type SetupAttemptPaymentMethodDetailsCard struct {
+	Brand        *string                                           `json:"brand"`
+	Checks       *SetupAttemptPaymentMethodDetailsCardChecks       `json:"checks,omitempty"`
+	Country      *string                                           `json:"country"`
+	Description  *string                                           `json:"description"`
+	ExpMonth     *int64                                            `json:"exp_month"`
+	ExpYear      *int64                                            `json:"exp_year"`
+	Fingerprint  *string                                           `json:"fingerprint"`
+	Funding      *string                                           `json:"funding"`
+	Iin          *string                                           `json:"iin"`
+	Issuer       *string                                           `json:"issuer"`
+	Last4        *string                                           `json:"last4"`
+	Network      *string                                           `json:"network"`
+	ThreeDSecure *SetupAttemptPaymentMethodDetailsCardThreeDSecure `json:"three_d_secure,omitempty"`
+	Wallet       *SetupAttemptPaymentMethodDetailsCardWallet       `json:"wallet,omitempty"`
+}
+
+// SetupAttemptPaymentMethodDetailsCardChecks defines model for SetupAttemptPaymentMethodDetailsCardChecks.
+type SetupAttemptPaymentMethodDetailsCardChecks struct {
+	AddressLine1Check      *string `json:"address_line1_check"`
+	AddressPostalCodeCheck *string `json:"address_postal_code_check"`
+	CvcCheck               *string `json:"cvc_check"`
+}
+
+// SetupAttemptPaymentMethodDetailsCardPresent defines model for SetupAttemptPaymentMethodDetailsCardPresent.
+type SetupAttemptPaymentMethodDetailsCardPresent struct {
+	GeneratedCard *ExpandableFieldOfPaymentMethod `json:"generated_card,omitempty"`
+}
+
+// SetupAttemptPaymentMethodDetailsCardThreeDSecure defines model for SetupAttemptPaymentMethodDetailsCardThreeDSecure.
+type SetupAttemptPaymentMethodDetailsCardThreeDSecure struct {
+	AuthenticationFlow *string `json:"authentication_flow"`
+	Result             *string `json:"result"`
+	ResultReason       *string `json:"result_reason"`
+	Version            *string `json:"version"`
+}
+
+// SetupAttemptPaymentMethodDetailsCardWallet defines model for SetupAttemptPaymentMethodDetailsCardWallet.
+type SetupAttemptPaymentMethodDetailsCardWallet struct {
+	ApplePay  *SetupAttemptPaymentMethodDetailsCardWalletApplePay  `json:"apple_pay,omitempty"`
+	GooglePay *SetupAttemptPaymentMethodDetailsCardWalletGooglePay `json:"google_pay,omitempty"`
+	Type      *string                                              `json:"type"`
+}
+
+// SetupAttemptPaymentMethodDetailsCardWalletApplePay defines model for SetupAttemptPaymentMethodDetailsCardWalletApplePay.
+type SetupAttemptPaymentMethodDetailsCardWalletApplePay = map[string]interface{}
+
+// SetupAttemptPaymentMethodDetailsCardWalletGooglePay defines model for SetupAttemptPaymentMethodDetailsCardWalletGooglePay.
+type SetupAttemptPaymentMethodDetailsCardWalletGooglePay = map[string]interface{}
+
+// SetupAttemptPaymentMethodDetailsCashapp defines model for SetupAttemptPaymentMethodDetailsCashapp.
+type SetupAttemptPaymentMethodDetailsCashapp = map[string]interface{}
+
+// SetupAttemptPaymentMethodDetailsIdeal defines model for SetupAttemptPaymentMethodDetailsIdeal.
+type SetupAttemptPaymentMethodDetailsIdeal struct {
+	Bank                      *string                         `json:"bank"`
+	Bic                       *string                         `json:"bic"`
+	GeneratedSepaDebit        *ExpandableFieldOfPaymentMethod `json:"generated_sepa_debit,omitempty"`
+	GeneratedSepaDebitMandate *ExpandableFieldOfMandate       `json:"generated_sepa_debit_mandate,omitempty"`
+	IbanLast4                 *string                         `json:"iban_last4"`
+	VerifiedName              *string                         `json:"verified_name"`
+}
+
+// SetupAttemptPaymentMethodDetailsKlarna defines model for SetupAttemptPaymentMethodDetailsKlarna.
+type SetupAttemptPaymentMethodDetailsKlarna = map[string]interface{}
+
+// SetupAttemptPaymentMethodDetailsLink defines model for SetupAttemptPaymentMethodDetailsLink.
+type SetupAttemptPaymentMethodDetailsLink = map[string]interface{}
+
+// SetupAttemptPaymentMethodDetailsPaypal defines model for SetupAttemptPaymentMethodDetailsPaypal.
+type SetupAttemptPaymentMethodDetailsPaypal = map[string]interface{}
+
+// SetupAttemptPaymentMethodDetailsSepaDebit defines model for SetupAttemptPaymentMethodDetailsSepaDebit.
+type SetupAttemptPaymentMethodDetailsSepaDebit = map[string]interface{}
+
+// SetupAttemptPaymentMethodDetailsSofort defines model for SetupAttemptPaymentMethodDetailsSofort.
+type SetupAttemptPaymentMethodDetailsSofort struct {
+	BankCode                  *string                         `json:"bank_code"`
+	BankName                  *string                         `json:"bank_name"`
+	Bic                       *string                         `json:"bic"`
+	GeneratedSepaDebit        *ExpandableFieldOfPaymentMethod `json:"generated_sepa_debit,omitempty"`
+	GeneratedSepaDebitMandate *ExpandableFieldOfMandate       `json:"generated_sepa_debit_mandate,omitempty"`
+	IbanLast4                 *string                         `json:"iban_last4"`
+	PreferredLanguage         *string                         `json:"preferred_language"`
+	VerifiedName              *string                         `json:"verified_name"`
+}
+
+// SetupAttemptPaymentMethodDetailsUsBankAccount defines model for SetupAttemptPaymentMethodDetailsUsBankAccount.
+type SetupAttemptPaymentMethodDetailsUsBankAccount = map[string]interface{}
+
+// SetupIntent defines model for SetupIntent.
+type SetupIntent struct {
+	Application             *ExpandableFieldOfApplication       `json:"application,omitempty"`
+	AttachToSelf            *bool                               `json:"attach_to_self,omitempty"`
+	AutomaticPaymentMethods *SetupIntentAutomaticPaymentMethods `json:"automatic_payment_methods,omitempty"`
+	CancellationReason      *string                             `json:"cancellation_reason"`
+	ClientSecret            *string                             `json:"client_secret"`
+	Created                 *time.Time                          `json:"created,omitempty"`
+	Customer                *ExpandableFieldOfCustomer          `json:"customer,omitempty"`
+	Description             *string                             `json:"description"`
+	FlowDirections          *[]string                           `json:"flow_directions"`
+	Id                      *string                             `json:"id"`
+	LastSetupError          *StripeError                        `json:"last_setup_error,omitempty"`
+	LatestAttempt           *ExpandableFieldOfSetupAttempt      `json:"latest_attempt,omitempty"`
+	Livemode                *bool                               `json:"livemode,omitempty"`
+	Mandate                 *ExpandableFieldOfMandate           `json:"mandate,omitempty"`
+	Metadata                *map[string]*string                 `json:"metadata"`
+	NextAction              *SetupIntentNextAction              `json:"next_action,omitempty"`
+	Object                  *string                             `json:"object"`
+	OnBehalfOf              *ExpandableFieldOfAccount           `json:"on_behalf_of,omitempty"`
+	PaymentMethod           *ExpandableFieldOfPaymentMethod     `json:"payment_method,omitempty"`
+	PaymentMethodOptions    *SetupIntentPaymentMethodOptions    `json:"payment_method_options,omitempty"`
+	PaymentMethodTypes      *[]string                           `json:"payment_method_types"`
+	SingleUseMandate        *ExpandableFieldOfMandate           `json:"single_use_mandate,omitempty"`
+	Status                  *string                             `json:"status"`
+	Usage                   *string                             `json:"usage"`
+}
+
+// SetupIntentAutomaticPaymentMethods defines model for SetupIntentAutomaticPaymentMethods.
+type SetupIntentAutomaticPaymentMethods struct {
+	AllowRedirects *string `json:"allow_redirects"`
+	Enabled        *bool   `json:"enabled"`
+}
+
+// SetupIntentNextAction defines model for SetupIntentNextAction.
+type SetupIntentNextAction struct {
+	CashappHandleRedirectOrDisplayQrCode *SetupIntentNextActionCashappHandleRedirectOrDisplayQrCode `json:"cashapp_handle_redirect_or_display_qr_code,omitempty"`
+	RedirectToUrl                        *SetupIntentNextActionRedirectToUrl                        `json:"redirect_to_url,omitempty"`
+	Type                                 *string                                                    `json:"type"`
+	UseStripeSdk                         *SetupIntentNextActionUseStripeSdk                         `json:"use_stripe_sdk,omitempty"`
+	VerifyWithMicrodeposits              *SetupIntentNextActionVerifyWithMicrodeposits              `json:"verify_with_microdeposits,omitempty"`
+}
+
+// SetupIntentNextActionCashappHandleRedirectOrDisplayQrCode defines model for SetupIntentNextActionCashappHandleRedirectOrDisplayQrCode.
+type SetupIntentNextActionCashappHandleRedirectOrDisplayQrCode struct {
+	HostedInstructionsUrl *string                                                          `json:"hosted_instructions_url"`
+	MobileAuthUrl         *string                                                          `json:"mobile_auth_url"`
+	QrCode                *SetupIntentNextActionCashappHandleRedirectOrDisplayQrCodeQrCode `json:"qr_code,omitempty"`
+}
+
+// SetupIntentNextActionCashappHandleRedirectOrDisplayQrCodeQrCode defines model for SetupIntentNextActionCashappHandleRedirectOrDisplayQrCodeQrCode.
+type SetupIntentNextActionCashappHandleRedirectOrDisplayQrCodeQrCode struct {
+	ExpiresAt   *time.Time `json:"expires_at,omitempty"`
+	ImageUrlPng *string    `json:"image_url_png"`
+	ImageUrlSvg *string    `json:"image_url_svg"`
+}
+
+// SetupIntentNextActionRedirectToUrl defines model for SetupIntentNextActionRedirectToUrl.
+type SetupIntentNextActionRedirectToUrl struct {
+	ReturnUrl *string `json:"return_url"`
+	Url       *string `json:"url"`
+}
+
+// SetupIntentNextActionUseStripeSdk defines model for SetupIntentNextActionUseStripeSdk.
+type SetupIntentNextActionUseStripeSdk = map[string]interface{}
+
+// SetupIntentNextActionVerifyWithMicrodeposits defines model for SetupIntentNextActionVerifyWithMicrodeposits.
+type SetupIntentNextActionVerifyWithMicrodeposits struct {
+	ArrivalDate           *time.Time `json:"arrival_date,omitempty"`
+	HostedVerificationUrl *string    `json:"hosted_verification_url"`
+	MicrodepositType      *string    `json:"microdeposit_type"`
+}
+
+// SetupIntentPaymentMethodOptions defines model for SetupIntentPaymentMethodOptions.
+type SetupIntentPaymentMethodOptions struct {
+	AcssDebit     *SetupIntentPaymentMethodOptionsAcssDebit     `json:"acss_debit,omitempty"`
+	Blik          *SetupIntentPaymentMethodOptionsBlik          `json:"blik,omitempty"`
+	Card          *SetupIntentPaymentMethodOptionsCard          `json:"card,omitempty"`
+	Link          *SetupIntentPaymentMethodOptionsLink          `json:"link,omitempty"`
+	Paypal        *SetupIntentPaymentMethodOptionsPaypal        `json:"paypal,omitempty"`
+	SepaDebit     *SetupIntentPaymentMethodOptionsSepaDebit     `json:"sepa_debit,omitempty"`
+	UsBankAccount *SetupIntentPaymentMethodOptionsUsBankAccount `json:"us_bank_account,omitempty"`
+}
+
+// SetupIntentPaymentMethodOptionsAcssDebit defines model for SetupIntentPaymentMethodOptionsAcssDebit.
+type SetupIntentPaymentMethodOptionsAcssDebit struct {
+	Currency           *string                                                 `json:"currency"`
+	MandateOptions     *SetupIntentPaymentMethodOptionsAcssDebitMandateOptions `json:"mandate_options,omitempty"`
+	VerificationMethod *string                                                 `json:"verification_method"`
+}
+
+// SetupIntentPaymentMethodOptionsAcssDebitMandateOptions defines model for SetupIntentPaymentMethodOptionsAcssDebitMandateOptions.
+type SetupIntentPaymentMethodOptionsAcssDebitMandateOptions struct {
+	CustomMandateUrl    *string   `json:"custom_mandate_url"`
+	DefaultFor          *[]string `json:"default_for"`
+	IntervalDescription *string   `json:"interval_description"`
+	PaymentSchedule     *string   `json:"payment_schedule"`
+	TransactionType     *string   `json:"transaction_type"`
+}
+
+// SetupIntentPaymentMethodOptionsBlik defines model for SetupIntentPaymentMethodOptionsBlik.
+type SetupIntentPaymentMethodOptionsBlik struct {
+	MandateOptions *SetupIntentPaymentMethodOptionsBlikMandateOptions `json:"mandate_options,omitempty"`
+}
+
+// SetupIntentPaymentMethodOptionsBlikMandateOptions defines model for SetupIntentPaymentMethodOptionsBlikMandateOptions.
+type SetupIntentPaymentMethodOptionsBlikMandateOptions struct {
+	ExpiresAfter *time.Time                                                   `json:"expires_after"`
+	OffSession   *SetupIntentPaymentMethodOptionsBlikMandateOptionsOffSession `json:"off_session,omitempty"`
+	Type         *string                                                      `json:"type"`
+}
+
+// SetupIntentPaymentMethodOptionsBlikMandateOptionsOffSession defines model for SetupIntentPaymentMethodOptionsBlikMandateOptionsOffSession.
+type SetupIntentPaymentMethodOptionsBlikMandateOptionsOffSession struct {
+	Amount        *int64  `json:"amount"`
+	Currency      *string `json:"currency"`
+	Interval      *string `json:"interval"`
+	IntervalCount *int64  `json:"interval_count"`
+}
+
+// SetupIntentPaymentMethodOptionsCard defines model for SetupIntentPaymentMethodOptionsCard.
+type SetupIntentPaymentMethodOptionsCard struct {
+	MandateOptions      *SetupIntentPaymentMethodOptionsCardMandateOptions `json:"mandate_options,omitempty"`
+	Network             *string                                            `json:"network"`
+	RequestThreeDSecure *string                                            `json:"request_three_d_secure"`
+}
+
+// SetupIntentPaymentMethodOptionsCardMandateOptions defines model for SetupIntentPaymentMethodOptionsCardMandateOptions.
+type SetupIntentPaymentMethodOptionsCardMandateOptions struct {
+	Amount         *int64     `json:"amount,omitempty"`
+	AmountType     *string    `json:"amount_type"`
+	Currency       *string    `json:"currency"`
+	Description    *string    `json:"description"`
+	EndDate        *time.Time `json:"end_date"`
+	Interval       *string    `json:"interval"`
+	IntervalCount  *int64     `json:"interval_count"`
+	Reference      *string    `json:"reference"`
+	StartDate      *time.Time `json:"start_date,omitempty"`
+	SupportedTypes *[]string  `json:"supported_types"`
+}
+
+// SetupIntentPaymentMethodOptionsLink defines model for SetupIntentPaymentMethodOptionsLink.
+type SetupIntentPaymentMethodOptionsLink struct {
+	PersistentToken *string `json:"persistent_token"`
+}
+
+// SetupIntentPaymentMethodOptionsPaypal defines model for SetupIntentPaymentMethodOptionsPaypal.
+type SetupIntentPaymentMethodOptionsPaypal struct {
+	BillingAgreementId *string `json:"billing_agreement_id"`
+}
+
+// SetupIntentPaymentMethodOptionsSepaDebit defines model for SetupIntentPaymentMethodOptionsSepaDebit.
+type SetupIntentPaymentMethodOptionsSepaDebit struct {
+	MandateOptions *SetupIntentPaymentMethodOptionsSepaDebitMandateOptions `json:"mandate_options,omitempty"`
+}
+
+// SetupIntentPaymentMethodOptionsSepaDebitMandateOptions defines model for SetupIntentPaymentMethodOptionsSepaDebitMandateOptions.
+type SetupIntentPaymentMethodOptionsSepaDebitMandateOptions = map[string]interface{}
+
+// SetupIntentPaymentMethodOptionsUsBankAccount defines model for SetupIntentPaymentMethodOptionsUsBankAccount.
+type SetupIntentPaymentMethodOptionsUsBankAccount struct {
+	FinancialConnections *SetupIntentPaymentMethodOptionsUsBankAccountFinancialConnections `json:"financial_connections,omitempty"`
+	VerificationMethod   *string                                                           `json:"verification_method"`
+}
+
+// SetupIntentPaymentMethodOptionsUsBankAccountFinancialConnections defines model for SetupIntentPaymentMethodOptionsUsBankAccountFinancialConnections.
+type SetupIntentPaymentMethodOptionsUsBankAccountFinancialConnections struct {
+	Permissions *[]string `json:"permissions"`
+	ReturnUrl   *string   `json:"return_url"`
+}
+
+// Shipping defines model for Shipping.
+type Shipping struct {
+	Address        *Address `json:"address,omitempty"`
+	Carrier        *string  `json:"carrier"`
+	Name           *string  `json:"name"`
+	Phone          *string  `json:"phone"`
+	TrackingNumber *string  `json:"tracking_number"`
+}
+
+// ShippingRate defines model for ShippingRate.
+type ShippingRate struct {
+	Active           *bool                         `json:"active,omitempty"`
+	Created          *time.Time                    `json:"created,omitempty"`
+	DeliveryEstimate *ShippingRateDeliveryEstimate `json:"delivery_estimate,omitempty"`
+	DisplayName      *string                       `json:"display_name"`
+	FixedAmount      *ShippingRateFixedAmount      `json:"fixed_amount,omitempty"`
+	Id               *string                       `json:"id"`
+	Livemode         *bool                         `json:"livemode,omitempty"`
+	Metadata         *map[string]*string           `json:"metadata"`
+	Object           *string                       `json:"object"`
+	TaxBehavior      *string                       `json:"tax_behavior"`
+	TaxCode          *ExpandableFieldOfTaxCode     `json:"tax_code,omitempty"`
+	Type             *string                       `json:"type"`
+}
+
+// ShippingRateDeliveryEstimate defines model for ShippingRateDeliveryEstimate.
+type ShippingRateDeliveryEstimate struct {
+	Maximum *ShippingRateDeliveryEstimateMaximum `json:"maximum,omitempty"`
+	Minimum *ShippingRateDeliveryEstimateMinimum `json:"minimum,omitempty"`
+}
+
+// ShippingRateDeliveryEstimateMaximum defines model for ShippingRateDeliveryEstimateMaximum.
+type ShippingRateDeliveryEstimateMaximum struct {
+	Unit  *string `json:"unit"`
+	Value *int64  `json:"value,omitempty"`
+}
+
+// ShippingRateDeliveryEstimateMinimum defines model for ShippingRateDeliveryEstimateMinimum.
+type ShippingRateDeliveryEstimateMinimum struct {
+	Unit  *string `json:"unit"`
+	Value *int64  `json:"value,omitempty"`
+}
+
+// ShippingRateFixedAmount defines model for ShippingRateFixedAmount.
+type ShippingRateFixedAmount struct {
+	Amount          *int64                                             `json:"amount,omitempty"`
+	Currency        *string                                            `json:"currency"`
+	CurrencyOptions *map[string]ShippingRateFixedAmountCurrencyOptions `json:"currency_options"`
+}
+
+// ShippingRateFixedAmountCurrencyOptions defines model for ShippingRateFixedAmountCurrencyOptions.
+type ShippingRateFixedAmountCurrencyOptions struct {
+	Amount      *int64  `json:"amount,omitempty"`
+	TaxBehavior *string `json:"tax_behavior"`
+}
+
+// StripeError defines model for StripeError.
+type StripeError struct {
+	Charge            *string         `json:"charge"`
+	Code              *string         `json:"code"`
+	DeclineCode       *string         `json:"decline_code"`
+	DocUrl            *string         `json:"doc_url"`
+	Error             *string         `json:"error"`
+	ErrorDescription  *string         `json:"error_description"`
+	Message           *string         `json:"message"`
+	Param             *string         `json:"param"`
+	PaymentIntent     *PaymentIntent  `json:"payment_intent,omitempty"`
+	PaymentMethod     *PaymentMethod  `json:"payment_method,omitempty"`
+	PaymentMethodType *string         `json:"payment_method_type"`
+	RequestLogUrl     *string         `json:"request_log_url"`
+	SetupIntent       *SetupIntent    `json:"setup_intent,omitempty"`
+	Source            *IPaymentSource `json:"source,omitempty"`
+	Type              *string         `json:"type"`
+}
+
+// StripeListOfApplicationFeeRefund defines model for StripeListOfApplicationFeeRefund.
+type StripeListOfApplicationFeeRefund struct {
+	Data    *[]ApplicationFeeRefund `json:"data"`
+	HasMore *bool                   `json:"has_more,omitempty"`
+	Object  *string                 `json:"object"`
+	Url     *string                 `json:"url"`
+}
+
+// StripeListOfFileLink defines model for StripeListOfFileLink.
+type StripeListOfFileLink struct {
+	Data    *[]FileLink `json:"data"`
+	HasMore *bool       `json:"has_more,omitempty"`
+	Object  *string     `json:"object"`
+	Url     *string     `json:"url"`
+}
+
+// StripeListOfIExternalAccount defines model for StripeListOfIExternalAccount.
+type StripeListOfIExternalAccount struct {
+	Data    *[]IExternalAccount `json:"data"`
+	HasMore *bool               `json:"has_more,omitempty"`
+	Object  *string             `json:"object"`
+	Url     *string             `json:"url"`
+}
+
+// StripeListOfIPaymentSource defines model for StripeListOfIPaymentSource.
+type StripeListOfIPaymentSource struct {
+	Data    *[]IPaymentSource `json:"data"`
+	HasMore *bool             `json:"has_more,omitempty"`
+	Object  *string           `json:"object"`
+	Url     *string           `json:"url"`
+}
+
+// StripeListOfInvoiceLineItem defines model for StripeListOfInvoiceLineItem.
+type StripeListOfInvoiceLineItem struct {
+	Data    *[]InvoiceLineItem `json:"data"`
+	HasMore *bool              `json:"has_more,omitempty"`
+	Object  *string            `json:"object"`
+	Url     *string            `json:"url"`
+}
+
+// StripeListOfLineItem defines model for StripeListOfLineItem.
+type StripeListOfLineItem struct {
+	Data    *[]LineItem `json:"data"`
+	HasMore *bool       `json:"has_more,omitempty"`
+	Object  *string     `json:"object"`
+	Url     *string     `json:"url"`
+}
+
+// StripeListOfRefund defines model for StripeListOfRefund.
+type StripeListOfRefund struct {
+	Data    *[]Refund `json:"data"`
+	HasMore *bool     `json:"has_more,omitempty"`
+	Object  *string   `json:"object"`
+	Url     *string   `json:"url"`
+}
+
+// StripeListOfSubscription defines model for StripeListOfSubscription.
+type StripeListOfSubscription struct {
+	Data    *[]Subscription `json:"data"`
+	HasMore *bool           `json:"has_more,omitempty"`
+	Object  *string         `json:"object"`
+	Url     *string         `json:"url"`
+}
+
+// StripeListOfSubscriptionItem defines model for StripeListOfSubscriptionItem.
+type StripeListOfSubscriptionItem struct {
+	Data    *[]SubscriptionItem `json:"data"`
+	HasMore *bool               `json:"has_more,omitempty"`
+	Object  *string             `json:"object"`
+	Url     *string             `json:"url"`
+}
+
+// StripeListOfTaxId defines model for StripeListOfTaxId.
+type StripeListOfTaxId struct {
+	Data    *[]TaxId `json:"data"`
+	HasMore *bool    `json:"has_more,omitempty"`
+	Object  *string  `json:"object"`
+	Url     *string  `json:"url"`
+}
+
+// StripeListOfTransferReversal defines model for StripeListOfTransferReversal.
+type StripeListOfTransferReversal struct {
+	Data    *[]TransferReversal `json:"data"`
+	HasMore *bool               `json:"has_more,omitempty"`
+	Object  *string             `json:"object"`
+	Url     *string             `json:"url"`
+}
+
+// StripeResponse defines model for StripeResponse.
+type StripeResponse struct {
+	Content        *string                                    `json:"content"`
+	Date           *time.Time                                 `json:"date"`
+	Headers        *[]KeyValuePairOfStringIEnumerableOfString `json:"headers"`
+	IdempotencyKey *string                                    `json:"idempotencyKey"`
+	RequestId      *string                                    `json:"requestId"`
+	StatusCode     *HttpStatusCode                            `json:"statusCode,omitempty"`
+}
+
+// Subscription defines model for Subscription.
+type Subscription struct {
+	Application                   *ExpandableFieldOfApplication           `json:"application,omitempty"`
+	ApplicationFeePercent         *float64                                `json:"application_fee_percent"`
+	AutomaticTax                  *SubscriptionAutomaticTax               `json:"automatic_tax,omitempty"`
+	BillingCycleAnchor            *time.Time                              `json:"billing_cycle_anchor,omitempty"`
+	BillingThresholds             *SubscriptionBillingThresholds          `json:"billing_thresholds,omitempty"`
+	CancelAt                      *time.Time                              `json:"cancel_at"`
+	CancelAtPeriodEnd             *bool                                   `json:"cancel_at_period_end,omitempty"`
+	CanceledAt                    *time.Time                              `json:"canceled_at"`
+	CancellationDetails           *SubscriptionCancellationDetails        `json:"cancellation_details,omitempty"`
+	CollectionMethod              *string                                 `json:"collection_method"`
+	Created                       *time.Time                              `json:"created,omitempty"`
+	Currency                      *string                                 `json:"currency"`
+	CurrentPeriodEnd              *time.Time                              `json:"current_period_end,omitempty"`
+	CurrentPeriodStart            *time.Time                              `json:"current_period_start,omitempty"`
+	Customer                      *ExpandableFieldOfCustomer              `json:"customer,omitempty"`
+	DaysUntilDue                  *int64                                  `json:"days_until_due"`
+	DefaultPaymentMethod          *ExpandableFieldOfPaymentMethod         `json:"default_payment_method,omitempty"`
+	DefaultSource                 *ExpandableFieldOfIPaymentSource        `json:"default_source,omitempty"`
+	DefaultTaxRates               *[]TaxRate                              `json:"default_tax_rates"`
+	Description                   *string                                 `json:"description"`
+	Discount                      *Discount                               `json:"discount,omitempty"`
+	EndedAt                       *time.Time                              `json:"ended_at"`
+	Id                            *string                                 `json:"id"`
+	Items                         *StripeListOfSubscriptionItem           `json:"items,omitempty"`
+	LatestInvoice                 *ExpandableFieldOfInvoice               `json:"latest_invoice,omitempty"`
+	Livemode                      *bool                                   `json:"livemode,omitempty"`
+	Metadata                      *map[string]*string                     `json:"metadata"`
+	NextPendingInvoiceItemInvoice *time.Time                              `json:"next_pending_invoice_item_invoice"`
+	Object                        *string                                 `json:"object"`
+	OnBehalfOf                    *ExpandableFieldOfAccount               `json:"on_behalf_of,omitempty"`
+	PauseCollection               *SubscriptionPauseCollection            `json:"pause_collection,omitempty"`
+	PaymentSettings               *SubscriptionPaymentSettings            `json:"payment_settings,omitempty"`
+	PendingInvoiceItemInterval    *SubscriptionPendingInvoiceItemInterval `json:"pending_invoice_item_interval,omitempty"`
+	PendingSetupIntent            *ExpandableFieldOfSetupIntent           `json:"pending_setup_intent,omitempty"`
+	PendingUpdate                 *SubscriptionPendingUpdate              `json:"pending_update,omitempty"`
+	Schedule                      *ExpandableFieldOfSubscriptionSchedule  `json:"schedule,omitempty"`
+	StartDate                     *time.Time                              `json:"start_date,omitempty"`
+	Status                        *string                                 `json:"status"`
+	TestClock                     *ExpandableFieldOfTestClock             `json:"test_clock,omitempty"`
+	TransferData                  *SubscriptionTransferData               `json:"transfer_data,omitempty"`
+	TrialEnd                      *time.Time                              `json:"trial_end"`
+	TrialSettings                 *SubscriptionTrialSettings              `json:"trial_settings,omitempty"`
+	TrialStart                    *time.Time                              `json:"trial_start"`
+}
+
+// SubscriptionAutomaticTax defines model for SubscriptionAutomaticTax.
+type SubscriptionAutomaticTax struct {
+	Enabled *bool `json:"enabled,omitempty"`
+}
+
+// SubscriptionBillingThresholds defines model for SubscriptionBillingThresholds.
+type SubscriptionBillingThresholds struct {
+	AmountGte               *int64 `json:"amount_gte"`
+	ResetBillingCycleAnchor *bool  `json:"reset_billing_cycle_anchor"`
+}
+
+// SubscriptionCancellationDetails defines model for SubscriptionCancellationDetails.
+type SubscriptionCancellationDetails struct {
+	Comment  *string `json:"comment"`
+	Feedback *string `json:"feedback"`
+	Reason   *string `json:"reason"`
+}
+
+// SubscriptionItem defines model for SubscriptionItem.
+type SubscriptionItem struct {
+	BillingThresholds *SubscriptionItemBillingThresholds `json:"billing_thresholds,omitempty"`
+	Created           *time.Time                         `json:"created,omitempty"`
+	Deleted           *bool                              `json:"deleted"`
+	Id                *string                            `json:"id"`
+	Metadata          *map[string]*string                `json:"metadata"`
+	Object            *string                            `json:"object"`
+	Plan              *Plan                              `json:"plan,omitempty"`
+	Price             *Price                             `json:"price,omitempty"`
+	Quantity          *int64                             `json:"quantity,omitempty"`
+	Subscription      *string                            `json:"subscription"`
+	TaxRates          *[]TaxRate                         `json:"tax_rates"`
+}
+
+// SubscriptionItemBillingThresholds defines model for SubscriptionItemBillingThresholds.
+type SubscriptionItemBillingThresholds struct {
+	UsageGte *int64 `json:"usage_gte"`
+}
+
+// SubscriptionPauseCollection defines model for SubscriptionPauseCollection.
+type SubscriptionPauseCollection struct {
+	Behavior  *string    `json:"behavior"`
+	ResumesAt *time.Time `json:"resumes_at"`
+}
+
+// SubscriptionPaymentSettings defines model for SubscriptionPaymentSettings.
+type SubscriptionPaymentSettings struct {
+	PaymentMethodOptions     *SubscriptionPaymentSettingsPaymentMethodOptions `json:"payment_method_options,omitempty"`
+	PaymentMethodTypes       *[]string                                        `json:"payment_method_types"`
+	SaveDefaultPaymentMethod *string                                          `json:"save_default_payment_method"`
+}
+
+// SubscriptionPaymentSettingsPaymentMethodOptions defines model for SubscriptionPaymentSettingsPaymentMethodOptions.
+type SubscriptionPaymentSettingsPaymentMethodOptions struct {
+	AcssDebit       *SubscriptionPaymentSettingsPaymentMethodOptionsAcssDebit       `json:"acss_debit,omitempty"`
+	Bancontact      *SubscriptionPaymentSettingsPaymentMethodOptionsBancontact      `json:"bancontact,omitempty"`
+	Card            *SubscriptionPaymentSettingsPaymentMethodOptionsCard            `json:"card,omitempty"`
+	CustomerBalance *SubscriptionPaymentSettingsPaymentMethodOptionsCustomerBalance `json:"customer_balance,omitempty"`
+	Konbini         *SubscriptionPaymentSettingsPaymentMethodOptionsKonbini         `json:"konbini,omitempty"`
+	UsBankAccount   *SubscriptionPaymentSettingsPaymentMethodOptionsUsBankAccount   `json:"us_bank_account,omitempty"`
+}
+
+// SubscriptionPaymentSettingsPaymentMethodOptionsAcssDebit defines model for SubscriptionPaymentSettingsPaymentMethodOptionsAcssDebit.
+type SubscriptionPaymentSettingsPaymentMethodOptionsAcssDebit struct {
+	MandateOptions     *SubscriptionPaymentSettingsPaymentMethodOptionsAcssDebitMandateOptions `json:"mandate_options,omitempty"`
+	VerificationMethod *string                                                                 `json:"verification_method"`
+}
+
+// SubscriptionPaymentSettingsPaymentMethodOptionsAcssDebitMandateOptions defines model for SubscriptionPaymentSettingsPaymentMethodOptionsAcssDebitMandateOptions.
+type SubscriptionPaymentSettingsPaymentMethodOptionsAcssDebitMandateOptions struct {
+	TransactionType *string `json:"transaction_type"`
+}
+
+// SubscriptionPaymentSettingsPaymentMethodOptionsBancontact defines model for SubscriptionPaymentSettingsPaymentMethodOptionsBancontact.
+type SubscriptionPaymentSettingsPaymentMethodOptionsBancontact struct {
+	PreferredLanguage *string `json:"preferred_language"`
+}
+
+// SubscriptionPaymentSettingsPaymentMethodOptionsCard defines model for SubscriptionPaymentSettingsPaymentMethodOptionsCard.
+type SubscriptionPaymentSettingsPaymentMethodOptionsCard struct {
+	MandateOptions      *SubscriptionPaymentSettingsPaymentMethodOptionsCardMandateOptions `json:"mandate_options,omitempty"`
+	Network             *string                                                            `json:"network"`
+	RequestThreeDSecure *string                                                            `json:"request_three_d_secure"`
+}
+
+// SubscriptionPaymentSettingsPaymentMethodOptionsCardMandateOptions defines model for SubscriptionPaymentSettingsPaymentMethodOptionsCardMandateOptions.
+type SubscriptionPaymentSettingsPaymentMethodOptionsCardMandateOptions struct {
+	Amount      *int64  `json:"amount"`
+	AmountType  *string `json:"amount_type"`
+	Description *string `json:"description"`
+}
+
+// SubscriptionPaymentSettingsPaymentMethodOptionsCustomerBalance defines model for SubscriptionPaymentSettingsPaymentMethodOptionsCustomerBalance.
+type SubscriptionPaymentSettingsPaymentMethodOptionsCustomerBalance struct {
+	BankTransfer *SubscriptionPaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransfer `json:"bank_transfer,omitempty"`
+	FundingType  *string                                                                     `json:"funding_type"`
+}
+
+// SubscriptionPaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransfer defines model for SubscriptionPaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransfer.
+type SubscriptionPaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransfer struct {
+	EuBankTransfer *SubscriptionPaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer `json:"eu_bank_transfer,omitempty"`
+	Type           *string                                                                                   `json:"type"`
+}
+
+// SubscriptionPaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer defines model for SubscriptionPaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer.
+type SubscriptionPaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer struct {
+	Country *string `json:"country"`
+}
+
+// SubscriptionPaymentSettingsPaymentMethodOptionsKonbini defines model for SubscriptionPaymentSettingsPaymentMethodOptionsKonbini.
+type SubscriptionPaymentSettingsPaymentMethodOptionsKonbini = map[string]interface{}
+
+// SubscriptionPaymentSettingsPaymentMethodOptionsUsBankAccount defines model for SubscriptionPaymentSettingsPaymentMethodOptionsUsBankAccount.
+type SubscriptionPaymentSettingsPaymentMethodOptionsUsBankAccount struct {
+	FinancialConnections *SubscriptionPaymentSettingsPaymentMethodOptionsUsBankAccountFinancialConnections `json:"financial_connections,omitempty"`
+	VerificationMethod   *string                                                                           `json:"verification_method"`
+}
+
+// SubscriptionPaymentSettingsPaymentMethodOptionsUsBankAccountFinancialConnections defines model for SubscriptionPaymentSettingsPaymentMethodOptionsUsBankAccountFinancialConnections.
+type SubscriptionPaymentSettingsPaymentMethodOptionsUsBankAccountFinancialConnections struct {
+	Permissions *[]string `json:"permissions"`
+}
+
+// SubscriptionPendingInvoiceItemInterval defines model for SubscriptionPendingInvoiceItemInterval.
+type SubscriptionPendingInvoiceItemInterval struct {
+	Interval      *string `json:"interval"`
+	IntervalCount *int64  `json:"interval_count,omitempty"`
+}
+
+// SubscriptionPendingUpdate defines model for SubscriptionPendingUpdate.
+type SubscriptionPendingUpdate struct {
+	BillingCycleAnchor *time.Time          `json:"billing_cycle_anchor"`
+	ExpiresAt          *time.Time          `json:"expires_at,omitempty"`
+	SubscriptionItems  *[]SubscriptionItem `json:"subscription_items"`
+	TrialEnd           *time.Time          `json:"trial_end"`
+	TrialFromPlan      *bool               `json:"trial_from_plan"`
+}
+
+// SubscriptionSchedule defines model for SubscriptionSchedule.
+type SubscriptionSchedule struct {
+	Application          *ExpandableFieldOfApplication        `json:"application,omitempty"`
+	CanceledAt           *time.Time                           `json:"canceled_at"`
+	CompletedAt          *time.Time                           `json:"completed_at"`
+	Created              *time.Time                           `json:"created,omitempty"`
+	CurrentPhase         *SubscriptionScheduleCurrentPhase    `json:"current_phase,omitempty"`
+	Customer             *ExpandableFieldOfCustomer           `json:"customer,omitempty"`
+	DefaultSettings      *SubscriptionScheduleDefaultSettings `json:"default_settings,omitempty"`
+	EndBehavior          *string                              `json:"end_behavior"`
+	Id                   *string                              `json:"id"`
+	Livemode             *bool                                `json:"livemode,omitempty"`
+	Metadata             *map[string]*string                  `json:"metadata"`
+	Object               *string                              `json:"object"`
+	Phases               *[]SubscriptionSchedulePhase         `json:"phases"`
+	ReleasedAt           *time.Time                           `json:"released_at"`
+	ReleasedSubscription *string                              `json:"released_subscription"`
+	Status               *string                              `json:"status"`
+	Subscription         *ExpandableFieldOfSubscription       `json:"subscription,omitempty"`
+	TestClock            *ExpandableFieldOfTestClock          `json:"test_clock,omitempty"`
+}
+
+// SubscriptionScheduleCurrentPhase defines model for SubscriptionScheduleCurrentPhase.
+type SubscriptionScheduleCurrentPhase struct {
+	EndDate   *time.Time `json:"end_date"`
+	StartDate *time.Time `json:"start_date"`
+}
+
+// SubscriptionScheduleDefaultSettings defines model for SubscriptionScheduleDefaultSettings.
+type SubscriptionScheduleDefaultSettings struct {
+	ApplicationFeePercent *float64                                              `json:"application_fee_percent"`
+	AutomaticTax          *SubscriptionScheduleDefaultSettingsAutomaticTax      `json:"automatic_tax,omitempty"`
+	BillingCycleAnchor    *string                                               `json:"billing_cycle_anchor"`
+	BillingThresholds     *SubscriptionScheduleDefaultSettingsBillingThresholds `json:"billing_thresholds,omitempty"`
+	CollectionMethod      *string                                               `json:"collection_method"`
+	DefaultPaymentMethod  *ExpandableFieldOfPaymentMethod                       `json:"default_payment_method,omitempty"`
+	Description           *string                                               `json:"description"`
+	InvoiceSettings       *SubscriptionScheduleDefaultSettingsInvoiceSettings   `json:"invoice_settings,omitempty"`
+	OnBehalfOf            *ExpandableFieldOfAccount                             `json:"on_behalf_of,omitempty"`
+	TransferData          *SubscriptionScheduleDefaultSettingsTransferData      `json:"transfer_data,omitempty"`
+}
+
+// SubscriptionScheduleDefaultSettingsAutomaticTax defines model for SubscriptionScheduleDefaultSettingsAutomaticTax.
+type SubscriptionScheduleDefaultSettingsAutomaticTax struct {
+	Enabled *bool `json:"enabled,omitempty"`
+}
+
+// SubscriptionScheduleDefaultSettingsBillingThresholds defines model for SubscriptionScheduleDefaultSettingsBillingThresholds.
+type SubscriptionScheduleDefaultSettingsBillingThresholds struct {
+	AmountGte               *int64 `json:"amount_gte"`
+	ResetBillingCycleAnchor *bool  `json:"reset_billing_cycle_anchor"`
+}
+
+// SubscriptionScheduleDefaultSettingsInvoiceSettings defines model for SubscriptionScheduleDefaultSettingsInvoiceSettings.
+type SubscriptionScheduleDefaultSettingsInvoiceSettings struct {
+	DaysUntilDue *int64 `json:"days_until_due"`
+}
+
+// SubscriptionScheduleDefaultSettingsTransferData defines model for SubscriptionScheduleDefaultSettingsTransferData.
+type SubscriptionScheduleDefaultSettingsTransferData struct {
+	AmountPercent *float64                  `json:"amount_percent"`
+	Destination   *ExpandableFieldOfAccount `json:"destination,omitempty"`
+}
+
+// SubscriptionSchedulePhase defines model for SubscriptionSchedulePhase.
+type SubscriptionSchedulePhase struct {
+	AddInvoiceItems       *[]SubscriptionSchedulePhaseAddInvoiceItem  `json:"add_invoice_items"`
+	ApplicationFeePercent *float64                                    `json:"application_fee_percent"`
+	AutomaticTax          *SubscriptionSchedulePhaseAutomaticTax      `json:"automatic_tax,omitempty"`
+	BillingCycleAnchor    *string                                     `json:"billing_cycle_anchor"`
+	BillingThresholds     *SubscriptionSchedulePhaseBillingThresholds `json:"billing_thresholds,omitempty"`
+	CollectionMethod      *string                                     `json:"collection_method"`
+	Coupon                *ExpandableFieldOfCoupon                    `json:"coupon,omitempty"`
+	Currency              *string                                     `json:"currency"`
+	DefaultPaymentMethod  *ExpandableFieldOfPaymentMethod             `json:"default_payment_method,omitempty"`
+	DefaultTaxRates       *[]TaxRate                                  `json:"default_tax_rates"`
+	Description           *string                                     `json:"description"`
+	EndDate               *time.Time                                  `json:"end_date,omitempty"`
+	InvoiceSettings       *SubscriptionSchedulePhaseInvoiceSettings   `json:"invoice_settings,omitempty"`
+	Items                 *[]SubscriptionSchedulePhaseItem            `json:"items"`
+	Metadata              *map[string]*string                         `json:"metadata"`
+	OnBehalfOf            *ExpandableFieldOfAccount                   `json:"on_behalf_of,omitempty"`
+	ProrationBehavior     *string                                     `json:"proration_behavior"`
+	StartDate             *time.Time                                  `json:"start_date,omitempty"`
+	TransferData          *SubscriptionSchedulePhaseTransferData      `json:"transfer_data,omitempty"`
+	TrialEnd              *time.Time                                  `json:"trial_end"`
+}
+
+// SubscriptionSchedulePhaseAddInvoiceItem defines model for SubscriptionSchedulePhaseAddInvoiceItem.
+type SubscriptionSchedulePhaseAddInvoiceItem struct {
+	Price    *ExpandableFieldOfPrice `json:"price,omitempty"`
+	Quantity *int64                  `json:"quantity"`
+	TaxRates *[]TaxRate              `json:"tax_rates"`
+}
+
+// SubscriptionSchedulePhaseAutomaticTax defines model for SubscriptionSchedulePhaseAutomaticTax.
+type SubscriptionSchedulePhaseAutomaticTax struct {
+	Enabled *bool `json:"enabled,omitempty"`
+}
+
+// SubscriptionSchedulePhaseBillingThresholds defines model for SubscriptionSchedulePhaseBillingThresholds.
+type SubscriptionSchedulePhaseBillingThresholds struct {
+	AmountGte               *int64 `json:"amount_gte"`
+	ResetBillingCycleAnchor *bool  `json:"reset_billing_cycle_anchor"`
+}
+
+// SubscriptionSchedulePhaseInvoiceSettings defines model for SubscriptionSchedulePhaseInvoiceSettings.
+type SubscriptionSchedulePhaseInvoiceSettings struct {
+	DaysUntilDue *int64 `json:"days_until_due"`
+}
+
+// SubscriptionSchedulePhaseItem defines model for SubscriptionSchedulePhaseItem.
+type SubscriptionSchedulePhaseItem struct {
+	BillingThresholds *SubscriptionSchedulePhaseItemBillingThresholds `json:"billing_thresholds,omitempty"`
+	Metadata          *map[string]*string                             `json:"metadata"`
+	Plan              *ExpandableFieldOfPlan                          `json:"plan,omitempty"`
+	Price             *ExpandableFieldOfPrice                         `json:"price,omitempty"`
+	Quantity          *int64                                          `json:"quantity,omitempty"`
+	TaxRates          *[]TaxRate                                      `json:"tax_rates"`
+}
+
+// SubscriptionSchedulePhaseItemBillingThresholds defines model for SubscriptionSchedulePhaseItemBillingThresholds.
+type SubscriptionSchedulePhaseItemBillingThresholds struct {
+	UsageGte *int64 `json:"usage_gte"`
+}
+
+// SubscriptionSchedulePhaseTransferData defines model for SubscriptionSchedulePhaseTransferData.
+type SubscriptionSchedulePhaseTransferData struct {
+	AmountPercent *float64                  `json:"amount_percent"`
+	Destination   *ExpandableFieldOfAccount `json:"destination,omitempty"`
+}
+
+// SubscriptionTransferData defines model for SubscriptionTransferData.
+type SubscriptionTransferData struct {
+	AmountPercent *float64                  `json:"amount_percent"`
+	Destination   *ExpandableFieldOfAccount `json:"destination,omitempty"`
+}
+
+// SubscriptionTrialSettings defines model for SubscriptionTrialSettings.
+type SubscriptionTrialSettings struct {
+	EndBehavior *SubscriptionTrialSettingsEndBehavior `json:"end_behavior,omitempty"`
+}
+
+// SubscriptionTrialSettingsEndBehavior defines model for SubscriptionTrialSettingsEndBehavior.
+type SubscriptionTrialSettingsEndBehavior struct {
+	MissingPaymentMethod *string `json:"missing_payment_method"`
+}
+
+// TaxCode defines model for TaxCode.
+type TaxCode struct {
+	Description *string `json:"description"`
+	Id          *string `json:"id"`
+	Name        *string `json:"name"`
+	Object      *string `json:"object"`
+}
+
+// TaxId defines model for TaxId.
+type TaxId struct {
+	Country      *string                    `json:"country"`
+	Created      *time.Time                 `json:"created,omitempty"`
+	Customer     *ExpandableFieldOfCustomer `json:"customer,omitempty"`
+	Deleted      *bool                      `json:"deleted"`
+	Id           *string                    `json:"id"`
+	Livemode     *bool                      `json:"livemode,omitempty"`
+	Object       *string                    `json:"object"`
+	Type         *string                    `json:"type"`
+	Value        *string                    `json:"value"`
+	Verification *TaxIdVerification         `json:"verification,omitempty"`
+}
+
+// TaxIdVerification defines model for TaxIdVerification.
+type TaxIdVerification struct {
+	Status          *string `json:"status"`
+	VerifiedAddress *string `json:"verified_address"`
+	VerifiedName    *string `json:"verified_name"`
+}
+
+// TaxRate defines model for TaxRate.
+type TaxRate struct {
+	Active              *bool               `json:"active,omitempty"`
+	Country             *string             `json:"country"`
+	Created             *time.Time          `json:"created,omitempty"`
+	Description         *string             `json:"description"`
+	DisplayName         *string             `json:"display_name"`
+	EffectivePercentage *float64            `json:"effective_percentage"`
+	Id                  *string             `json:"id"`
+	Inclusive           *bool               `json:"inclusive,omitempty"`
+	Jurisdiction        *string             `json:"jurisdiction"`
+	Livemode            *bool               `json:"livemode,omitempty"`
+	Metadata            *map[string]*string `json:"metadata"`
+	Object              *string             `json:"object"`
+	Percentage          *float64            `json:"percentage,omitempty"`
+	State               *string             `json:"state"`
+	TaxType             *string             `json:"tax_type"`
+}
+
+// TestClock defines model for TestClock.
+type TestClock struct {
+	Created      *time.Time `json:"created,omitempty"`
+	Deleted      *bool      `json:"deleted"`
+	DeletesAfter *time.Time `json:"deletes_after,omitempty"`
+	FrozenTime   *time.Time `json:"frozen_time,omitempty"`
+	Id           *string    `json:"id"`
+	Livemode     *bool      `json:"livemode,omitempty"`
+	Name         *string    `json:"name"`
+	Object       *string    `json:"object"`
+	Status       *string    `json:"status"`
+}
+
+// Transfer defines model for Transfer.
+type Transfer struct {
+	Amount             *int64                               `json:"amount,omitempty"`
+	AmountReversed     *int64                               `json:"amount_reversed,omitempty"`
+	BalanceTransaction *ExpandableFieldOfBalanceTransaction `json:"balance_transaction,omitempty"`
+	Created            *time.Time                           `json:"created,omitempty"`
+	Currency           *string                              `json:"currency"`
+	Description        *string                              `json:"description"`
+	Destination        *ExpandableFieldOfAccount            `json:"destination,omitempty"`
+	DestinationPayment *ExpandableFieldOfCharge             `json:"destination_payment,omitempty"`
+	Id                 *string                              `json:"id"`
+	Livemode           *bool                                `json:"livemode,omitempty"`
+	Metadata           *map[string]*string                  `json:"metadata"`
+	Object             *string                              `json:"object"`
+	Reversals          *StripeListOfTransferReversal        `json:"reversals,omitempty"`
+	Reversed           *bool                                `json:"reversed,omitempty"`
+	SourceTransaction  *ExpandableFieldOfCharge             `json:"source_transaction,omitempty"`
+	SourceType         *string                              `json:"source_type"`
+	TransferGroup      *string                              `json:"transfer_group"`
+}
+
+// TransferReversal defines model for TransferReversal.
+type TransferReversal struct {
+	Amount                   *int64                               `json:"amount,omitempty"`
+	BalanceTransaction       *ExpandableFieldOfBalanceTransaction `json:"balance_transaction,omitempty"`
+	Created                  *time.Time                           `json:"created,omitempty"`
+	Currency                 *string                              `json:"currency"`
+	DestinationPaymentRefund *ExpandableFieldOfRefund             `json:"destination_payment_refund,omitempty"`
+	Id                       *string                              `json:"id"`
+	Metadata                 *map[string]*string                  `json:"metadata"`
+	Object                   *string                              `json:"object"`
+	SourceRefund             *ExpandableFieldOfRefund             `json:"source_refund,omitempty"`
+	Transfer                 *ExpandableFieldOfTransfer           `json:"transfer,omitempty"`
 }
 
 // DestroyApplicationParams defines parameters for DestroyApplication.
