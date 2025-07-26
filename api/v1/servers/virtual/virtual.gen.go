@@ -21,12 +21,6 @@ import (
 	"github.com/denvrdata/go-denvr/response"
 )
 
-// Child defines model for Child.
-type Child struct {
-	Children *[]Child `json:"children"`
-	Data     *Data    `json:"data,omitempty"`
-}
-
 // CreateVirtualServerInput defines model for CreateVirtualServerInput.
 type CreateVirtualServerInput struct {
 	// Cluster Cluster to be used. For possible values, refer to the otput of api/v1/clusters/GetAll"/>
@@ -65,14 +59,6 @@ type CreateVirtualServerInput struct {
 
 	// Vpc Name of the VPC to be used. Usually this will match the tenant name.
 	Vpc string `json:"vpc"`
-}
-
-// Data defines model for Data.
-type Data struct {
-	Cost      *float64   `json:"cost,omitempty"`
-	EndTime   *time.Time `json:"endTime,omitempty"`
-	Name      *string    `json:"name"`
-	StartTime *time.Time `json:"startTime,omitempty"`
 }
 
 // ListResultDtoOfServerAvailability defines model for ListResultDtoOfServerAvailability.

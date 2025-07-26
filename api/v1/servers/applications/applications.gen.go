@@ -215,20 +215,6 @@ type ApplicationsApiRuntimeLogsResponse struct {
 	Logs *string `json:"logs"`
 }
 
-// Child defines model for Child.
-type Child struct {
-	Children *[]Child `json:"children"`
-	Data     *Data    `json:"data,omitempty"`
-}
-
-// Data defines model for Data.
-type Data struct {
-	Cost      *float64   `json:"cost,omitempty"`
-	EndTime   *time.Time `json:"endTime,omitempty"`
-	Name      *string    `json:"name"`
-	StartTime *time.Time `json:"startTime,omitempty"`
-}
-
 // ImageRepositoryDto defines model for ImageRepositoryDto.
 type ImageRepositoryDto struct {
 	// Hostname The registry hostname for the container repository.
@@ -261,7 +247,7 @@ type InstanceDetails struct {
 	EnvironmentVariables           *map[string]*string `json:"environmentVariables"`
 	Id                             *string             `json:"id"`
 	ImageCmdOverride               *string             `json:"imageCmdOverride"`
-	LastUpdated                    *time.Time          `json:"lastUpdated,omitempty"`
+	LastUpdated                    *time.Time          `json:"lastUpdated"`
 	PersistedDirectAttachedStorage *bool               `json:"persistedDirectAttachedStorage,omitempty"`
 	PersonalSharedStorage          *bool               `json:"personalSharedStorage,omitempty"`
 	PrivateIp                      *string             `json:"privateIp"`
