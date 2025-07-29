@@ -48,15 +48,18 @@ func TestConfig(t *testing.T) {
 		server.URL,
 	)
 
+	// Create an HTTP client for the test
+	httpClient := &http.Client{}
+
 	expected := config.Config{
-		auth.NewAuth(server.URL, "test@foobar.com", "test.foo.bar.baz"),
+		auth.NewAuth(server.URL, "test@foobar.com", "test.foo.bar.baz", httpClient),
 		server.URL,
 		"v2",
 		"Hou1",
 		"denvr",
 		"denvr",
 		"reserved-denvr",
-		5,
+		httpClient,
 	}
 
 	f := result.Wrap(os.CreateTemp("", "test-newconfig-tmpfile-")).Unwrap()
@@ -67,7 +70,26 @@ func TestConfig(t *testing.T) {
 	t.Run(
 		"NewConfig",
 		func(t *testing.T) {
-			assert.Equal(t, expected, config.NewConfig(f.Name()))
+			result := config.NewConfig(f.Name())
+
+			// Compare all fields except Auth since it contains a non-comparable Client field
+			assert.Equal(t, expected.Server, result.Server)
+			assert.Equal(t, expected.API, result.API)
+			assert.Equal(t, expected.Cluster, result.Cluster)
+			assert.Equal(t, expected.Tenant, result.Tenant)
+			assert.Equal(t, expected.VPCId, result.VPCId)
+			assert.Equal(t, expected.RPool, result.RPool)
+			// Compare Client field (just check that both are non-nil)
+			assert.NotNil(t, expected.Client)
+			assert.NotNil(t, result.Client)
+
+			// Compare Auth fields individually
+			assert.Equal(t, expected.Auth.Server, result.Auth.Server)
+			assert.Equal(t, expected.Auth.AccessToken, result.Auth.AccessToken)
+			assert.Equal(t, expected.Auth.RefreshToken, result.Auth.RefreshToken)
+			// Compare Auth Client field (just check that both are non-nil)
+			assert.NotNil(t, expected.Auth.Client)
+			assert.NotNil(t, result.Auth.Client)
 		},
 	)
 }

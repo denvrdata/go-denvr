@@ -2,13 +2,16 @@ package config
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/BurntSushi/toml"
 	"github.com/denvrdata/go-denvr/auth"
 	"github.com/denvrdata/go-denvr/result"
+	"github.com/hashicorp/go-retryablehttp"
 )
 
 type Config struct {
@@ -19,7 +22,7 @@ type Config struct {
 	Tenant  string
 	VPCId   string
 	RPool   string
-	Retries int64
+	Client  *http.Client
 }
 
 func NewConfig(paths ...string) Config {
@@ -118,14 +121,22 @@ func NewConfig(paths ...string) Config {
 		}
 	}
 
+	// Create a retryable HTTP client for use both in our auth code and the API client code.
+	client := retryablehttp.NewClient()
+	client.RetryMax = int(defaults.Retries)
+	client.RetryWaitMin = 2 * time.Second
+	client.RetryWaitMax = 60 * time.Second
+	client.Backoff = retryablehttp.DefaultBackoff
+	client.HTTPClient.Timeout = 60 * time.Second
+
 	return Config{
-		auth.NewAuth(defaults.Server, credentials.Username, credentials.Password),
+		auth.NewAuth(defaults.Server, credentials.Username, credentials.Password, client.StandardClient()),
 		defaults.Server,
 		defaults.API,
 		defaults.Cluster,
 		defaults.Tenant,
 		defaults.VPCId,
 		defaults.RPool,
-		defaults.Retries,
+		client.StandardClient(),
 	}
 }

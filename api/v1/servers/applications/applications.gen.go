@@ -399,16 +399,10 @@ type Client struct {
 func NewClient() Client {
 	conf := config.NewConfig()
 
-	// Use a retryable http client and set the max retries
-	// TODO: re-enable this and call client.Standard() below when we stop
-	// returning incorrect 500 errors
-	// client := retryablehttp.NewClient()
-	// client.RetryMax = int(conf.Retries)
-
 	// Create the client with our server, retryable client and auth intercept method
 	return Client{
 		Server:         conf.Server,
-		Client:         http.DefaultClient,
+		Client:         conf.Client,
 		RequestEditors: []RequestEditorFn{conf.Auth.Intercept},
 	}
 }
