@@ -11,7 +11,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/oapi-codegen/runtime"
 
@@ -56,12 +55,12 @@ type ApplicationsApiCatalogItem struct {
 
 // ApplicationsApiCatalogItemVersion defines model for ApplicationsApiCatalogItemVersion.
 type ApplicationsApiCatalogItemVersion struct {
-	ImageLastPushDate *time.Time `json:"imageLastPushDate"`
-	ImageUrl          *string    `json:"imageUrl"`
-	LaunchType        *string    `json:"launchType"`
-	Name              *string    `json:"name"`
-	Platform          *string    `json:"platform"`
-	ReleaseNotesUrl   *string    `json:"releaseNotesUrl"`
+	ImageLastPushDate *string `json:"imageLastPushDate"`
+	ImageUrl          *string `json:"imageUrl"`
+	LaunchType        *string `json:"launchType"`
+	Name              *string `json:"name"`
+	Platform          *string `json:"platform"`
+	ReleaseNotesUrl   *string `json:"releaseNotesUrl"`
 }
 
 // ApplicationsApiCommandRequest defines model for ApplicationsApiCommandRequest.
@@ -242,12 +241,12 @@ type InstanceDetails struct {
 	// ContainerUid User ID (UID) for running container when not using root privileges
 	ContainerUid                   *int32              `json:"containerUid"`
 	CreatedBy                      *string             `json:"createdBy"`
-	CreationTime                   *time.Time          `json:"creationTime,omitempty"`
+	CreationTime                   *string             `json:"creationTime,omitempty"`
 	Dns                            *string             `json:"dns"`
 	EnvironmentVariables           *map[string]*string `json:"environmentVariables"`
 	Id                             *string             `json:"id"`
 	ImageCmdOverride               *string             `json:"imageCmdOverride"`
-	LastUpdated                    *time.Time          `json:"lastUpdated"`
+	LastUpdated                    *string             `json:"lastUpdated"`
 	PersistedDirectAttachedStorage *bool               `json:"persistedDirectAttachedStorage,omitempty"`
 	PersonalSharedStorage          *bool               `json:"personalSharedStorage,omitempty"`
 	PrivateIp                      *string             `json:"privateIp"`

@@ -70,8 +70,15 @@ def schemas(spec, init):
             queued.add(match.group(1))
 
     def populate(item):
-        """Add $ref values or recurse on lists or dicts"""
-        if isinstance(item, dict) and "$ref" in item:
+        """
+        Add $ref values or recurse on lists or dicts.
+
+        NOTE: We also remove date-time formats to avoid RFC3339 parsing errors when the server returns
+        strings that are missing timezones. https://github.com/denvrdata/DenvrDashboard/issues/3048
+        """
+        if isinstance(item, dict) and item.get("type") == "string" and item.get("format") == "date-time":
+            del item["format"]
+        elif isinstance(item, dict) and "$ref" in item:
             add(item["$ref"])
         elif isinstance(item, (list, dict)):
             for value in item if isinstance(item, list) else item.values():
