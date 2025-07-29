@@ -8,8 +8,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/hashicorp/go-retryablehttp"
-
 	"github.com/denvrdata/go-denvr/result"
 )
 
@@ -19,9 +17,10 @@ type Auth struct {
 	RefreshToken   string
 	AccessExpires  int64
 	RefreshExpires int64
+	Client         *http.Client
 }
 
-func NewAuth(server string, username string, password string) Auth {
+func NewAuth(server string, username string, password string, client *http.Client) Auth {
 	data := result.Wrap(
 		json.Marshal(
 			map[string]string{
@@ -31,13 +30,16 @@ func NewAuth(server string, username string, password string) Auth {
 		),
 	).Unwrap()
 
-	resp := result.Wrap(
-		retryablehttp.Post(
+	req := result.Wrap(
+		http.NewRequest(
+			http.MethodPost,
 			fmt.Sprintf("%s/api/TokenAuth/Authenticate", server),
-			"application/json",
 			bytes.NewBuffer(data),
 		),
 	).Unwrap()
+	req.Header.Set("Content-Type", "application/json")
+
+	resp := result.Wrap(client.Do(req)).Unwrap()
 
 	defer resp.Body.Close()
 
@@ -58,6 +60,7 @@ func NewAuth(server string, username string, password string) Auth {
 		content.Result.RefreshToken,
 		time.Now().Unix() + content.Result.ExpireInSeconds,
 		time.Now().Unix() + content.Result.RefreshTokenExpireInSeconds,
+		client,
 	}
 }
 
@@ -69,7 +72,6 @@ func (auth Auth) Token() string {
 	}
 
 	if t > auth.AccessExpires {
-		client := retryablehttp.NewClient().StandardClient()
 		req := result.Wrap(
 			http.NewRequest(
 				http.MethodGet,
@@ -82,7 +84,7 @@ func (auth Auth) Token() string {
 		query.Add("refreshToken", auth.RefreshToken)
 		req.URL.RawQuery = query.Encode()
 
-		resp := result.Wrap(client.Do(req)).Unwrap()
+		resp := result.Wrap(auth.Client.Do(req)).Unwrap()
 		defer resp.Body.Close()
 
 		// A bit ugly, but we'll define our specific response content to decode
