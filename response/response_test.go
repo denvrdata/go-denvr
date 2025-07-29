@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/denvrdata/go-denvr/response"
 )
@@ -12,6 +13,11 @@ import (
 // TestStruct represents a simple test structure with a data field
 type TestStruct struct {
 	Data *string `json:"data"`
+}
+
+type TestStructWithTime struct {
+	Data        *string    `json:"data"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 }
 
 func TestParseResponse(t *testing.T) {
@@ -153,6 +159,97 @@ func TestParseResponse(t *testing.T) {
 				} else if *result.Data != *tt.wantData {
 					t.Errorf("ParseResponse() result.Data = %v, want %v", *result.Data, *tt.wantData)
 				}
+			}
+		})
+	}
+}
+
+func TestParseResponseWithMalformedTime(t *testing.T) {
+	tests := []struct {
+		name        string
+		response    *http.Response
+		wantErr     bool
+		errContains string
+	}{
+		{
+			name: "malformed time without timezone - wrapped response",
+			response: &http.Response{
+				StatusCode: http.StatusOK,
+				Body: io.NopCloser(bytes.NewReader([]byte(`{
+					"result": {
+						"data": "test-data",
+						"lastUpdated": "0001-01-01T00:00:00"
+					},
+					"success": true
+				}`))),
+			},
+			wantErr:     true,
+			errContains: `cannot parse "" as "Z07:00"`,
+		},
+		{
+			name: "malformed time without timezone - direct response",
+			response: &http.Response{
+				StatusCode: http.StatusOK,
+				Body: io.NopCloser(bytes.NewReader([]byte(`{
+					"data": "test-data",
+					"lastUpdated": "0001-01-01T00:00:00"
+				}`))),
+			},
+			wantErr:     true,
+			errContains: `cannot parse "" as "Z07:00"`,
+		},
+		{
+			name: "valid time with timezone",
+			response: &http.Response{
+				StatusCode: http.StatusOK,
+				Body: io.NopCloser(bytes.NewReader([]byte(`{
+					"result": {
+						"data": "test-data",
+						"lastUpdated": "2025-07-28T17:41:44.093Z"
+					},
+					"success": true
+				}`))),
+			},
+			wantErr: false,
+		},
+		{
+			name: "null time value",
+			response: &http.Response{
+				StatusCode: http.StatusOK,
+				Body: io.NopCloser(bytes.NewReader([]byte(`{
+					"result": {
+						"data": "test-data",
+						"lastUpdated": null
+					},
+					"success": true
+				}`))),
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := response.ParseResponse[TestStructWithTime](tt.response)
+
+			if tt.wantErr {
+				if err == nil {
+					t.Errorf("ParseResponse() error = nil, wantErr = true")
+					return
+				}
+				if tt.errContains != "" && !contains(err.Error(), tt.errContains) {
+					t.Errorf("ParseResponse() error = %v, want error containing %v", err, tt.errContains)
+				}
+				return
+			}
+
+			if err != nil {
+				t.Errorf("ParseResponse() unexpected error = %v", err)
+				return
+			}
+
+			if result == nil {
+				t.Errorf("ParseResponse() result is nil")
 			}
 		})
 	}
