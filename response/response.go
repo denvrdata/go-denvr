@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
 )
 
 // ErrorResponse represents an error response from our Denvr API Server.
@@ -26,6 +27,9 @@ func ParseResponse[T any](rsp *http.Response) (*T, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// Try and fix malformed time formats prior to calling JSON unmarshalling
+	bodyBytes = fixMalformedTimeFormats(bodyBytes)
 
 	// First try to parse the response as a Response[T]
 	var resp Response[T]
@@ -54,4 +58,32 @@ func ParseResponse[T any](rsp *http.Response) (*T, error) {
 	}
 
 	return resp.Result, nil
+}
+
+// fixMalformedTimeFormats fixes common time format issues in JSON before unmarshaling
+// https://github.com/denvrdata/DenvrDashboard/issues/3048
+// TODO: This seems kinda ugly, maybe there's a better way by reusing the existing definition?
+func fixMalformedTimeFormats(data []byte) []byte {
+	// Pattern to match timestamps like "0001-01-01T00:00:00" (zero time without timezone)
+	// and replace them with null since this typically indicates missing data
+	zeroTimeRegex := regexp.MustCompile(`"0001-01-01T00:00:00(?:\.\d+)?"`)
+	data = zeroTimeRegex.ReplaceAll(data, []byte("null"))
+
+	// Pattern to match timestamps that need timezone added
+	// Only matches timestamps that end with seconds/nanoseconds followed immediately by quote
+	// (no existing timezone suffix like Z, +05:00, -07:00, etc.)
+	noTimezoneRegex := regexp.MustCompile(`"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?)"`)
+
+	// Replace each match, but only if it doesn't already have timezone info
+	result := noTimezoneRegex.ReplaceAllFunc(data, func(match []byte) []byte {
+		str := string(match)
+		// Check if this timestamp already has timezone info by looking at what comes before the closing quote
+		if str[len(str)-2] == 'Z' || (len(str) > 7 && (str[len(str)-7] == '+' || str[len(str)-7] == '-')) {
+			return match // Already has timezone, don't modify
+		}
+		// Add Z timezone
+		return []byte(str[:len(str)-1] + `Z"`)
+	})
+
+	return result
 }

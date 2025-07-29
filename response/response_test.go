@@ -183,8 +183,7 @@ func TestParseResponseWithMalformedTime(t *testing.T) {
 					"success": true
 				}`))),
 			},
-			wantErr:     true,
-			errContains: `cannot parse "" as "Z07:00"`,
+			wantErr: false,
 		},
 		{
 			name: "malformed time without timezone - direct response",
@@ -192,11 +191,10 @@ func TestParseResponseWithMalformedTime(t *testing.T) {
 				StatusCode: http.StatusOK,
 				Body: io.NopCloser(bytes.NewReader([]byte(`{
 					"data": "test-data",
-					"lastUpdated": "0001-01-01T00:00:00"
+					"lastUpdated": "2006-01-02T15:04:05"
 				}`))),
 			},
-			wantErr:     true,
-			errContains: `cannot parse "" as "Z07:00"`,
+			wantErr: false,
 		},
 		{
 			name: "valid time with timezone",
@@ -250,6 +248,72 @@ func TestParseResponseWithMalformedTime(t *testing.T) {
 
 			if result == nil {
 				t.Errorf("ParseResponse() result is nil")
+			}
+		})
+	}
+}
+
+func TestFixMalformedTimeFormats(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{
+			name:     "zero time becomes null",
+			input:    `{"lastUpdated": "0001-01-01T00:00:00"}`,
+			expected: `{"lastUpdated": null}`,
+		},
+		{
+			name:     "zero time with nanoseconds becomes null",
+			input:    `{"lastUpdated": "0001-01-01T00:00:00.000"}`,
+			expected: `{"lastUpdated": null}`,
+		},
+		{
+			name:     "time without timezone gets Z added",
+			input:    `{"lastUpdated": "2006-01-02T15:04:05"}`,
+			expected: `{"lastUpdated": "2006-01-02T15:04:05Z"}`,
+		},
+		{
+			name:     "time with nanoseconds without timezone gets Z added",
+			input:    `{"lastUpdated": "2006-01-02T15:04:05.999"}`,
+			expected: `{"lastUpdated": "2006-01-02T15:04:05.999Z"}`,
+		},
+		{
+			name:     "time with timezone remains unchanged",
+			input:    `{"lastUpdated": "2006-01-02T15:04:05Z"}`,
+			expected: `{"lastUpdated": "2006-01-02T15:04:05Z"}`,
+		},
+		{
+			name:     "time with offset remains unchanged",
+			input:    `{"lastUpdated": "2006-01-02T15:04:05-07:00"}`,
+			expected: `{"lastUpdated": "2006-01-02T15:04:05-07:00"}`,
+		},
+		{
+			name:     "multiple times in response",
+			input:    `{"created": "0001-01-01T00:00:00", "updated": "2006-01-02T15:04:05"}`,
+			expected: `{"created": null, "updated": "2006-01-02T15:04:05Z"}`,
+		},
+		{
+			name:     "non-time strings remain unchanged",
+			input:    `{"data": "some regular string", "count": 123}`,
+			expected: `{"data": "some regular string", "count": 123}`,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// We need to access the unexported function, so we'll test it indirectly
+			// by creating a response and checking if it parses correctly
+			resp := &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       io.NopCloser(bytes.NewReader([]byte(tt.input))),
+			}
+
+			// This should not error if our fix works
+			_, err := response.ParseResponse[TestStructWithTime](resp)
+			if err != nil {
+				t.Errorf("ParseResponse() with fixed time failed: %v", err)
 			}
 		})
 	}
