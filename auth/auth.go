@@ -6,12 +6,81 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/denvrdata/go-denvr/result"
 )
 
-type Auth struct {
+type Auth interface {
+	Intercept(ctx context.Context, req *http.Request) error
+}
+
+func NewAuth(path string, content map[string]any, server string, client *http.Client) Auth {
+	// Use environment variables as our default
+	credentials := struct {
+		Apikey   string
+		Username string
+		Password string
+	}{
+		Apikey:   os.Getenv("DENVR_APIKEY"),
+		Username: os.Getenv("DENVR_USERNAME"),
+		Password: os.Getenv("DENVR_PASSWORD"),
+	}
+
+	// Check if a credentials section even exists
+	// TODO: This code seems ugly and should be placed in an accessor utility function
+	if cred, ok := content["credentials"].(map[string]any); ok {
+		// Check if we need to load the Apikey
+		if credentials.Apikey == "" {
+			if apikey, ok := cred["apikey"].(string); ok {
+				return ApiKey{apikey}
+			}
+		}
+		// Check if we need to load a username
+		if credentials.Username == "" {
+			if username, ok := cred["username"].(string); ok {
+				credentials.Username = username
+			}
+		}
+		// Check if we need to load a password
+		if credentials.Password == "" {
+			if password, ok := cred["password"].(string); ok {
+				credentials.Password = password
+			}
+		}
+	}
+
+	if credentials.Apikey != "" {
+		return NewApiKey(credentials.Apikey)
+	} else if credentials.Username != "" && credentials.Password != "" {
+		return NewBearer(server, credentials.Username, credentials.Password, client)
+	} else {
+		panic(
+			fmt.Sprintf(
+				"Authentication failed. "+
+					"Please provide credentials via environment variables or the [credentials] section in %s. "+
+					"See https://github.com/denvrdata/go-denvr#configuration for more details.",
+				path,
+			),
+		)
+	}
+}
+
+type ApiKey struct {
+	Key string
+}
+
+func NewApiKey(key string) ApiKey {
+	return ApiKey{key}
+}
+
+func (auth ApiKey) Intercept(ctx context.Context, req *http.Request) error {
+	req.Header.Set("Authorization", fmt.Sprintf("ApiKey %s", auth.Key))
+	return nil
+}
+
+type Bearer struct {
 	Server         string
 	AccessToken    string
 	RefreshToken   string
@@ -20,7 +89,7 @@ type Auth struct {
 	Client         *http.Client
 }
 
-func NewAuth(server string, username string, password string, client *http.Client) Auth {
+func NewBearer(server string, username string, password string, client *http.Client) Bearer {
 	data := result.Wrap(
 		json.Marshal(
 			map[string]string{
@@ -54,7 +123,7 @@ func NewAuth(server string, username string, password string, client *http.Clien
 	}
 	result.Wrap(content, json.NewDecoder(resp.Body).Decode(&content)).Unwrap()
 
-	return Auth{
+	return Bearer{
 		server,
 		content.Result.AccessToken,
 		content.Result.RefreshToken,
@@ -64,7 +133,7 @@ func NewAuth(server string, username string, password string, client *http.Clien
 	}
 }
 
-func (auth Auth) Token() string {
+func (auth Bearer) Token() string {
 	t := time.Now().Unix()
 
 	if t > auth.RefreshExpires {
@@ -104,7 +173,7 @@ func (auth Auth) Token() string {
 	return auth.AccessToken
 }
 
-func (auth Auth) Intercept(ctx context.Context, req *http.Request) error {
+func (auth Bearer) Intercept(ctx context.Context, req *http.Request) error {
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", auth.Token()))
 	return nil
 }

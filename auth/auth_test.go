@@ -1,6 +1,7 @@
 package auth_test
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -10,7 +11,102 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAuth(t *testing.T) {
+func TestNewAuth(t *testing.T) {
+	t.Run(
+		"NoCredentialsKey",
+		func(t *testing.T) {
+			content := map[string]any{}
+			httpClient := &http.Client{}
+
+			defer func() {
+				if r := recover(); r != nil {
+					assert.Contains(t, fmt.Sprintf("%v", r), "Authentication failed.")
+				} else {
+					t.Fatal("Expected panic but none occurred")
+				}
+			}()
+
+			auth.NewAuth("/path/to/config.toml", content, "https://api.example.com", httpClient)
+		},
+	)
+
+	t.Run(
+		"EmptyCredentials",
+		func(t *testing.T) {
+			content := map[string]any{
+				"credentials": map[string]any{},
+			}
+			httpClient := &http.Client{}
+
+			defer func() {
+				if r := recover(); r != nil {
+					assert.Contains(t, fmt.Sprintf("%v", r), "Authentication failed.")
+				} else {
+					t.Fatal("Expected panic but none occurred")
+				}
+			}()
+
+			auth.NewAuth("/path/to/config.toml", content, "https://api.example.com", httpClient)
+		},
+	)
+
+	t.Run(
+		"CredentialsWithApiKey",
+		func(t *testing.T) {
+			content := map[string]any{
+				"credentials": map[string]any{
+					"apikey": "test-api-key-123",
+				},
+			}
+			httpClient := &http.Client{}
+			result := auth.NewAuth("/path/to/config.toml", content, "https://api.example.com", httpClient)
+			assert.NotNil(t, result)
+
+			// Test the intercept function
+			req, _ := http.NewRequest("GET", "https://api.example.com/test", nil)
+			result.Intercept(req.Context(), req)
+			assert.Equal(t, "ApiKey test-api-key-123", req.Header.Get("Authorization"))
+		},
+	)
+	server := httptest.NewServer(
+		http.HandlerFunc(
+			func(writer http.ResponseWriter, request *http.Request) {
+				writer.WriteHeader(http.StatusOK)
+				writer.Write(
+					[]byte(`{
+						"result": {
+							"accessToken": "access1",
+							"refreshToken": "refresh",
+							"expireInSeconds": 60,
+							"refreshTokenExpireInSeconds": 3600
+						}
+					}`),
+				)
+			},
+		),
+	)
+	t.Run(
+		"CredentialsWithUsernamePassword",
+		func(t *testing.T) {
+			content := map[string]any{
+				"credentials": map[string]any{
+					"username": "testuser",
+					"password": "testpass",
+				},
+			}
+			httpClient := &http.Client{}
+			result := auth.NewAuth("/path/to/config.toml", content, server.URL, httpClient)
+			assert.NotNil(t, result)
+
+			// Test the intercept function
+			req, _ := http.NewRequest("GET", "https://api.example.com/test", nil)
+			result.Intercept(req.Context(), req)
+			assert.Equal(t, "Bearer access1", req.Header.Get("Authorization"))
+		},
+	)
+}
+
+func TestBearer(t *testing.T) {
 	server := httptest.NewServer(
 		http.HandlerFunc(
 			func(writer http.ResponseWriter, request *http.Request) {
@@ -33,7 +129,7 @@ func TestAuth(t *testing.T) {
 		"NewAuth",
 		func(t *testing.T) {
 			httpClient := &http.Client{}
-			result := auth.NewAuth(
+			result := auth.NewBearer(
 				server.URL,
 				"alice@denvrtest.com",
 				"alice.is.the.best",
