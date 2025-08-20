@@ -42,38 +42,8 @@ func NewConfig(paths ...string) Config {
 		path = os.Getenv("DENVR_CONFIG")
 	}
 
-	var content map[string]interface{}
+	var content map[string]any
 	result.Wrap(toml.DecodeFile(path, &content)).Unwrap()
-
-	// Use environment variables as our default
-	credentials := struct {
-		Username string
-		Password string
-	}{
-		Username: os.Getenv("DENVR_USERNAME"),
-		Password: os.Getenv("DENVR_PASSWORD"),
-	}
-
-	// Check if a credentials section even exists
-	// TODO: This code seems ugly and should be placed in an accessor utility function
-	if cred, ok := content["credentials"].(map[string]interface{}); ok {
-		// Check if we need to load a username
-		if credentials.Username == "" {
-			if username, ok := cred["username"].(string); ok {
-				credentials.Username = username
-			} else {
-				panic(fmt.Sprintf("Could not find username in \"DENVR_USERNAME\" or %s", path))
-			}
-		}
-		// Check if we need to load a password
-		if credentials.Password == "" {
-			if password, ok := cred["password"].(string); ok {
-				credentials.Password = password
-			} else {
-				panic(fmt.Sprintf("Could not find password in \"DENVR_PASSWORD\" or %s", path))
-			}
-		}
-	}
 
 	defaults := struct {
 		Server  string
@@ -92,7 +62,7 @@ func NewConfig(paths ...string) Config {
 		RPool:   "on-demand",
 		Retries: 3,
 	}
-	if def, ok := content["defaults"].(map[string]interface{}); ok {
+	if def, ok := content["defaults"].(map[string]any); ok {
 		if server, ok := def["server"].(string); ok {
 			// Trim any trailing slashes to make sure the paths work
 			defaults.Server = strings.Trim(server, "/")
@@ -130,7 +100,7 @@ func NewConfig(paths ...string) Config {
 	client.HTTPClient.Timeout = 60 * time.Second
 
 	return Config{
-		auth.NewAuth(defaults.Server, credentials.Username, credentials.Password, client.StandardClient()),
+		auth.NewAuth(path, content, defaults.Server, client.StandardClient()),
 		defaults.Server,
 		defaults.API,
 		defaults.Cluster,
