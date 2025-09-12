@@ -247,6 +247,7 @@ type InstanceDetails struct {
 	Id                             *string             `json:"id"`
 	ImageCmdOverride               *string             `json:"imageCmdOverride"`
 	LastUpdated                    *string             `json:"lastUpdated"`
+	NodeSelector                   *string             `json:"nodeSelector"`
 	PersistedDirectAttachedStorage *bool               `json:"persistedDirectAttachedStorage,omitempty"`
 	PersonalSharedStorage          *bool               `json:"personalSharedStorage,omitempty"`
 	PrivateIp                      *string             `json:"privateIp"`
