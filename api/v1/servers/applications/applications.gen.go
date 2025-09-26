@@ -37,13 +37,14 @@ type ApplicationsApiApplicationConfig struct {
 
 // ApplicationsApiApplicationConfigAvailability defines model for ApplicationsApiApplicationConfigAvailability.
 type ApplicationsApiApplicationConfigAvailability struct {
-	Available     *bool    `json:"available"`
-	Cluster       *string  `json:"cluster"`
-	Configuration *string  `json:"configuration"`
-	Count         *int32   `json:"count"`
-	MaxCount      *int32   `json:"maxCount"`
-	Price         *float64 `json:"price"`
-	Rpool         *string  `json:"rpool"`
+	Available          *bool     `json:"available"`
+	AvailableNodeNames *[]string `json:"availableNodeNames"`
+	Cluster            *string   `json:"cluster"`
+	Configuration      *string   `json:"configuration"`
+	Count              *int32    `json:"count"`
+	MaxCount           *int32    `json:"maxCount"`
+	Price              *float64  `json:"price"`
+	Rpool              *string   `json:"rpool"`
 }
 
 // ApplicationsApiCatalogItem defines model for ApplicationsApiCatalogItem.
@@ -110,6 +111,10 @@ type ApplicationsApiCreateRequest struct {
 	// ResourcePool The resource pool to use for the application
 	ResourcePool *string `json:"resourcePool"`
 
+	// SelectedNode Specific node name to target for application deployment.
+	// Used for non-on-demand resource pools to allow node-specific scheduling.
+	SelectedNode *string `json:"selectedNode"`
+
 	// SshKeys The SSH keys for accessing the application
 	SshKeys *[]string `json:"sshKeys"`
 
@@ -160,6 +165,10 @@ type ApplicationsApiCustomApiCreateRequest struct {
 	// ResourcePool The resource pool to use for the application
 	ResourcePool    *string             `json:"resourcePool"`
 	SecurityContext *SecurityContextDto `json:"securityContext,omitempty"`
+
+	// SelectedNode Specific node name to target for application deployment.
+	// Used for non-on-demand resource pools to allow node-specific scheduling.
+	SelectedNode *string `json:"selectedNode"`
 
 	// TenantSharedStorage Enable tenant shared storage for the application
 	TenantSharedStorage *bool `json:"tenantSharedStorage,omitempty"`
