@@ -49,6 +49,11 @@ type CreateVirtualServerInput struct {
 	// Rpool Name of the pool to be used. If not provided, first pool assigned to a tenant will be used. In case of no pool assigned, 'on-demand' will be used.
 	Rpool *string `json:"rpool"`
 
+	// SelectedNode Specific node name to target for VM deployment.
+	// Used for non-on-demand resource pools to allow node-specific scheduling.
+	// Maps to Kubernetes nodeSelector with kubernetes.io/hostname label.
+	SelectedNode *string `json:"selectedNode"`
+
 	// SnapshotName Snapshot name.
 	SnapshotName *string  `json:"snapshotName"`
 	SshKeys      []string `json:"ssh_keys"`
@@ -77,9 +82,12 @@ type ListResultDtoOfVirtualServerDetailsItem struct {
 
 // ServerAvailability defines model for ServerAvailability.
 type ServerAvailability struct {
-	Available     *bool   `json:"available,omitempty"`
-	Cluster       *string `json:"cluster"`
-	Configuration *string `json:"configuration"`
+	Available *bool `json:"available,omitempty"`
+
+	// AvailableNodeNames List of node names where this configuration is available. Omitted for on-demand resource pools
+	AvailableNodeNames *[]string `json:"availableNodeNames"`
+	Cluster            *string   `json:"cluster"`
+	Configuration      *string   `json:"configuration"`
 
 	// Count number of servers that can be created with this configuration.
 	Count *int32 `json:"count,omitempty"`
@@ -179,6 +187,9 @@ type VirtualServerDetailsItem struct {
 	// Memory Amount of system memory available in GB
 	Memory    *int64  `json:"memory"`
 	Namespace *string `json:"namespace"`
+
+	// NodeSelector The specific node where the VM is scheduled
+	NodeSelector *string `json:"nodeSelector"`
 
 	// PrivateIp The private IP address of the VM
 	PrivateIp    *string `json:"privateIp"`
