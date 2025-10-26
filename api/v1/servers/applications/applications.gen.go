@@ -137,8 +137,8 @@ type ApplicationsApiCustomApiCreateRequest struct {
 
 	// ImageCmdOverride Optional Image CMD override allows users to specify a custom command to run in the container.
 	// Must be a JSON array (e.g., ["python", "train.py"])
-	ImageCmdOverride *[]string          `json:"imageCmdOverride"`
-	ImageRepository  ImageRepositoryDto `json:"imageRepository"`
+	ImageCmdOverride *[]string           `json:"imageCmdOverride"`
+	ImageRepository  *ImageRepositoryDto `json:"imageRepository,omitempty"`
 
 	// ImageUrl Image URL for the custom application.
 	ImageUrl string `json:"imageUrl"`
@@ -152,7 +152,17 @@ type ApplicationsApiCustomApiCreateRequest struct {
 	// PersonalSharedStorage Enable personal shared storage for the application
 	PersonalSharedStorage *bool `json:"personalSharedStorage,omitempty"`
 
+	// ProxyApiKeys API keys for authenticating with the reverse proxy service.
+	// Optional, but requires proxyPort to be set for the reverse proxy to be configured.
+	// Each key must:
+	// - Contain only alphanumeric characters, hyphens, and underscores
+	// - Not exceed 512 characters
+	// - Not be null or whitespace
+	// Maximum 10 keys allowed.
+	ProxyApiKeys *[]string `json:"proxyApiKeys"`
+
 	// ProxyPort The port your application uses to receive HTTPS traffic.
+	// When set, a reverse proxy will be automatically configured in front of your application.
 	// Port 443 is reserved for the reverse proxy and cannot be used.
 	ProxyPort *int32 `json:"proxyPort"`
 
@@ -226,10 +236,11 @@ type ApplicationsApiRuntimeLogsResponse struct {
 // ImageRepositoryDto defines model for ImageRepositoryDto.
 type ImageRepositoryDto struct {
 	// Hostname The registry hostname for the container repository.
+	// If not provided in the ImageRepository object, will be inferred from the imageUrl.
 	// Examples:
 	// - Docker Hub: "https://index.docker.io/v1/"
 	// - GitHub Container Registry: "https://ghcr.io/"
-	Hostname string `json:"hostname"`
+	Hostname *string `json:"hostname"`
 
 	// Password The password or access token for authentication with private repositories.
 	// This is only required if the repository is private.
