@@ -93,6 +93,11 @@ type ApplicationsApiCreateRequest struct {
 	// Cluster The cluster you're operating on
 	Cluster string `json:"cluster"`
 
+	// EnvironmentVariables Custom environment variables for the application.
+	// Key-value pairs that will be set in the container environment.
+	// Useful for authentication tokens, cache paths, and runtime configuration.
+	EnvironmentVariables *map[string]*string `json:"environmentVariables"`
+
 	// HardwarePackageName The name or unique identifier of the application hardware configuration to use for the application.
 	HardwarePackageName string `json:"hardwarePackageName"`
 
@@ -108,6 +113,15 @@ type ApplicationsApiCreateRequest struct {
 	// PersonalSharedStorage Enable personal shared storage for the application
 	PersonalSharedStorage *bool `json:"personalSharedStorage,omitempty"`
 
+	// ProxyApiKeys Optional API keys for authenticating with the application proxy service.
+	// Multiple keys can be provided to support key rotation.
+	// Each key must contain only alphanumeric characters, hyphens, and underscores.
+	ProxyApiKeys *[]string `json:"proxyApiKeys"`
+
+	// ProxyPort The port number for the application proxy service. Required to setup the proxy
+	// Used in conjunction with proxyApiKeys for authenticated access.
+	ProxyPort *string `json:"proxyPort"`
+
 	// ResourcePool The resource pool to use for the application
 	ResourcePool *string `json:"resourcePool"`
 
@@ -117,6 +131,11 @@ type ApplicationsApiCreateRequest struct {
 
 	// SshKeys The SSH keys for accessing the application
 	SshKeys *[]string `json:"sshKeys"`
+
+	// StartupCommands List of startup commands to be executed during container initialization.
+	// Commands are executed in order and joined with semicolons.
+	// Used for custom initialization logic before the main application starts.
+	StartupCommands *[]string `json:"startupCommands"`
 
 	// TenantSharedStorage Enable tenant shared storage for the application
 	TenantSharedStorage *bool `json:"tenantSharedStorage,omitempty"`
