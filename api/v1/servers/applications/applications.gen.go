@@ -50,12 +50,14 @@ type ApplicationsApiApplicationConfigAvailability struct {
 // ApplicationsApiCatalogItem defines model for ApplicationsApiCatalogItem.
 type ApplicationsApiCatalogItem struct {
 	ApplicationSourceDetailsUrl *string                              `json:"applicationSourceDetailsUrl"`
+	ApplicationSourceOwner      *string                              `json:"applicationSourceOwner"`
 	Name                        *string                              `json:"name"`
 	Versions                    *[]ApplicationsApiCatalogItemVersion `json:"versions"`
 }
 
 // ApplicationsApiCatalogItemVersion defines model for ApplicationsApiCatalogItemVersion.
 type ApplicationsApiCatalogItemVersion struct {
+	Accelerator       *string `json:"accelerator"`
 	ImageLastPushDate *string `json:"imageLastPushDate"`
 	ImageUrl          *string `json:"imageUrl"`
 	LaunchType        *string `json:"launchType"`
