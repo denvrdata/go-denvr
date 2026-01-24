@@ -32,6 +32,7 @@ type CreateVirtualServerInput struct {
 	DirectStorageMountPath *string `json:"directStorageMountPath"`
 
 	// Name Name of virtual server to be created. If not provided, name will be auto-generated.
+	// Must be 52 characters or less.
 	Name *string `json:"name"`
 
 	// OperatingSystemImage Name of the Operating System image to be used.

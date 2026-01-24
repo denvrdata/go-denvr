@@ -106,7 +106,8 @@ type ApplicationsApiCreateRequest struct {
 	// JupyterToken An authentication token for accessing Jupyter Notebook enabled applications
 	JupyterToken *string `json:"jupyterToken"`
 
-	// Name The application name
+	// Name The application name.
+	// Must be 52 characters or less.
 	Name string `json:"name"`
 
 	// PersistDirectAttachedStorage Indicates whether to persist direct attached storage (if resource pool is reserved)
@@ -164,7 +165,8 @@ type ApplicationsApiCustomApiCreateRequest struct {
 	// ImageUrl Image URL for the custom application.
 	ImageUrl string `json:"imageUrl"`
 
-	// Name The application name
+	// Name The application name.
+	// Must be 52 characters or less.
 	Name string `json:"name"`
 
 	// PersistDirectAttachedStorage Indicates whether to persist direct attached storage (if resource pool is reserved)
